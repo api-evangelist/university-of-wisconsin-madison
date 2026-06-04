@@ -1,0 +1,104 @@
+---
+aid: university-of-wisconsin-madison
+name: University of Wisconsin-Madison
+description: >-
+  The University of Wisconsin-Madison is a public land-grant research university
+  in Madison, Wisconsin, ranked #46 in the QS World University Rankings 2025. Its
+  Division of Information Technology (DoIT) runs a formal API Program with a public
+  developer portal at developer.wisc.edu, an Apigee-based API gateway, OAuth2
+  client-credentials authentication, and published API standards based on JSON:API
+  and OpenAPI. Documented enterprise APIs include the Person API, an HR API, the
+  Curricular Data Model API, and the DARS (Degree Audit Reporting System) API.
+  Most production APIs are gated and require institutional access requests, with
+  mock variants published openly for development.
+type: Index
+position: Consumer
+access: 3rd-Party
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/refs/heads/main/apis.yml
+tags:
+  - Education
+  - Higher Education
+  - University
+  - Identity
+  - Student Information System
+  - Curriculum
+  - Human Resources
+  - United States
+created: '2026-06-03'
+modified: '2026-06-03'
+specificationVersion: '0.19'
+apis:
+  - aid: university-of-wisconsin-madison:person-api
+    name: Person API
+    description: >-
+      Enterprise API providing authoritative person/identity data for the
+      University of Wisconsin-Madison. Access is gated and requires an approved
+      institutional access request; a Mock Person API is published for development.
+    humanURL: https://developer.wisc.edu/docs/person-api/1/overview
+    tags: [ Identity, People, Directory ]
+    properties:
+      - type: Documentation
+        url: https://developer.wisc.edu/docs/person-api/1/overview
+      - type: SignUp
+        url: https://developer.wisc.edu/person-api/getting-access
+  - aid: university-of-wisconsin-madison:hr-api
+    name: HR API
+    description: >-
+      Human resources API exposing institutional HR data such as academic units.
+      Documented on the developer portal, with a Mock HR API published openly
+      for development and testing.
+    humanURL: https://developer.wisc.edu/docs/api-team-mock-hr-api/1/routes/academicUnits/get
+    tags: [ Human Resources, Academic Units ]
+    properties:
+      - type: Documentation
+        url: https://developer.wisc.edu/docs/api-team-mock-hr-api/1/routes/academicUnits/get
+  - aid: university-of-wisconsin-madison:curricular-data-model
+    name: Curricular Data Model API
+    description: >-
+      API exposing UW-Madison's curricular data model (courses, curriculum
+      structures) documented via the DoIT WAMS API hub with OpenAPI/JavaDoc-style
+      reference documentation.
+    humanURL: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/help-doc.html
+    tags: [ Curriculum, Courses, Curricular Data ]
+    properties:
+      - type: Documentation
+        url: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/help-doc.html
+  - aid: university-of-wisconsin-madison:dars-api
+    name: DARS API
+    description: >-
+      Degree Audit Reporting System (DARS) API for submitting and retrieving
+      batch degree-audit requests, documented on the UW-Madison developer portal.
+    humanURL: https://developer.wisc.edu/docs/dars/1/types/DarsBatchAuditRequest
+    tags: [ Student Information System, Degree Audit, Academic ]
+    properties:
+      - type: Documentation
+        url: https://developer.wisc.edu/docs/dars/1/types/DarsBatchAuditRequest
+common:
+  - type: Website
+    url: https://www.wisc.edu/
+  - type: DeveloperPortal
+    url: https://developer.wisc.edu/
+  - type: GitHub
+    url: https://github.com/UW-Madison-DoIT
+  - type: SourceCode
+    url: https://git.doit.wisc.edu/interop/external-docs/api-program
+  - type: LinkedIn
+    url: https://www.linkedin.com/school/uw-madison/
+  - type: Twitter
+    url: https://twitter.com/UWMadison
+  - type: Status
+    url: https://www.outages.doit.wisc.edu/
+  - type: Authentication
+    url: https://git.doit.wisc.edu/interop/external-docs/api-program/-/blob/main/practices/apigee.md
+  - type: Plans
+    url: plans/university-of-wisconsin-madison-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/university-of-wisconsin-madison-rate-limits.yml
+  - type: FinOps
+    url: finops/university-of-wisconsin-madison-finops.yml
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

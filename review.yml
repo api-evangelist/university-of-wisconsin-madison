@@ -1,0 +1,52 @@
+---
+name: University of Wisconsin-Madison
+description: University of Wisconsin-Madison public developer/API footprint review for APIs.json cataloging.
+url: https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/refs/heads/main/review.yml
+created: '2026-06-03'
+modified: '2026-06-03'
+reviews:
+  - date: '2026-06-03'
+    rating: 4
+    summary: >-
+      UW-Madison (QS World 2025 #46) operates a mature, formal API Program run by
+      DoIT with a public developer portal at developer.wisc.edu, an Apigee API
+      gateway, OAuth2 client-credentials auth, and published JSON:API/OpenAPI
+      standards. I verified the portal and documented APIs (Person, HR, Curricular
+      Data Model, DARS) return HTTP 200. Production APIs are access-gated requiring
+      institutional approval, with openly published mock variants for development;
+      no base URLs or live endpoints are fabricated here. All cataloged entries map
+      to confirmed live documentation pages.
+    endpoints:
+      - url: https://developer.wisc.edu/
+        status: 200
+        note: Developer portal home (JS-rendered).
+      - url: https://developer.wisc.edu/apis
+        status: 200
+        note: Portal API catalog listing.
+      - url: https://developer.wisc.edu/docs/person-api/1/overview
+        status: 200
+        note: Person API documentation.
+      - url: https://developer.wisc.edu/person-api/getting-access
+        status: 200
+        note: Person API access request (gated sign-up).
+      - url: https://developer.wisc.edu/docs/api-team-mock-hr-api/1/routes/academicUnits/get
+        status: 200
+        note: Mock HR API documentation.
+      - url: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/help-doc.html
+        status: 200
+        note: Curricular Data Model API reference docs.
+      - url: https://developer.wisc.edu/docs/dars/1/types/DarsBatchAuditRequest
+        status: 200
+        note: DARS (Degree Audit) API documentation.
+      - url: https://github.com/UW-Madison-DoIT
+        status: 200
+        note: DoIT GitHub organization.
+      - url: https://git.doit.wisc.edu/interop/external-docs/api-program
+        status: 200
+        note: API Program standards and Apigee practices (GitLab).
+      - url: https://www.outages.doit.wisc.edu/
+        status: 200
+        note: DoIT IT outages/status page.
+      - url: https://www.linkedin.com/school/uw-madison/
+        status: 999
+        note: Official LinkedIn school page (999 = LinkedIn anti-bot, page exists).
