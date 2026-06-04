@@ -1,0 +1,63 @@
+{
+  "@context": {
+    "schema": "https://schema.org/",
+    "uw": "https://developer.wisc.edu/ns#",
+    "name": "schema:name",
+    "url": "schema:url",
+    "description": "schema:description",
+    "CollegeOrUniversity": "schema:CollegeOrUniversity",
+    "EducationalOrganization": "schema:EducationalOrganization",
+    "address": "schema:address",
+    "sameAs": "schema:sameAs",
+    "telephone": "schema:telephone",
+    "developerPortal": {
+      "@id": "uw:developerPortal",
+      "@type": "@id"
+    },
+    "api": {
+      "@id": "uw:api",
+      "@type": "@id"
+    },
+    "apiName": "schema:name",
+    "documentation": {
+      "@id": "schema:documentation",
+      "@type": "@id"
+    },
+    "person": "uw:Person",
+    "academicUnit": "uw:AcademicUnit",
+    "course": "schema:Course",
+    "degreeAudit": "uw:DegreeAuditRequest"
+  },
+  "@type": "CollegeOrUniversity",
+  "name": "University of Wisconsin-Madison",
+  "url": "https://www.wisc.edu/",
+  "description": "Public land-grant research university in Madison, Wisconsin, whose Division of Information Technology (DoIT) operates a formal API Program and developer portal.",
+  "developerPortal": "https://developer.wisc.edu/",
+  "sameAs": [
+    "https://www.linkedin.com/school/uw-madison/",
+    "https://twitter.com/UWMadison",
+    "https://github.com/UW-Madison-DoIT"
+  ],
+  "api": [
+    {
+      "@type": "schema:WebAPI",
+      "apiName": "Person API",
+      "documentation": "https://developer.wisc.edu/docs/person-api/1/overview"
+    },
+    {
+      "@type": "schema:WebAPI",
+      "apiName": "HR API",
+      "documentation": "https://developer.wisc.edu/docs/api-team-mock-hr-api/1/routes/academicUnits/get"
+    },
+    {
+      "@type": "schema:WebAPI",
+      "apiName": "Curricular Data Model API",
+      "documentation": "https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/help-doc.html"
+    },
+    {
+      "@type": "schema:WebAPI",
+      "apiName": "DARS API",
+      "documentation": "https://developer.wisc.edu/docs/dars/1/types/DarsBatchAuditRequest"
+    }
+  ]
+}

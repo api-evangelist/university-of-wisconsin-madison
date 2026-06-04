@@ -1,0 +1,14 @@
+{
+  "repo": "university-of-wisconsin-madison",
+  "feeds": [
+    {
+      "source": "https://it.wisc.edu/news/",
+      "feed_url": "https://it.wisc.edu/news/",
+      "title": "UW-Madison DoIT News",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-06-03T00:00:00Z"
+}
