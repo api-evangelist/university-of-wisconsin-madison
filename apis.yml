@@ -75,6 +75,8 @@ apis:
       - type: Documentation
         url: https://developer.wisc.edu/docs/dars/1/types/DarsBatchAuditRequest
 common:
+  - type: DomainSecurity
+    url: security/university-of-wisconsin-madison-domain-security.yml
   - type: Website
     url: https://www.wisc.edu/
   - type: DeveloperPortal
