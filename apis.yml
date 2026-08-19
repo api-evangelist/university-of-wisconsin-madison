@@ -1,110 +1,420 @@
 ---
 aid: university-of-wisconsin-madison
 name: University of Wisconsin-Madison
+x-type: university
+x-category: Public Research University
 description: >-
-  The University of Wisconsin-Madison is a public land-grant research university
-  in Madison, Wisconsin, ranked #46 in the QS World University Rankings 2025. Its
-  Division of Information Technology (DoIT) runs a formal API Program with a public
-  developer portal at developer.wisc.edu, an Apigee-based API gateway, OAuth2
-  client-credentials authentication, and published API standards based on JSON:API
-  and OpenAPI. Documented enterprise APIs include the Person API, an HR API, the
-  Curricular Data Model API, and the DARS (Degree Audit Reporting System) API.
-  Most production APIs are gated and require institutional access requests, with
-  mock variants published openly for development.
+  The University of Wisconsin-Madison is a public land-grant research university in Madison,
+  Wisconsin, and one of the very few institutions in this cohort that genuinely operates an API
+  program of its own rather than pointing at a vendor's. Its Division of Information Technology
+  (DoIT) runs a formal API Program on a UW-owned Google Apigee organization
+  (doit-ipt-apigee-prod-ce29), fronted by a public developer portal at developer.wisc.edu, and
+  publishes eleven OpenAPI 3.0 contracts — 245 operations across Person, HR, Manifest (Grouper
+  groups), Finance, Locations, Enterprise Billing and OAuth — every one of them served from
+  api.wisc.edu or mock.api.wisc.edu with a wisc.edu contact. Nothing in this repository is a
+  vendor contract running under the institution's name: there is no Figshare, Pure, Ex Libris,
+  Dataverse or Symplectic surface attributed here. Beyond the gateway, UW-Madison operates a
+  fully public unauthenticated course-search API at public.enroll.wisc.edu, its own Shibboleth
+  identity provider at login.wisc.edu speaking both SAML 2.0 and OpenID Connect, and a live
+  OAI-PMH 2.0 endpoint for the MINDS@UW institutional repository. The honest limits: production
+  access is gated behind a manual institutional approval per API product and is effectively
+  closed to anyone without a UW NetID, the estate declares zero OAuth scopes, no contract
+  carries a license or terms of service, and the developer portal is a client-rendered
+  single-page app that returns an identical 2,138-byte shell for every URL — including ones
+  that do not exist. Learning management runs on a Canvas tenant, recorded here as a tenant
+  relationship and not as UW-Madison engineering.
 type: Index
 accessModel:
   pricing: free
-  onboarding: unknown
+  onboarding: request
   trial: false
   try_now: false
   public: false
   label: Free
-  confidence: medium
+  confidence: high
   source:
+  - openapi
   - plans
-  generated: '2026-07-22'
-  method: derived
-position: Consumer
-access: 3rd-Party
+  generated: '2026-08-19'
+  method: probed
+position: Producer
+access: 1st-Party
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/university-of-wisconsin-madison.png
 url: https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/refs/heads/main/apis.yml
 tags:
-  - Education
-  - Higher Education
   - University
-  - Identity
-  - Student Information System
-  - Curriculum
-  - Human Resources
+  - Higher Education
+  - Education
+  - Public Research University
   - United States
+  - Wisconsin
+  - Big Ten
+  - Association of American Universities
+  - Identity
+  - Identity Federation
+  - Course Catalog
+  - Research Repository
+  - Student Information System
+  - Human Resources
+  - Finance
+  - Curriculum
 created: '2026-06-03'
-modified: '2026-06-03'
+modified: '2026-08-19'
 specificationVersion: '0.23'
+x-coverage:
+  state: covered
+  reason: institution-operated-program-verified
+  detail: >-
+    UW-Madison is not a thin profile. Twelve machine-readable contracts were retrieved and every
+    one was checked against the operator axis before being saved: all eleven portal specs
+    declare servers under api.wisc.edu / mock.api.wisc.edu / doit.dev.api.wisc.edu and DoIT
+    contacts, so all are x-operator institution. No vendor-attributed contract was found or
+    added. Three findings limit the profile. (1) The developer portal at developer.wisc.edu is
+    an Angular SPA that returns an identical 2,138-byte shell with HTTP 200 for EVERY path — a
+    bogus URL and /.well-known/security.txt both return the same body — so no developer.wisc.edu
+    deep link can be verified by status code; the pointers kept here were confirmed instead
+    against the portal's own sitemap.xml, and the previously catalogued DARS API pointer was
+    removed because it appears in neither the sitemap nor the portal's API catalog. The
+    contracts themselves were recovered from the portal's own JSON API
+    (/portals/api/sites/{siteId}/liveportal/apis/{apiId}/download_spec), not from the rendered
+    pages. (2) Production APIs are gated: every API product carries approvalType "manual" and a
+    UW NetID is required to sign in, so request/response behaviour could not be exercised —
+    though UW-Madison publishes open mock variants on mock.api.wisc.edu, which is why the
+    contracts are still fully readable. (3) No OpenAPI exists for the course-search API, the
+    identity federation or the OAI-PMH endpoint; those were probed live and are recorded with
+    method probed, never as UW-Madison publications.
+  evidence:
+  - url: https://developer.wisc.edu/portals/api/sites/doit-ipt-apigee-prod-ce29-productionorgportal/liveportal/apis
+    status: 200
+  - url: https://developer.wisc.edu/sitemap.xml
+    status: 200
+  - url: https://developer.wisc.edu/docs/dars/1/types/DarsBatchAuditRequest
+    status: 200
+    note: soft-404 — byte-identical 2,138-byte SPA shell, same as a deliberately bogus URL
+  - url: https://api.wisc.edu/
+    status: 404
+    note: gateway root, not a portal — expected
+  - url: https://public.enroll.wisc.edu/api/search/v1/terms
+    status: 200
+  - url: https://public.enroll.wisc.edu/api/search/v1/aggregate
+    status: 200
+  - url: https://login.wisc.edu/idp/shibboleth
+    status: 200
+  - url: https://login.wisc.edu/.well-known/openid-configuration
+    status: 200
+  - url: https://minds.wisc.edu/server/oai/request?verb=Identify
+    status: 200
+  - url: https://www.wisc.edu/llms.txt
+    status: 404
+  - url: https://www.wisc.edu/.well-known/security.txt
+    status: 404
+  checked: '2026-08-19'
 apis:
   - aid: university-of-wisconsin-madison:person-api
     name: Person API
+    x-operator: institution
     description: >-
-      Enterprise API providing authoritative person/identity data for the
-      University of Wisconsin-Madison. Access is gated and requires an approved
-      institutional access request; a Mock Person API is published for development.
-    humanURL: https://developer.wisc.edu/docs/person-api/1/overview
+      Authoritative person and identity data for UW-Madison — names, populations, affiliations,
+      contact points, exports and webhooks. 47 operations over 31 paths, JSON:API envelopes,
+      OAuth 2.0 client credentials. Gated: production access requires an approved institutional
+      request. This is the closest thing in the estate to SCIM, expressed in UW-local terms.
+    humanURL: https://developer.wisc.edu/person-api
+    baseURL: https://api.wisc.edu
     tags: [ Identity, People, Directory ]
     properties:
-      - type: Documentation
-        url: https://developer.wisc.edu/docs/person-api/1/overview
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-person-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-person-api-schema.json
       - type: Signup
         url: https://developer.wisc.edu/person-api/getting-access
+  - aid: university-of-wisconsin-madison:mock-person-api
+    name: Mock Person API
+    x-operator: institution
+    description: >-
+      Openly published mock of the Person API on mock.api.wisc.edu, mirroring all 47 operations
+      so the contract and data shape are public even though production data is not. An
+      unusually good practice for an institution of this cohort.
+    baseURL: https://mock.api.wisc.edu
+    tags: [ Identity, Mock, Sandbox ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-mock-person-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - aid: university-of-wisconsin-madison:mock-person-api-certificates
+    name: Mock Person API (Certificates)
+    x-operator: institution
+    description: >-
+      Certificate-authentication variant of the Mock Person API — 39 operations over 23 paths,
+      published for testing the mTLS/certificate access path documented on the portal.
+    baseURL: https://mock.api.wisc.edu
+    tags: [ Identity, Mock, Certificates ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
   - aid: university-of-wisconsin-madison:hr-api
     name: HR API
+    x-operator: institution
     description: >-
-      Human resources API exposing institutional HR data such as academic units.
-      Documented on the developer portal, with a Mock HR API published openly
-      for development and testing.
-    humanURL: https://developer.wisc.edu/docs/api-team-mock-hr-api/1/routes/academicUnits/get
-    tags: [ Human Resources, Academic Units ]
+      Institutional HR data — academic units, supervisory organizations, job profiles, positions
+      and full-time-equivalent data, surfacing Workday-derived concepts under UW-Madison's own
+      JSON:API contract. 9 operations, OAuth 2.0 client credentials, gated.
+    humanURL: https://developer.wisc.edu/hr-api/supervisory-organizations
+    baseURL: https://api.wisc.edu/hr
+    tags: [ Human Resources, Academic Units, Workforce ]
     properties:
-      - type: Documentation
-        url: https://developer.wisc.edu/docs/api-team-mock-hr-api/1/routes/academicUnits/get
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-hr-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+      - type: ChangeLog
+        url: https://developer.wisc.edu/hr-api/release-notes
+  - aid: university-of-wisconsin-madison:mock-hr-api
+    name: Mock HR API
+    x-operator: institution
+    description: Openly published mock of the HR API on mock.api.wisc.edu, mirroring all 9 operations.
+    baseURL: https://mock.api.wisc.edu/hr
+    tags: [ Human Resources, Mock, Sandbox ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-mock-hr-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - aid: university-of-wisconsin-madison:manifest-api
+    name: Manifest API
+    x-operator: institution
+    description: >-
+      Group and membership data for UW-Madison's Manifest service, backed by Internet2 Grouper
+      Web Services. 5 operations, JSON:API, OAuth 2.0 client credentials, manual approval.
+      Together with the Person API this is UW-Madison's authorization substrate.
+    baseURL: https://api.wisc.edu/manifest
+    tags: [ Identity, Groups, Authorization ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-manifest-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - aid: university-of-wisconsin-madison:mock-manifest-api
+    name: Mock Manifest API
+    x-operator: institution
+    description: Openly published mock of the Manifest API on mock.api.wisc.edu.
+    baseURL: https://mock.api.wisc.edu/manifest
+    tags: [ Identity, Groups, Mock ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-mock-manifest-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - aid: university-of-wisconsin-madison:finance-api
+    name: Finance API
+    x-operator: institution
+    description: >-
+      The largest contract in the estate — 73 operations covering sponsored research and
+      financial administration: awards, award lines and tasks, grants, gifts, funds, cost
+      centers, budget lines, billing schedules, customer invoices, expense reports and assets.
+      Built by the DoIT Enterprise Business Systems (EBS) Integrated Business Solutions team.
+      OpenAPI 3.0.4, OAuth 2.0 client credentials, gated.
+    baseURL: https://api.wisc.edu/finance
+    tags: [ Finance, Grants, Sponsored Research, Procurement ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-finance-api-openapi.yml
+  - aid: university-of-wisconsin-madison:locations-api
+    name: Locations API
+    x-operator: institution
+    description: >-
+      Campus location, building and room reference data. 3 operations, OAuth 2.0 client
+      credentials, maintained by the DoIT EBS/IBS API team (locations-api@doit.wisc.edu).
+    baseURL: https://api.wisc.edu
+    tags: [ Locations, Buildings, Campus, Reference Data ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-locations-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-locations-api-schema.json
+  - aid: university-of-wisconsin-madison:enterprise-billing-api
+    name: Enterprise Billing API
+    x-operator: institution
+    description: >-
+      Service-provider billing transaction submission and lookup, backed by Salesforce. 7
+      operations. Recorded as published, with a defect noted honestly: the contract listed in
+      the PRODUCTION portal declares only a development server
+      (https://doit.dev.api.wisc.edu/enterprise-billing) and declares no security scheme,
+      despite the API product carrying manual approval.
+    baseURL: https://doit.dev.api.wisc.edu/enterprise-billing
+    tags: [ Billing, Finance, Salesforce ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-enterprise-billing-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - aid: university-of-wisconsin-madison:oauth-api
+    name: OAuth API
+    x-operator: institution
+    description: >-
+      The token endpoint for the whole gateway — POST https://api.wisc.edu/oauth/token, HTTP
+      Basic presentation of client_id/client_secret, returning the bearer access token every
+      other UW-Madison API requires. Declares no scopes.
+    baseURL: https://api.wisc.edu/oauth
+    tags: [ Authentication, OAuth, Security ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-oauth-api-openapi.yml
+      - type: Authentication
+        url: authentication/university-of-wisconsin-madison-authentication.yml
+  - aid: university-of-wisconsin-madison:course-search-api
+    name: Public Course Search API
+    x-operator: institution
+    description: >-
+      UW-Madison's only openly callable API — the unauthenticated JSON search behind
+      public.enroll.wisc.edu/search. Verified live on 2026-08-19: GET /terms returns the open
+      term codes, GET /aggregate returns 190 subject facets per term, and a POST search returned
+      226 and 932 course records for two terms. No credential of any kind is required. The
+      OpenAPI here is PROBED, not published by UW-Madison.
+    humanURL: https://public.enroll.wisc.edu/search
+    baseURL: https://public.enroll.wisc.edu/api/search/v1
+    tags: [ Course Catalog, Curriculum, Registrar, Open Access ]
+    properties:
+      - type: OpenAPI
+        url: openapi/university-of-wisconsin-madison-course-search-api-openapi.yml
+      - type: JSONSchema
+        url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+      - type: Examples
+        url: examples/university-of-wisconsin-madison-course-search-search-example.json
+  - aid: university-of-wisconsin-madison:identity-federation
+    name: UW-Madison Identity Provider (Shibboleth)
+    x-operator: institution
+    description: >-
+      Institution-operated Shibboleth IdP at login.wisc.edu, machine-readable on two protocols
+      and almost never catalogued for a university. https://login.wisc.edu/idp/shibboleth
+      returns SAML 2.0 metadata (entityID https://login.wisc.edu/idp/shibboleth, shibmd:Scope
+      wisc.edu, signing and encryption keys), and
+      https://login.wisc.edu/.well-known/openid-configuration returns a full OIDC discovery
+      document. This governs campus SSO and the vendor tenants — it is NOT the API gateway,
+      which uses OAuth 2.0 client credentials and publishes no discovery document.
+    humanURL: https://login.wisc.edu/
+    baseURL: https://login.wisc.edu
+    tags: [ Identity Federation, SAML, Shibboleth, OpenID Connect, Single Sign-On ]
+    properties:
+      - type: SAMLMetadata
+        url: https://login.wisc.edu/idp/shibboleth
+      - type: OpenIDConnectDiscovery
+        url: https://login.wisc.edu/.well-known/openid-configuration
+      - type: Conformance
+        url: conformance/university-of-wisconsin-madison-conformance.yml
+  - aid: university-of-wisconsin-madison:minds-oai-pmh
+    name: MINDS@UW OAI-PMH Endpoint
+    x-operator: institution
+    description: >-
+      Live OAI-PMH 2.0 harvesting endpoint for MINDS@UW, UW-Madison's institutional repository.
+      Confirmed with ?verb=Identify — repositoryName 'MINDS@UW', protocolVersion 2.0,
+      adminEmail dspace-help@library.wisc.edu, records back to 1985 — and ?verb=ListMetadataFormats,
+      which offers 13 prefixes (oai_dc, qdc, dim, xoai, mods, mets, didl, ore, rdf, marc, etdms,
+      rioxx, uketd_dc). Classed institution rather than tenant because the endpoint reports its
+      own baseURL under wisc.edu and is administered by UW-Madison Libraries; the underlying
+      DSpace software is open source and self-hosted, not a vendor SaaS contract.
+    humanURL: https://minds.wisc.edu/
+    baseURL: https://minds.wisc.edu/server/oai/request
+    tags: [ Research Repository, OAI-PMH, Libraries, Open Access, Metadata ]
+    properties:
+      - type: APIReference
+        url: https://minds.wisc.edu/server/oai/request?verb=Identify
+      - type: Conformance
+        url: conformance/university-of-wisconsin-madison-conformance.yml
   - aid: university-of-wisconsin-madison:curricular-data-model
-    name: Curricular Data Model API
+    name: Curricular Data Model
+    x-operator: institution
     description: >-
-      API exposing UW-Madison's curricular data model (courses, curriculum
-      structures) documented via the DoIT WAMS API hub with OpenAPI/JavaDoc-style
-      reference documentation.
-    humanURL: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/help-doc.html
-    tags: [ Curriculum, Courses, Curricular Data ]
+      UW-Madison's curricular data model (v1.5), published as generated Javadoc-style reference
+      documentation on the DoIT WAMS host. Verified live and genuinely institution-operated, but
+      it is reference documentation for a Java data model — there is no OpenAPI and no callable
+      endpoint behind it, so no contract is saved.
+    humanURL: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/index.html
+    tags: [ Curriculum, Courses, Data Model, Documentation ]
     properties:
       - type: Documentation
-        url: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/help-doc.html
-  - aid: university-of-wisconsin-madison:dars-api
-    name: DARS API
+        url: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/index.html
+  - aid: university-of-wisconsin-madison:canvas-lms
+    name: Canvas LMS (tenant)
+    x-operator: tenant
     description: >-
-      Degree Audit Reporting System (DARS) API for submitting and retrieving
-      batch degree-audit requests, documented on the UW-Madison developer portal.
-    humanURL: https://developer.wisc.edu/docs/dars/1/types/DarsBatchAuditRequest
-    tags: [ Student Information System, Degree Audit, Academic ]
+      UW-Madison's learning management system runs on an Instructure Canvas tenant at
+      canvas.wisc.edu, gated behind the institution's own Shibboleth IdP — an unauthenticated
+      request 302-redirects to login.wisc.edu/idp/profile/SAML2/Redirect/SSO, and
+      canvas.wisc.edu/api/v1/accounts returns Canvas's own 401 JSON. This is a REAL institutional
+      fact and one of UW-Madison's largest programmable surfaces, so it is recorded — but the
+      data is UW-Madison's and the contract is Instructure's. Per the operator axis, Instructure's
+      generic Canvas API specification is deliberately NOT saved under this institution, and no
+      artifact is derived from it. Any LTI conformance at UW-Madison lives here, inside the
+      vendor's contract, not in anything the institution publishes.
+    humanURL: https://canvas.wisc.edu/
+    baseURL: https://canvas.wisc.edu/api/v1
+    tags: [ Learning Management, Canvas, Instructure, Tenant, LTI ]
     properties:
-      - type: Documentation
-        url: https://developer.wisc.edu/docs/dars/1/types/DarsBatchAuditRequest
+      - type: Website
+        url: https://canvas.wisc.edu/
 common:
-  - type: DomainSecurity
-    url: security/university-of-wisconsin-madison-domain-security.yml
   - type: Website
     url: https://www.wisc.edu/
   - type: DeveloperPortal
     url: https://developer.wisc.edu/
-  - type: GitHub
-    url: https://github.com/UW-Madison-DoIT
+  - type: Documentation
+    url: https://kb.wisc.edu/uw-apis/
   - type: SourceCode
-    url: https://git.doit.wisc.edu/interop/external-docs/api-program
+    url: https://git.doit.wisc.edu/interop/external-docs/api-publisher-documentation
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: Scopes
+    url: scopes/university-of-wisconsin-madison-scopes.yml
+  - type: Errors
+    url: errors/university-of-wisconsin-madison-errors.yml
+  - type: Lifecycle
+    url: lifecycle/university-of-wisconsin-madison-lifecycle.yml
+  - type: Conformance
+    url: conformance/university-of-wisconsin-madison-conformance.yml
+  - type: Rules
+    url: rules/university-of-wisconsin-madison-rules.yml
+  - type: Vocabulary
+    url: vocabulary/university-of-wisconsin-madison-vocabulary.yml
+  - type: JSONLD
+    url: json-ld/university-of-wisconsin-madison-context.jsonld
+  - type: IdentityFederation
+    url: https://login.wisc.edu/idp/shibboleth
+  - type: CourseCatalog
+    url: https://public.enroll.wisc.edu/search
+  - type: ResearchRepository
+    url: https://minds.wisc.edu/
+  - type: LibraryCatalog
+    url: https://search.library.wisc.edu/
+  - type: ResearchComputing
+    url: https://chtc.cs.wisc.edu/
+  - type: OpenData
+    url: https://data.wisc.edu/
+  - type: AIPolicy
+    url: https://it.wisc.edu/ai/generative-ai-uw-madison-use-policies/
+  - type: AITooling
+    url: https://it.wisc.edu/ai/
+  - type: GitHubOrganization
+    url: https://github.com/UW-Madison-DoIT
+  - type: PrivacyPolicy
+    url: https://www.wisc.edu/privacy-notice/
+  - type: TermsOfService
+    url: https://policy.wisc.edu/
+  - type: Status
+    url: https://outages.doit.wisc.edu/
+  - type: Support
+    url: https://kb.wisc.edu/
+  - type: Blog
+    url: https://news.wisc.edu/
   - type: LinkedIn
     url: https://www.linkedin.com/school/uw-madison/
   - type: Twitter
     url: https://twitter.com/UWMadison
-  - type: Status
-    url: https://www.outages.doit.wisc.edu/
-  - type: Authentication
-    url: https://git.doit.wisc.edu/interop/external-docs/api-program/-/blob/main/practices/apigee.md
+  - type: DomainSecurity
+    url: security/university-of-wisconsin-madison-domain-security.yml
   - type: Plans
     url: plans/university-of-wisconsin-madison-plans-pricing.yml
   - type: RateLimits
