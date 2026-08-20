@@ -191,7 +191,14 @@ apis:
       Web Services. 5 operations, JSON:API, OAuth 2.0 client credentials, manual approval.
       Together with the Person API this is UW-Madison's authorization substrate.
     baseURL: https://api.wisc.edu/manifest
-    tags: [ Identity, Groups, Authorization ]
+    tags:
+    - Identity
+    - Group
+    - Authorization
+    tags_raw:
+    - Identity
+    - Groups
+    - Authorization
     properties:
       - type: OpenAPI
         url: openapi/university-of-wisconsin-madison-manifest-api-openapi.yml
@@ -202,7 +209,14 @@ apis:
     x-operator: institution
     description: Openly published mock of the Manifest API on mock.api.wisc.edu.
     baseURL: https://mock.api.wisc.edu/manifest
-    tags: [ Identity, Groups, Mock ]
+    tags:
+    - Identity
+    - Group
+    - Mock
+    tags_raw:
+    - Identity
+    - Groups
+    - Mock
     properties:
       - type: OpenAPI
         url: openapi/university-of-wisconsin-madison-mock-manifest-api-openapi.yml
@@ -259,7 +273,13 @@ apis:
       Basic presentation of client_id/client_secret, returning the bearer access token every
       other UW-Madison API requires. Declares no scopes.
     baseURL: https://api.wisc.edu/oauth
-    tags: [ Authentication, OAuth, Security ]
+    tags:
+    - Authentication
+    - Security
+    tags_raw:
+    - Authentication
+    - OAuth
+    - Security
     properties:
       - type: OpenAPI
         url: openapi/university-of-wisconsin-madison-oauth-api-openapi.yml
