@@ -3,13 +3,19 @@
   "feeds": [
     {
       "source": "https://it.wisc.edu/news/",
-      "feed_url": "https://it.wisc.edu/news/",
-      "title": "UW-Madison DoIT News",
+      "feed_url": "https://it.wisc.edu/news/feed/",
+      "title": "",
       "saved": 0,
-      "method": "none",
-      "error": "parse_failed"
+      "method": "discovered"
+    },
+    {
+      "source": "https://kb.wisc.edu/",
+      "feed_url": "https://kb.wisc.edu/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
   "post_count": 0,
-  "fetched": "2026-08-15T12:11:08Z"
+  "fetched": "2026-08-22T20:20:02Z"
 }
