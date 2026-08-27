@@ -110,272 +110,1476 @@ x-coverage:
     status: 404
   checked: '2026-08-19'
 apis:
-  - aid: university-of-wisconsin-madison:person-api
-    name: Person API
-    x-operator: institution
-    description: >-
-      Authoritative person and identity data for UW-Madison — names, populations, affiliations,
-      contact points, exports and webhooks. 47 operations over 31 paths, JSON:API envelopes,
-      OAuth 2.0 client credentials. Gated: production access requires an approved institutional
-      request. This is the closest thing in the estate to SCIM, expressed in UW-local terms.
-    humanURL: https://developer.wisc.edu/person-api
-    baseURL: https://api.wisc.edu
-    tags: [ Identity, People, Directory ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-person-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-person-api-schema.json
-      - type: Signup
-        url: https://developer.wisc.edu/person-api/getting-access
-  - aid: university-of-wisconsin-madison:mock-person-api
-    name: Mock Person API
-    x-operator: institution
-    description: >-
-      Openly published mock of the Person API on mock.api.wisc.edu, mirroring all 47 operations
-      so the contract and data shape are public even though production data is not. An
-      unusually good practice for an institution of this cohort.
-    baseURL: https://mock.api.wisc.edu
-    tags: [ Identity, Mock, Sandbox ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-mock-person-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
-  - aid: university-of-wisconsin-madison:mock-person-api-certificates
-    name: Mock Person API (Certificates)
-    x-operator: institution
-    description: >-
-      Certificate-authentication variant of the Mock Person API — 39 operations over 23 paths,
-      published for testing the mTLS/certificate access path documented on the portal.
-    baseURL: https://mock.api.wisc.edu
-    tags: [ Identity, Mock, Certificates ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
-  - aid: university-of-wisconsin-madison:hr-api
-    name: HR API
-    x-operator: institution
-    description: >-
-      Institutional HR data — academic units, supervisory organizations, job profiles, positions
-      and full-time-equivalent data, surfacing Workday-derived concepts under UW-Madison's own
-      JSON:API contract. 9 operations, OAuth 2.0 client credentials, gated.
-    humanURL: https://developer.wisc.edu/hr-api/supervisory-organizations
-    baseURL: https://api.wisc.edu/hr
-    tags: [ Human Resources, Academic Units, Workforce ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-hr-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
-      - type: ChangeLog
-        url: https://developer.wisc.edu/hr-api/release-notes
-  - aid: university-of-wisconsin-madison:mock-hr-api
-    name: Mock HR API
-    x-operator: institution
-    description: Openly published mock of the HR API on mock.api.wisc.edu, mirroring all 9 operations.
-    baseURL: https://mock.api.wisc.edu/hr
-    tags: [ Human Resources, Mock, Sandbox ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-mock-hr-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
-  - aid: university-of-wisconsin-madison:manifest-api
-    name: Manifest API
-    x-operator: institution
-    description: >-
-      Group and membership data for UW-Madison's Manifest service, backed by Internet2 Grouper
-      Web Services. 5 operations, JSON:API, OAuth 2.0 client credentials, manual approval.
-      Together with the Person API this is UW-Madison's authorization substrate.
-    baseURL: https://api.wisc.edu/manifest
-    tags:
-    - Identity
-    - Group
-    - Authorization
-    tags_raw:
-    - Identity
-    - Groups
-    - Authorization
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-manifest-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
-  - aid: university-of-wisconsin-madison:mock-manifest-api
-    name: Mock Manifest API
-    x-operator: institution
-    description: Openly published mock of the Manifest API on mock.api.wisc.edu.
-    baseURL: https://mock.api.wisc.edu/manifest
-    tags:
-    - Identity
-    - Group
-    - Mock
-    tags_raw:
-    - Identity
-    - Groups
-    - Mock
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-mock-manifest-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
-  - aid: university-of-wisconsin-madison:finance-api
-    name: Finance API
-    x-operator: institution
-    description: >-
-      The largest contract in the estate — 73 operations covering sponsored research and
-      financial administration: awards, award lines and tasks, grants, gifts, funds, cost
-      centers, budget lines, billing schedules, customer invoices, expense reports and assets.
-      Built by the DoIT Enterprise Business Systems (EBS) Integrated Business Solutions team.
-      OpenAPI 3.0.4, OAuth 2.0 client credentials, gated.
-    baseURL: https://api.wisc.edu/finance
-    tags: [ Finance, Grants, Sponsored Research, Procurement ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-finance-api-openapi.yml
-  - aid: university-of-wisconsin-madison:locations-api
-    name: Locations API
-    x-operator: institution
-    description: >-
-      Campus location, building and room reference data. 3 operations, OAuth 2.0 client
-      credentials, maintained by the DoIT EBS/IBS API team (locations-api@doit.wisc.edu).
-    baseURL: https://api.wisc.edu
-    tags: [ Locations, Buildings, Campus, Reference Data ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-locations-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-locations-api-schema.json
-  - aid: university-of-wisconsin-madison:enterprise-billing-api
-    name: Enterprise Billing API
-    x-operator: institution
-    description: >-
-      Service-provider billing transaction submission and lookup, backed by Salesforce. 7
-      operations. Recorded as published, with a defect noted honestly: the contract listed in
-      the PRODUCTION portal declares only a development server
-      (https://doit.dev.api.wisc.edu/enterprise-billing) and declares no security scheme,
-      despite the API product carrying manual approval.
-    baseURL: https://doit.dev.api.wisc.edu/enterprise-billing
-    tags: [ Billing, Finance, Salesforce ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-enterprise-billing-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
-  - aid: university-of-wisconsin-madison:oauth-api
-    name: OAuth API
-    x-operator: institution
-    description: >-
-      The token endpoint for the whole gateway — POST https://api.wisc.edu/oauth/token, HTTP
-      Basic presentation of client_id/client_secret, returning the bearer access token every
-      other UW-Madison API requires. Declares no scopes.
-    baseURL: https://api.wisc.edu/oauth
-    tags:
-    - Authentication
-    - Security
-    tags_raw:
-    - Authentication
-    - OAuth
-    - Security
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-oauth-api-openapi.yml
-      - type: Authentication
-        url: authentication/university-of-wisconsin-madison-authentication.yml
-  - aid: university-of-wisconsin-madison:course-search-api
-    name: Public Course Search API
-    x-operator: institution
-    description: >-
-      UW-Madison's only openly callable API — the unauthenticated JSON search behind
-      public.enroll.wisc.edu/search. Verified live on 2026-08-19: GET /terms returns the open
-      term codes, GET /aggregate returns 190 subject facets per term, and a POST search returned
-      226 and 932 course records for two terms. No credential of any kind is required. The
-      OpenAPI here is PROBED, not published by UW-Madison.
-    humanURL: https://public.enroll.wisc.edu/search
-    baseURL: https://public.enroll.wisc.edu/api/search/v1
-    tags: [ Course Catalog, Curriculum, Registrar, Open Access ]
-    properties:
-      - type: OpenAPI
-        url: openapi/university-of-wisconsin-madison-course-search-api-openapi.yml
-      - type: JSONSchema
-        url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
-      - type: Examples
-        url: examples/university-of-wisconsin-madison-course-search-search-example.json
-  - aid: university-of-wisconsin-madison:identity-federation
-    name: UW-Madison Identity Provider (Shibboleth)
-    x-operator: institution
-    description: >-
-      Institution-operated Shibboleth IdP at login.wisc.edu, machine-readable on two protocols
-      and almost never catalogued for a university. https://login.wisc.edu/idp/shibboleth
-      returns SAML 2.0 metadata (entityID https://login.wisc.edu/idp/shibboleth, shibmd:Scope
-      wisc.edu, signing and encryption keys), and
-      https://login.wisc.edu/.well-known/openid-configuration returns a full OIDC discovery
-      document. This governs campus SSO and the vendor tenants — it is NOT the API gateway,
-      which uses OAuth 2.0 client credentials and publishes no discovery document.
-    humanURL: https://login.wisc.edu/
-    baseURL: https://login.wisc.edu
-    tags: [ Identity Federation, SAML, Shibboleth, OpenID Connect, Single Sign-On ]
-    properties:
-      - type: SAMLMetadata
-        url: https://login.wisc.edu/idp/shibboleth
-      - type: OpenIDConnectDiscovery
-        url: https://login.wisc.edu/.well-known/openid-configuration
-      - type: Conformance
-        url: conformance/university-of-wisconsin-madison-conformance.yml
-  - aid: university-of-wisconsin-madison:minds-oai-pmh
-    name: MINDS@UW OAI-PMH Endpoint
-    x-operator: institution
-    description: >-
-      Live OAI-PMH 2.0 harvesting endpoint for MINDS@UW, UW-Madison's institutional repository.
-      Confirmed with ?verb=Identify — repositoryName 'MINDS@UW', protocolVersion 2.0,
-      adminEmail dspace-help@library.wisc.edu, records back to 1985 — and ?verb=ListMetadataFormats,
-      which offers 13 prefixes (oai_dc, qdc, dim, xoai, mods, mets, didl, ore, rdf, marc, etdms,
-      rioxx, uketd_dc). Classed institution rather than tenant because the endpoint reports its
-      own baseURL under wisc.edu and is administered by UW-Madison Libraries; the underlying
-      DSpace software is open source and self-hosted, not a vendor SaaS contract.
-    humanURL: https://minds.wisc.edu/
-    baseURL: https://minds.wisc.edu/server/oai/request
-    tags: [ Research Repository, OAI-PMH, Libraries, Open Access, Metadata ]
-    properties:
-      - type: APIReference
-        url: https://minds.wisc.edu/server/oai/request?verb=Identify
-      - type: Conformance
-        url: conformance/university-of-wisconsin-madison-conformance.yml
-  - aid: university-of-wisconsin-madison:curricular-data-model
-    name: Curricular Data Model
-    x-operator: institution
-    description: >-
-      UW-Madison's curricular data model (v1.5), published as generated Javadoc-style reference
-      documentation on the DoIT WAMS host. Verified live and genuinely institution-operated, but
-      it is reference documentation for a Java data model — there is no OpenAPI and no callable
-      endpoint behind it, so no contract is saved.
-    humanURL: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/index.html
-    tags: [ Curriculum, Courses, Data Model, Documentation ]
-    properties:
-      - type: Documentation
-        url: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/index.html
-  - aid: university-of-wisconsin-madison:canvas-lms
-    name: Canvas LMS (tenant)
-    x-operator: tenant
-    description: >-
-      UW-Madison's learning management system runs on an Instructure Canvas tenant at
-      canvas.wisc.edu, gated behind the institution's own Shibboleth IdP — an unauthenticated
-      request 302-redirects to login.wisc.edu/idp/profile/SAML2/Redirect/SSO, and
-      canvas.wisc.edu/api/v1/accounts returns Canvas's own 401 JSON. This is a REAL institutional
-      fact and one of UW-Madison's largest programmable surfaces, so it is recorded — but the
-      data is UW-Madison's and the contract is Instructure's. Per the operator axis, Instructure's
-      generic Canvas API specification is deliberately NOT saved under this institution, and no
-      artifact is derived from it. Any LTI conformance at UW-Madison lives here, inside the
-      vendor's contract, not in anything the institution publishes.
-    humanURL: https://canvas.wisc.edu/
-    baseURL: https://canvas.wisc.edu/api/v1
-    tags: [ Learning Management, Canvas, Instructure, Tenant, LTI ]
-    properties:
-      - type: Website
-        url: https://canvas.wisc.edu/
+- aid: university-of-wisconsin-madison:locations-api
+  name: Locations API
+  x-operator: institution
+  description: >-
+    Campus location, building and room reference data. 3 operations, OAuth 2.0 client credentials, maintained
+    by the DoIT EBS/IBS API team (locations-api@doit.wisc.edu).
+  baseURL: https://api.wisc.edu
+  tags:
+  - Locations
+  - Buildings
+  - Campus
+  - Reference Data
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-locations-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-locations-api-schema.json
+- aid: university-of-wisconsin-madison:identity-federation
+  name: UW-Madison Identity Provider (Shibboleth)
+  x-operator: institution
+  description: >-
+    Institution-operated Shibboleth IdP at login.wisc.edu, machine-readable on two protocols and almost
+    never catalogued for a university. https://login.wisc.edu/idp/shibboleth returns SAML 2.0 metadata
+    (entityID https://login.wisc.edu/idp/shibboleth, shibmd:Scope wisc.edu, signing and encryption keys),
+    and https://login.wisc.edu/.well-known/openid-configuration returns a full OIDC discovery document.
+    This governs campus SSO and the vendor tenants — it is NOT the API gateway, which uses OAuth 2.0 client
+    credentials and publishes no discovery document.
+  humanURL: https://login.wisc.edu/
+  baseURL: https://login.wisc.edu
+  tags:
+  - Identity Federation
+  - SAML
+  - Shibboleth
+  - OpenID Connect
+  - Single Sign-On
+  properties:
+  - type: SAMLMetadata
+    url: https://login.wisc.edu/idp/shibboleth
+  - type: OpenIDConnectDiscovery
+    url: https://login.wisc.edu/.well-known/openid-configuration
+  - type: Conformance
+    url: conformance/university-of-wisconsin-madison-conformance.yml
+- aid: university-of-wisconsin-madison:minds-oai-pmh
+  name: MINDS@UW OAI-PMH Endpoint
+  x-operator: institution
+  description: >-
+    Live OAI-PMH 2.0 harvesting endpoint for MINDS@UW, UW-Madison's institutional repository. Confirmed
+    with ?verb=Identify — repositoryName 'MINDS@UW', protocolVersion 2.0, adminEmail dspace-help@library.wisc.edu,
+    records back to 1985 — and ?verb=ListMetadataFormats, which offers 13 prefixes (oai_dc, qdc, dim,
+    xoai, mods, mets, didl, ore, rdf, marc, etdms, rioxx, uketd_dc). Classed institution rather than tenant
+    because the endpoint reports its own baseURL under wisc.edu and is administered by UW-Madison Libraries;
+    the underlying DSpace software is open source and self-hosted, not a vendor SaaS contract.
+  humanURL: https://minds.wisc.edu/
+  baseURL: https://minds.wisc.edu/server/oai/request
+  tags:
+  - Research Repository
+  - OAI-PMH
+  - Libraries
+  - Open Access
+  - Metadata
+  properties:
+  - type: APIReference
+    url: https://minds.wisc.edu/server/oai/request?verb=Identify
+  - type: Conformance
+    url: conformance/university-of-wisconsin-madison-conformance.yml
+- aid: university-of-wisconsin-madison:curricular-data-model
+  name: Curricular Data Model
+  x-operator: institution
+  description: >-
+    UW-Madison's curricular data model (v1.5), published as generated Javadoc-style reference documentation
+    on the DoIT WAMS host. Verified live and genuinely institution-operated, but it is reference documentation
+    for a Java data model — there is no OpenAPI and no callable endpoint behind it, so no contract is
+    saved.
+  humanURL: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/index.html
+  tags:
+  - Curriculum
+  - Courses
+  - Data Model
+  - Documentation
+  properties:
+  - type: Documentation
+    url: https://wams.doit.wisc.edu/chub/curricular-data-model-1.5/apidocs/index.html
+- aid: university-of-wisconsin-madison:canvas-lms
+  name: Canvas LMS (tenant)
+  x-operator: tenant
+  description: >-
+    UW-Madison's learning management system runs on an Instructure Canvas tenant at canvas.wisc.edu, gated
+    behind the institution's own Shibboleth IdP — an unauthenticated request 302-redirects to login.wisc.edu/idp/profile/SAML2/Redirect/SSO,
+    and canvas.wisc.edu/api/v1/accounts returns Canvas's own 401 JSON. This is a REAL institutional fact
+    and one of UW-Madison's largest programmable surfaces, so it is recorded — but the data is UW-Madison's
+    and the contract is Instructure's. Per the operator axis, Instructure's generic Canvas API specification
+    is deliberately NOT saved under this institution, and no artifact is derived from it. Any LTI conformance
+    at UW-Madison lives here, inside the vendor's contract, not in anything the institution publishes.
+  humanURL: https://canvas.wisc.edu/
+  baseURL: https://canvas.wisc.edu/api/v1
+  tags:
+  - Learning Management
+  - Canvas
+  - Instructure
+  - Tenant
+  - LTI
+  properties:
+  - type: Website
+    url: https://canvas.wisc.edu/
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-academic-units-api
+  name: University of Wisconsin-Madison Academic Units API
+  description: >-
+    The Academic Units API from University of Wisconsin-Madison — 2 operation(s) for academic units.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Academic Units
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-academic-units-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-academicappointments-api
+  name: University of Wisconsin-Madison Academic Appointments API
+  description: >-
+    The academicAppointments API from University of Wisconsin-Madison — 1 operation(s) for academicappointments.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - academicAppointments
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-academicappointments-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-addresses-api
+  name: University of Wisconsin-Madison Addresses API
+  description: The addresses API from University of Wisconsin-Madison — 1 operation(s) for addresses.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - addresses
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-addresses-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-affiliations-api
+  name: University of Wisconsin-Madison Affiliations API
+  description: >-
+    The affiliations API from University of Wisconsin-Madison — 1 operation(s) for affiliations.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - affiliations
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-affiliations-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-aggregate-api
+  name: University of Wisconsin-Madison Aggregate API
+  description: The Aggregate API from University of Wisconsin-Madison — 1 operation(s) for aggregate.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Aggregate
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-aggregate-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-billing-batch-delete-api
+  name: University of Wisconsin-Madison Billing Batch Delete API
+  description: >-
+    The Billing Batch Delete API from University of Wisconsin-Madison — 1 operation(s) for billing batch
+    delete.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Billing Batch Delete
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-billing-batch-delete-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: >-
+    university-of-wisconsin-madison:university-of-wisconsin-madison-billing-batch-information-api
+  name: University of Wisconsin-Madison Billing Batch Information API
+  description: >-
+    The Billing Batch Information API from University of Wisconsin-Madison — 1 operation(s) for billing
+    batch information.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Billing Batch Information
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-billing-batch-information-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-billing-batches-api
+  name: University of Wisconsin-Madison Billing Batches API
+  description: >-
+    The Billing Batches API from University of Wisconsin-Madison — 1 operation(s) for billing batches.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Billing Batches
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-billing-batches-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-billingcustomers-api
+  name: University of Wisconsin-Madison Billing Customers API
+  description: >-
+    The BillingCustomers API from University of Wisconsin-Madison — 1 operation(s) for billingcustomers.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - BillingCustomers
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-billingcustomers-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: >-
+    university-of-wisconsin-madison:university-of-wisconsin-madison-bulk-job-failed-results-api
+  name: University of Wisconsin-Madison Bulk Job Failed Results API
+  description: >-
+    The Bulk Job Failed Results API from University of Wisconsin-Madison — 1 operation(s) for bulk job
+    failed results.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Bulk Job Failed Results
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-bulk-job-failed-results-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-bulk-job-status-api
+  name: University of Wisconsin-Madison Bulk Job Status API
+  description: >-
+    The Bulk Job Status API from University of Wisconsin-Madison — 1 operation(s) for bulk job status.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Bulk Job Status
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-bulk-job-status-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-bulkjob-billingtrans-api
+  name: University of Wisconsin-Madison Bulkjob BillingTrans API
+  description: >-
+    The Bulkjob BillingTrans API from University of Wisconsin-Madison — 1 operation(s) for bulkjob billingtrans.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Bulkjob BillingTrans
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-bulkjob-billingtrans-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-certificates-api
+  name: University of Wisconsin-Madison Certificates API
+  description: >-
+    The certificates API from University of Wisconsin-Madison — 2 operation(s) for certificates.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - certificates
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-certificates-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-degrees-api
+  name: University of Wisconsin-Madison Degrees API
+  description: The degrees API from University of Wisconsin-Madison — 1 operation(s) for degrees.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - degrees
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-degrees-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-emailaddresses-api
+  name: University of Wisconsin-Madison Email Addresses API
+  description: >-
+    The emailAddresses API from University of Wisconsin-Madison — 1 operation(s) for emailaddresses.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - emailAddresses
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-emailaddresses-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-exports-api
+  name: University of Wisconsin-Madison Exports API
+  description: The exports API from University of Wisconsin-Madison — 2 operation(s) for exports.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - exports
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-exports-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-groups-api
+  name: University of Wisconsin-Madison Groups API
+  description: The groups API from University of Wisconsin-Madison — 3 operation(s) for groups.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - groups
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-groups-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-identifiers-api
+  name: University of Wisconsin-Madison Identifiers API
+  description: >-
+    The identifiers API from University of Wisconsin-Madison — 1 operation(s) for identifiers.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - identifiers
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-identifiers-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-jobs-api
+  name: University of Wisconsin-Madison Jobs API
+  description: The jobs API from University of Wisconsin-Madison — 5 operation(s) for jobs.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-jobs-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-journals-api
+  name: University of Wisconsin-Madison Journals API
+  description: The Journals API from University of Wisconsin-Madison — 4 operation(s) for journals.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Journals
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-journals-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-members-api
+  name: University of Wisconsin-Madison Members API
+  description: The members API from University of Wisconsin-Madison — 2 operation(s) for members.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - members
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-members-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-names-api
+  name: University of Wisconsin-Madison Names API
+  description: The names API from University of Wisconsin-Madison — 2 operation(s) for names.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - names
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-names-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: >-
+    university-of-wisconsin-madison:university-of-wisconsin-madison-organizationstructures-api
+  name: University of Wisconsin-Madison Organization Structures API
+  description: >-
+    The organizationStructures API from University of Wisconsin-Madison — 2 operation(s) for organizationstructures.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - organizationStructures
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-organizationstructures-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-other-api
+  name: University of Wisconsin-Madison Other API
+  description: The Other API from University of Wisconsin-Madison — 32 operation(s) for other.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Other
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-other-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-people-api
+  name: University of Wisconsin-Madison People API
+  description: The people API from University of Wisconsin-Madison — 2 operation(s) for people.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - people
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-people-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-phonenumbers-api
+  name: University of Wisconsin-Madison Phone Numbers API
+  description: >-
+    The phoneNumbers API from University of Wisconsin-Madison — 1 operation(s) for phonenumbers.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - phoneNumbers
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-phonenumbers-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-research-api
+  name: University of Wisconsin-Madison Research API
+  description: The Research API from University of Wisconsin-Madison — 6 operation(s) for research.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Research
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-research-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-salary-structures-api
+  name: University of Wisconsin-Madison Salary Structures API
+  description: >-
+    The Salary Structures API from University of Wisconsin-Madison — 2 operation(s) for salary structures.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Salary Structures
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-salary-structures-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: >-
+    university-of-wisconsin-madison:university-of-wisconsin-madison-socialsecuritynumbers-api
+  name: University of Wisconsin-Madison Social Security Numbers API
+  description: >-
+    The socialSecurityNumbers API from University of Wisconsin-Madison — 1 operation(s) for socialsecuritynumbers.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - socialSecurityNumbers
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-socialsecuritynumbers-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: >-
+    university-of-wisconsin-madison:university-of-wisconsin-madison-standard-job-descriptions-api
+  name: University of Wisconsin-Madison Standard Job Descriptions API
+  description: >-
+    The Standard Job Descriptions API from University of Wisconsin-Madison — 3 operation(s) for standard
+    job descriptions.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Standard Job Descriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-standard-job-descriptions-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: >-
+    university-of-wisconsin-madison:university-of-wisconsin-madison-supervisory-organizations-api
+  name: University of Wisconsin-Madison Supervisory Organizations API
+  description: >-
+    The Supervisory Organizations API from University of Wisconsin-Madison — 2 operation(s) for supervisory
+    organizations.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Supervisory Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-supervisory-organizations-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-terms-api
+  name: University of Wisconsin-Madison Terms API
+  description: The Terms API from University of Wisconsin-Madison — 1 operation(s) for terms.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Terms
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-terms-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-token-api
+  name: University of Wisconsin-Madison Token API
+  description: The Token API from University of Wisconsin-Madison — 1 operation(s) for token.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Token
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-token-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: >-
+    university-of-wisconsin-madison:university-of-wisconsin-madison-uw-madison-public-course-search-api-api
+  name: University of Wisconsin-Madison UW Madison Public Course Search API
+  description: >-
+    The UW Madison Public Course Search API API from University of Wisconsin-Madison — 1 operation(s)
+    for uw madison public course search api.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - UW Madison Public Course Search API
+  properties:
+  - type: OpenAPI
+    url: >-
+      openapi/university-of-wisconsin-madison-uw-madison-public-course-search-api-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-webhooks-api
+  name: University of Wisconsin-Madison Webhooks API
+  description: The webhooks API from University of Wisconsin-Madison — 7 operation(s) for webhooks.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-webhooks-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-wiscard-api
+  name: University of Wisconsin-Madison Wiscard API
+  description: The wiscard API from University of Wisconsin-Madison — 1 operation(s) for wiscard.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - wiscard
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-wiscard-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-worktags-api
+  name: University of Wisconsin-Madison Worktags API
+  description: The Worktags API from University of Wisconsin-Madison — 31 operation(s) for worktags.
+  humanURL: https://developer.wisc.edu/person-api
+  baseURL: https://api.wisc.edu
+  tags:
+  - Worktags
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-worktags-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
 common:
   - type: Website
     url: https://www.wisc.edu/
