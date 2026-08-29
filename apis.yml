@@ -24,6 +24,18 @@ description: >-
   that do not exist. Learning management runs on a Canvas tenant, recorded here as a tenant
   relationship and not as UW-Madison engineering.
 type: Index
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: free
   onboarding: request
@@ -1581,6 +1593,9 @@ apis:
   - type: Examples
     url: examples/university-of-wisconsin-madison-course-search-search-example.json
 common:
+  - type: CapabilityMap
+    url: capabilities/university-of-wisconsin-madison-capability-edges.yml
+    name: University of Wisconsin-Madison Business Capability Map
   - type: Website
     url: https://www.wisc.edu/
   - type: DeveloperPortal
