@@ -1,0 +1,1476 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Exports API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+    url: https://go.wisc.edu/k701y6
+  description: 'Operations tagged exports across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://mock.api.wisc.edu
+- url: https://api.wisc.edu
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: exports
+paths:
+  /people/exports:
+    get:
+      description: Get a collection of exports. Refer to the [Exports Documentation](/person-api/exports) for more information.
+      summary: Get exports.
+      operationId: get_exports
+      tags:
+      - exports
+      responses:
+        '200':
+          description: A collection of exports.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of exports.
+                    type: array
+                    items:
+                      description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](/person-api/exports) for more information.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - links
+                      properties:
+                        type:
+                          type: string
+                          example: exports
+                        id:
+                          type: string
+                          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+                          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+                        attributes:
+                          type: object
+                          properties:
+                            relationships:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - names
+                              - jobs
+                              description: Relationships to include in the exported data. By default, only the root person data will be included.
+                            filters:
+                              type: array
+                              items:
+                                type: object
+                                description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                                required:
+                                - attribute
+                                - values
+                                properties:
+                                  attribute:
+                                    type: string
+                                    example: jobs.divisionCode
+                                    description: A valid attribute or relationship attribute on the people resource.
+                                  operator:
+                                    type: string
+                                    example: STARTS_WITH
+                                    enum:
+                                    - STARTS_WITH
+                                    - ENDS_WITH
+                                    - CONTAINS
+                                    - EQUALS
+                                    - IN
+                                    description: The comparison to be performed on the values.
+                                  values:
+                                    type: array
+                                    items:
+                                      type: string
+                                    example:
+                                    - A192
+                                    - A193
+                                    description: A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                              description: Filters to apply when generating the exported data.
+                            status:
+                              type: string
+                              enum:
+                              - Pending
+                              - Completed
+                              - Deleted
+                              - Error
+                              readOnly: true
+                              example: Pending
+                              description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
+                            exportUrl:
+                              type: string
+                              format: url
+                              readOnly: true
+                              description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
+                            requestTime:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The time the export request was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                            completionTime:
+                              type:
+                              - string
+                              - 'null'
+                              format: date-time
+                              readOnly: true
+                              example: '2024-01-01T00:05:00+00:00'
+                              description: The time the export was done processing. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-exports:
+                  value:
+                    data:
+                    - attributes:
+                        relationships:
+                        - names
+                        - jobs
+                        filters:
+                        - attribute: jobs.divisionCode
+                          operator: STARTS_WITH
+                          values:
+                          - A192
+                          - A193
+                        status: Completed
+                        exportUrl: https://example.com/person-export-d26bd7c2-8874-4322-b184-aaa410246630.json?signature=123456
+                        requestTime: '2024-01-01T00:00:00+00:00'
+                        completionTime: '2024-01-01T00:05:00+00:00'
+                      id: d26bd7c2-8874-4322-b184-aaa410246630
+                      links:
+                        self: https://api.wisc.edu/people/exports/d26bd7c2-8874-4322-b184-aaa410246630
+                      type: exports
+                    - attributes:
+                        relationships:
+                        - emailAddresses
+                        - phoneNumbers
+                        filters:
+                        - attribute: emailAddresses.emailAddress
+                          operator: ENDS_WITH
+                          values:
+                          - '@wisc.edu'
+                          - '@wisconsin.edu'
+                        status: Error
+                        exportUrl: null
+                        requestTime: '2024-01-02T00:00:00Z'
+                        completionTime: '2024-01-02T00:05:00Z'
+                      id: 2c5b6610-d9b7-4510-abbf-d31772d21fcd
+                      links:
+                        self: https://api.wisc.edu/people/exports/2c5b6610-d9b7-4510-abbf-d31772d21fcd
+                      type: exports
+                    links:
+                      self: https://api.wisc.edu/people/exports
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    post:
+      description: Create an export. Refer to the [Exports Documentation](/person-api/exports) for more information.
+      summary: Create an export.
+      operationId: create_export
+      tags:
+      - exports
+      requestBody:
+        description: An export request body. Only the attributes "relationships" and "filters" can be set in a request.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              required:
+              - data
+              properties:
+                data:
+                  type: object
+                  required:
+                  - type
+                  properties:
+                    type:
+                      type: string
+                      example: exports
+                      enum:
+                      - exports
+                    attributes:
+                      type: object
+                      properties:
+                        relationships:
+                          type: array
+                          items:
+                            type: string
+                          example:
+                          - names
+                          - jobs
+                          description: Relationships to include in the exported data. By default, only the root person data will be included.
+                        filters:
+                          type: array
+                          items:
+                            type: object
+                            description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                            required:
+                            - attribute
+                            - values
+                            properties:
+                              attribute:
+                                type: string
+                                example: jobs.divisionCode
+                                description: A valid attribute or relationship attribute on the people resource.
+                              operator:
+                                type: string
+                                example: STARTS_WITH
+                                enum:
+                                - STARTS_WITH
+                                - ENDS_WITH
+                                - CONTAINS
+                                - EQUALS
+                                - IN
+                                description: The comparison to be performed on the values.
+                              values:
+                                type: array
+                                items:
+                                  type: string
+                                example:
+                                - A192
+                                - A193
+                                description: A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                          description: Filters to apply when generating the exported data.
+      responses:
+        '202':
+          description: A single export.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](/person-api/exports) for more information.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - attributes
+                    - links
+                    properties:
+                      type:
+                        type: string
+                        example: exports
+                      id:
+                        type: string
+                        description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+                        example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+                      attributes:
+                        type: object
+                        properties:
+                          relationships:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - names
+                            - jobs
+                            description: Relationships to include in the exported data. By default, only the root person data will be included.
+                          filters:
+                            type: array
+                            items:
+                              type: object
+                              description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                              required:
+                              - attribute
+                              - values
+                              properties:
+                                attribute:
+                                  type: string
+                                  example: jobs.divisionCode
+                                  description: A valid attribute or relationship attribute on the people resource.
+                                operator:
+                                  type: string
+                                  example: STARTS_WITH
+                                  enum:
+                                  - STARTS_WITH
+                                  - ENDS_WITH
+                                  - CONTAINS
+                                  - EQUALS
+                                  - IN
+                                  description: The comparison to be performed on the values.
+                                values:
+                                  type: array
+                                  items:
+                                    type: string
+                                  example:
+                                  - A192
+                                  - A193
+                                  description: A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                            description: Filters to apply when generating the exported data.
+                          status:
+                            type: string
+                            enum:
+                            - Pending
+                            - Completed
+                            - Deleted
+                            - Error
+                            readOnly: true
+                            example: Pending
+                            description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
+                          exportUrl:
+                            type: string
+                            format: url
+                            readOnly: true
+                            description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
+                          requestTime:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                            example: '2024-01-01T00:00:00+00:00'
+                            description: The time the export request was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                          completionTime:
+                            type:
+                            - string
+                            - 'null'
+                            format: date-time
+                            readOnly: true
+                            example: '2024-01-01T00:05:00+00:00'
+                            description: The time the export was done processing. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                      links:
+                        description: The link to access a resource itself
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-export-pending:
+                  value:
+                    data:
+                      attributes:
+                        relationships:
+                        - names
+                        - jobs
+                        - identifiers
+                        filters:
+                        - attribute: jobs.divisionCode
+                          operator: STARTS_WITH
+                          values:
+                          - A192
+                          - A193
+                        status: Pending
+                        requestTime: '2024-01-01T00:00:00+00:00'
+                      id: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+                      links:
+                        self: https://api.wisc.edu/people/exports/b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+                      type: exports
+                    links:
+                      self: https://api.wisc.edu/people/exports/b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '415':
+          description: 'Request includes a body but not the valid JSON API Content-Type header: application/vnd.api+json'
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unsupported-media-type-example:
+                  value:
+                    errors:
+                    - status: 415
+                      title: Unsupported Media Type
+                      detail: Requests with a body must include the Content-Type header with a value of application/vnd.api+json
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+  /people/exports/{exportId}:
+    get:
+      description: Get an export. This endpoint is meant to be checked on a repeated basis when waiting for an export to complete. Requests to this endpoint count towards the overall quota for an application. Refer to the [Exports Documentation](/person-api/exports) for more information.
+      summary: Get an export.
+      operationId: get_export
+      tags:
+      - exports
+      parameters:
+      - name: exportId
+        description: ID of an export. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
+        in: path
+        example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+        required: true
+        schema:
+          type: string
+          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+      responses:
+        '200':
+          description: A single export.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](/person-api/exports) for more information.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - attributes
+                    - links
+                    properties:
+                      type:
+                        type: string
+                        example: exports
+                      id:
+                        type: string
+                        description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+                        example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+                      attributes:
+                        type: object
+                        properties:
+                          relationships:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - names
+                            - jobs
+                            description: Relationships to include in the exported data. By default, only the root person data will be included.
+                          filters:
+                            type: array
+                            items:
+                              type: object
+                              description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                              required:
+                              - attribute
+                              - values
+                              properties:
+                                attribute:
+                                  type: string
+                                  example: jobs.divisionCode
+                                  description: A valid attribute or relationship attribute on the people resource.
+                                operator:
+                                  type: string
+                                  example: STARTS_WITH
+                                  enum:
+                                  - STARTS_WITH
+                                  - ENDS_WITH
+                                  - CONTAINS
+                                  - EQUALS
+                                  - IN
+                                  description: The comparison to be performed on the values.
+                                values:
+                                  type: array
+                                  items:
+                                    type: string
+                                  example:
+                                  - A192
+                                  - A193
+                                  description: A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                            description: Filters to apply when generating the exported data.
+                          status:
+                            type: string
+                            enum:
+                            - Pending
+                            - Completed
+                            - Deleted
+                            - Error
+                            readOnly: true
+                            example: Pending
+                            description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
+                          exportUrl:
+                            type: string
+                            format: url
+                            readOnly: true
+                            description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
+                          requestTime:
+                            type: string
+                            format: date-time
+                            readOnly: true
+                            example: '2024-01-01T00:00:00+00:00'
+                            description: The time the export request was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                          completionTime:
+                            type:
+                            - string
+                            - 'null'
+                            format: date-time
+                            readOnly: true
+                            example: '2024-01-01T00:05:00+00:00'
+                            description: The time the export was done processing. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                      links:
+                        description: The link to access a resource itself
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-export-completed:
+                  value:
+                    data:
+                      attributes:
+                        relationships:
+                        - names
+                        - jobs
+                        filters:
+                        - attribute: jobs.divisionCode
+                          operator: STARTS_WITH
+                          values:
+                          - A192
+                          - A193
+                        status: Completed
+                        exportUrl: https://example.com/person-export-d26bd7c2-8874-4322-b184-aaa410246630.json?signature=123456
+                        requestTime: '2024-01-01T00:00:00+00:00'
+                        completionTime: '2024-01-01T00:05:00+00:00'
+                      id: d26bd7c2-8874-4322-b184-aaa410246630
+                      links:
+                        self: https://api.wisc.edu/people/exports/d26bd7c2-8874-4322-b184-aaa410246630
+                      type: exports
+                    links:
+                      self: https://api.wisc.edu/people/exports/d26bd7c2-8874-4322-b184-aaa410246630
+                example-export-error:
+                  value:
+                    data:
+                      attributes:
+                        relationships:
+                        - emailAddresses
+                        - phoneNumbers
+                        filters:
+                        - attribute: emailAddresses.emailAddress
+                          operator: ENDS_WITH
+                          values:
+                          - '@wisc.edu'
+                          - '@wisconsin.edu'
+                        status: Error
+                        exportUrl: null
+                        requestTime: '2024-01-02T00:00:00Z'
+                        completionTime: '2024-01-02T00:05:00Z'
+                      id: 2c5b6610-d9b7-4510-abbf-d31772d21fcd
+                      links:
+                        self: https://api.wisc.edu/people/exports/2c5b6610-d9b7-4510-abbf-d31772d21fcd
+                      type: exports
+                    links:
+                      self: https://api.wisc.edu/people/exports/2c5b6610-d9b7-4510-abbf-d31772d21fcd
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    delete:
+      description: Delete an export. This deletes the export and the exported data. Refer to the [Exports Documentation](/person-api/exports) for more information.
+      summary: Delete an export.
+      operationId: delete_export
+      tags:
+      - exports
+      parameters:
+      - name: exportId
+        description: ID of an export. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
+        in: path
+        example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+        required: true
+        schema:
+          type: string
+          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+      responses:
+        '204':
+          description: Name deleted. Empty response.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
+- university-of-wisconsin-madison-mock-person-api-openapi.yml
+- university-of-wisconsin-madison-person-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

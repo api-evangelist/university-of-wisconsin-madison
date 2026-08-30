@@ -1,0 +1,512 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Addresses API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+    url: https://go.wisc.edu/k701y6
+  description: 'Operations tagged addresses across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://mock.api.wisc.edu
+- url: https://api.wisc.edu
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: addresses
+paths:
+  /people/{id}/addresses:
+    get:
+      description: "<main>\n    <section>\n        <p>\n            Get a person's addresses, split into separate resource objects depending on the type and source of address. Home addresses will only show up if requested and granted during the request process.\n        </p>\n        <p>\n            The following combinations of <code>addressType</code> and <code>source</code> are available:\n        </p>\n        <ul>\n            <ul>\n                <li>Types for source: <code>CSIS</code>\n                    <ul>\n                        <li>permanentHome</li>\n                    </ul>\n                </li>\n                <li>Types for source: <code>HRS</code>\n                    <ul>\n                        <li>office</li>\n                        <li>permanentHome</li>\n                    </ul>\n                </li>\n                <li>Types for source: <code>SIS</code>\n                    <ul>\n                        <li>currentHome</li>\n                        <li>permanentHome</li>\n                    </ul>\n                </li>\n                <li>Types for source: <code>Summer Research Opportunities Program</code>\n                    <ul>\n                        <li>currentHome</li>\n                        <li>permanentHome</li>\n                    </ul>\n                </li>\n                <li>Types for source: <code>UW Hospital and Clinics</code>\n                    <ul>\n                        <li>office</li>\n                        <li>permanentHome</li>\n                    </ul>\n                </li>\n                <li>Types for source: <code>UW Medical Foundation</code>\n                    <ul>\n                        <li>office</li>\n                        <li>permanentHome</li>\n                    </ul>\n                </li>\n                <li>Types for source: <code>UW-Madison Special Populations</code>\n                    <ul>\n                        <li>office</li>\n                        <li>permanentHome</li>\n                    </ul>\n                </li>\n                <li>Types for source: <code>Workday</code>\n                    <ul>\n                        <li>office</li>\n                        <li>permanentHome</li>\n                    </ul>\n                </li>\n            </ul>\n        </ul>\n    </section>\n</main>"
+      summary: Get addresses.
+      operationId: get_person_addresses
+      tags:
+      - addresses
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: '700'
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: '12345'
+      - name: fields
+        in: query
+        description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              example: people
+      responses:
+        '200':
+          description: A collection of addresses.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of addresses
+                    type: array
+                    items:
+                      description: Details about an address associated with a person.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - links
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          example: addresses
+                        id:
+                          type: string
+                          example: '12345'
+                          description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+                        attributes:
+                          type: object
+                          required:
+                          - line1
+                          - line2
+                          - line3
+                          - line4
+                          - city
+                          - state
+                          - county
+                          - country
+                          - postalCode
+                          - source
+                          - addressType
+                          - institution
+                          properties:
+                            line1:
+                              description: Line 1 of the address.
+                              type: string
+                              example: 123 Main Street
+                            line2:
+                              description: Line 2 of the address.
+                              type: string
+                              example: Apartment 1
+                            line3:
+                              description: Line 3 of the address.
+                              type: string
+                            line4:
+                              description: Line 4 of the address.
+                              type: string
+                            city:
+                              description: The city associated with the address.
+                              type: string
+                              example: Madison
+                            state:
+                              description: The state associated with the address.
+                              type: string
+                              example: WI
+                            county:
+                              description: The county associated with the address.
+                              type: string
+                              example: Dane
+                            country:
+                              description: The country associated with the address.
+                              type: string
+                              example: US
+                            postalCode:
+                              description: The postal/zip code associated with the address.
+                              type: string
+                              example: '53715'
+                            source:
+                              description: The source of the address.
+                              type: string
+                              enum:
+                              - CSIS
+                              - HRS
+                              - SIS
+                              - Summer Research Opportunities Program
+                              - UW-Madison Special Authorization
+                              - UW Hospital and Clinics
+                              - UW Medical Foundation
+                              - Workday
+                              example: HRS
+                            addressType:
+                              description: The type of address.
+                              type: string
+                              enum:
+                              - currentHome
+                              - permanentHome
+                              - office
+                              example: office
+                            institution:
+                              description: The institution associated with the resource.
+                              type: string
+                              example: UW-Madison
+                              enum:
+                              - Shared
+                              - UW-Eau Claire
+                              - UW-Green Bay
+                              - UW-La Crosse
+                              - UW-Madison
+                              - UW-Milwaukee
+                              - UW Oshkosh
+                              - UW-Parkside
+                              - UW-Platteville
+                              - UW-River Falls
+                              - UW-Stevens Point
+                              - UW-Stout
+                              - UW-Superior
+                              - UW-Whitewater
+                              - UW-Extension
+                              - UW System
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                        relationships:
+                          type: object
+                          properties:
+                            person:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-addresses:
+                  value:
+                    data:
+                    - attributes:
+                        line1: 700 Regent Street
+                        line2: Unit 200
+                        line3: null
+                        line4: null
+                        city: Madison
+                        state: WI
+                        county: Dane
+                        country: US
+                        postalCode: '53715'
+                        source: HRS
+                        addressType: office
+                        institution: UW-Madison
+                      id: '100'
+                      relationships:
+                        person:
+                          data:
+                            id: '100'
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/100
+                      type: addresses
+                    links:
+                      self: https://api.wisc.edu/people/100/addresses
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
+- university-of-wisconsin-madison-mock-person-api-openapi.yml
+- university-of-wisconsin-madison-person-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

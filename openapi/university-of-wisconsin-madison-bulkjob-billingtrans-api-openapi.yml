@@ -1,0 +1,300 @@
+openapi: 3.2.0
+info:
+  title: Enterprise Billing Bulkjob BillingTrans API
+  description: Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API.  For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/.  For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438.
+  version: 0.1.0
+servers:
+- url: https://doit.dev.api.wisc.edu/enterprise-billing
+  description: Dev server
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Bulkjob BillingTrans
+paths:
+  /bulkjob-BillingTrans:
+    parameters:
+    - in: path
+      name: csv file
+      schema:
+        type: array
+      required: true
+      description: Submit a .csv file of billing transactions.
+    summary: Upload .csv file of billing transactions.
+    post:
+      summary: Submit a .csv file of billing transactions.
+      description: Creates Billing Batch and child billing transactions in Salesforce.
+      requestBody:
+        description: Attached .csv file for request.
+        required: true
+        content:
+          'text/plain:':
+            schema:
+              $ref: '#/components/schemas/billingTransactionsCSV'
+      responses:
+        '200':
+          description: Bulkjob created with submitted CSV file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bulkjob'
+              example:
+                id: 750Dh0000095JICIA2
+                operation: insert
+                object: blng_Billing_ISP_Data__c
+                createdById: 005Dh000007Z12uIAC
+                createdDate: 2025-03-20T13:29:35.000+0000
+                systemModstamp: 2025-03-20T13:29:37.000+0000
+                state: JobComplete
+                concurrencyMode: Parallel
+                contentType: CSV
+                apiVersion: 58.0,
+                jobType: V2Ingest
+                lineEnding: CRLF
+                columnDelimiter: COMMA
+                numberRecordsProcessed: 2
+                numberRecordsFailed: 0
+                retries: 0
+                totalProcessingTime: 848
+                apiActiveProcessingTime: 790
+                apexProcessingTime: 329
+        '400':
+          $ref: '#/components/responses/DuplicateBillingBatchName'
+        '403':
+          $ref: '#/components/responses/NoAuthorization'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+      - Bulkjob BillingTrans
+components:
+  responses:
+    DuplicateBillingBatchName:
+      description: Duplicate BillingBatchName not allowed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorDuplicateBillingBatchName'
+          example:
+            error: null
+            reason: Bad Request
+            details: Salesforce Billing_Batch_Name must be unique.
+            sfdcDetail:
+              message: Billing Batch Name must be unique
+              errorCode: Billing Batch Name must be unique
+              fields: Name
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.
+  schemas:
+    errorDuplicateBillingBatchName:
+      description: Duplicate BillingBatchName error object
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Base fault reason.
+        details:
+          type: string
+          description: Specific fault verbage. (from Apigee)
+        sfdcDetail:
+          type: array
+          description: Details from Salesforce.
+          items:
+            properties:
+              message:
+                type: string
+                description: Specific fault message.
+              errorCode:
+                type: string
+                description: specific error code
+              fields:
+                type: array
+                description: Field API name(s) with issues.
+    billingTransactionsCSV:
+      title: Billing Transaction CSV
+      description: Billing transactions CSV file
+      type: object
+      properties:
+        Billing_Batch_Name:
+          title: Billing_Batch_Name
+          description: Salesforce name of Billing Batch.
+          type: string
+          example: Cloud Services April 2025
+        ISP_Source_Record_ID:
+          title: ISP_Source_Record_ID
+          description: Source system record unique identifier.
+          type: string
+        Billing_Customer_ID:
+          title: Billing_Customer_ID
+          description: Salesforce Billing_Customer_ID.
+          type: string
+          example: ICUS000002
+        Customer_PO_Number:
+          title: Customer_PO_Number
+          description: External Customer PO Number.
+          type: string
+        Service_Billing_Table_Name:
+          title: Service_Billing_Table_Name
+          description: Salesforce name of provided service.
+          type: string
+          example: Digital Publishing and Printing Services
+        Quantity:
+          title: Quantity
+          description: Quantity consumed. (Quantity x Unit_Cost = Extended Amount)
+          type: number
+        Unit_of_Measure:
+          title: Unit_of_Measure
+          description: Unit of Measure
+          type: string
+        Unit_Cost:
+          title: Unit_Cost
+          description: Cost per Unit. (Quantity x Unit_Cost = Extended Amount)
+          type: string
+        Extended_Amount:
+          title: Extended_Amount
+          description: (Quantity x Unit_Cost = Extended Amount)
+          type: string
+        Transaction_Date:
+          title: Transaction_Date
+          description: Date of service.
+          type: string
+          format: date
+          example: '2024-11-27'
+        From_Date:
+          title: From_Date
+          description: Start of date range for service.
+          type: string
+          format: date
+          example: '2024-07-23'
+        To_Date:
+          title: To_Date
+          description: End of date range for service.
+          type: string
+          format: date
+          example: '2024-03-17'
+        Memo:
+          title: Memo
+          description: Comments field.
+          type: string
+    error:
+      description: Error object
+      type: object
+      properties:
+        message:
+          type: string
+    bulkjob:
+      title: Bulkjob Status
+      description: Bulkjob information.
+      type: object
+      properties:
+        id:
+          readOnly: true
+          title: Id
+          description: Salesforce record identifier.
+          type: string
+          format: Salesforce Id
+        operation:
+          readOnly: true
+          title: Operation
+          description: Bulkjob data operation of submitted data.
+          type: string
+        object:
+          readOnly: true
+          title: Object
+          description: Bulkjob target object (api name).
+          type: string
+        createdById:
+          readOnly: true
+          title: Created By
+          description: 'Salesforce user identifier whom created bulkjob. '
+          type: string
+          format: Salesforce Id
+        createdDate:
+          readOnly: true
+          title: Created Date
+          description: Bulkjob created date.
+          type: string
+          format: date-time
+        systemModstamp:
+          readOnly: true
+          title: System Modstamp
+          description: ''
+          type: string
+          format: date-time
+        state:
+          readOnly: true
+          title: State
+          description: Bulkjob status.
+          type: string
+        concurrencyMode:
+          readOnly: true
+          title: Concurrency Mode
+          description: Bulkjob run mode.
+          type: string
+        contentType:
+          readOnly: true
+          title: Content Type
+          description: Bulkjob submitted data type.
+          type: string
+        apiVersion:
+          readOnly: true
+          title: APIVersion
+          description: Bulkjob runtime api version.
+          type: string
+        jobType:
+          readOnly: true
+          title: Job Type
+          description: Bulkjob type.
+          type: string
+        lineEnding:
+          readOnly: true
+          title: Line Ending
+          description: Bulkjob submitted data lineEnding.
+          type: string
+        columnDelimiter:
+          readOnly: true
+          title: Column Delimiter
+          description: Bulkjob submitted data column delimiter.
+          type: string
+        numberRecordsProcessed:
+          readOnly: true
+          title: Number of Records Processed
+          description: Bulkjob total records processed.
+          type: number
+        numberRecordsFailed:
+          readOnly: true
+          title: Number of Records Failed
+          description: Bulkjob records that failed.
+          type: number
+        retries:
+          readOnly: true
+          title: Retries
+          description: Bulkjob retries.
+          type: number
+        totalProcessingTime:
+          readOnly: true
+          title: Total Processing Time
+          description: Bulkjob processing time.
+          type: number
+        apiActiveProcessingTime:
+          readOnly: true
+          title: API Active Processing Time
+          description: Bulkjob API active processing time.
+          type: number
+        apexProcessingTime:
+          readOnly: true
+          title: APEX Processing Time
+          description: Bulkjob APEX processing time.
+          type: number

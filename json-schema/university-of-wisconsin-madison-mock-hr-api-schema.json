@@ -1,0 +1,631 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/main/json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json",
+  "title": "Mock HR API data model",
+  "description": "Component schemas extracted verbatim from openapi/university-of-wisconsin-madison-mock-hr-api-openapi.yml, a contract published by the University of Wisconsin-Madison. Refs are rewritten from #/$defs/ to #/$defs/; no schema was authored or altered here.",
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "derived",
+    "source": "openapi/university-of-wisconsin-madison-mock-hr-api-openapi.yml",
+    "x-operator": "institution"
+  },
+  "$defs": {
+    "academicUnit": {
+      "description": "An academic unit.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "academicUnits"
+        },
+        "id": {
+          "type": "string",
+          "description": "The academic unit ID.",
+          "example": "AU000111"
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "UWMSN | SoBS | School of Bucky Studies",
+              "description": "The academic unit name."
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "supervisoryOrganization": {
+              "description": "The supervisory organization of this academic unit, if one exists. Around 10% of all academic units lack an associated supervisory organization.",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "description": "Link to the supervisory organization.",
+                      "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "supervisoryOrganizations"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the supervisory organization.",
+                      "example": "SO0000123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "links": {
+          "description": "The link to the supervisory organization.",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+            }
+          }
+        }
+      }
+    },
+    "supervisoryOrganization": {
+      "description": "A supervisory organization.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "supervisoryOrganizations"
+        },
+        "id": {
+          "type": "string",
+          "description": "The supervisory organization ID.",
+          "example": "SO00002793"
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "example": "UWMSN | DoIT |",
+              "description": "The code that precedes the name of a supervisory organization.",
+              "nullable": true
+            },
+            "managerPositionId": {
+              "type": "string",
+              "example": "0123456789",
+              "description": "The Workday position ID that manages the supervisory organization. This is present whether or not the position is currently filled.",
+              "nullable": true
+            },
+            "name": {
+              "type": "string",
+              "example": "AIS Enterprise Integration (EI)",
+              "description": "The name of the supervisory organization."
+            },
+            "supervisoryOrganizationType": {
+              "type": "string",
+              "example": "Division",
+              "enum": [
+                "System",
+                "Institution",
+                "Executive",
+                "Division",
+                "College",
+                "School",
+                "Department",
+                "Subdepartment"
+              ],
+              "description": "The type of supervisory organization."
+            },
+            "costCenterId": {
+              "type": "string",
+              "example": "CC000001",
+              "description": "The ID of the default Cost Center for this supervisory organization."
+            },
+            "costCenterName": {
+              "type": "string",
+              "example": "UWEAU | CHAN | Chancellor",
+              "description": "The name of the default Cost Center for this supervisory organization."
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "superiorOrganization": {
+              "description": "The superior organization to this supervisory organization.",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "description": "Link to the superior organization.",
+                      "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "supervisoryOrganizations"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the superior organization.",
+                      "example": "SO0000123"
+                    }
+                  }
+                }
+              }
+            },
+            "subordinateOrganizations": {
+              "description": "Subordinate organizations under this supervisory organization.",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "supervisoryOrganizations"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "ID of a subordinate organization.",
+                        "example": "SO0000567"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "allSubordinateOrganizations": {
+              "description": "All subordinate organizations under this supervisory organization.",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "supervisoryOrganizations"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "ID of a subordinate organization.",
+                        "example": "SO0000567"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "links": {
+          "description": "The link to the supervisory organization.",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+            }
+          }
+        }
+      }
+    },
+    "supervisoryOrganizationWithoutAllSubordinateOrgs": {
+      "description": "A supervisory organization.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "supervisoryOrganizations"
+        },
+        "id": {
+          "type": "string",
+          "description": "The supervisory organization ID.",
+          "example": "SO00002793"
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "code": {
+              "type": "string",
+              "example": "UWMSN | DoIT |",
+              "description": "The code that precedes the name of a supervisory organization.",
+              "nullable": true
+            },
+            "managerPositionId": {
+              "type": "string",
+              "example": "0123456789",
+              "description": "The Workday position ID that manages the supervisory organization. This is present whether or not the position is currently filled.",
+              "nullable": true
+            },
+            "name": {
+              "type": "string",
+              "example": "AIS Enterprise Integration (EI)",
+              "description": "The name of the supervisory organization."
+            },
+            "supervisoryOrganizationType": {
+              "type": "string",
+              "example": "Division",
+              "enum": [
+                "System",
+                "Institution",
+                "Executive",
+                "Division",
+                "College",
+                "School",
+                "Department",
+                "Subdepartment"
+              ],
+              "description": "The type of supervisory organization."
+            },
+            "costCenterId": {
+              "type": "string",
+              "example": "CC000001",
+              "description": "The ID of the default Cost Center for this supervisory organization."
+            },
+            "costCenterName": {
+              "type": "string",
+              "example": "UWEAU | CHAN | Chancellor",
+              "description": "The name of the default Cost Center for this supervisory organization."
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "academicUnits": {
+              "description": "Academic units of this supervisory organization.",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "academicUnits"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "ID of an academic unit.",
+                        "example": "AU000123"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "superiorOrganization": {
+              "description": "The superior organization to this supervisory organization.",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "description": "Link to the superior organization.",
+                      "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "supervisoryOrganizations"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the superior organization.",
+                      "example": "SO0000456"
+                    }
+                  }
+                }
+              }
+            },
+            "subordinateOrganizations": {
+              "description": "Subordinate organizations under this supervisory organization.",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "supervisoryOrganizations"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "ID of a subordinate organization.",
+                        "example": "SO0000567"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "links": {
+          "description": "The link to the supervisory organization.",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+            }
+          }
+        }
+      }
+    },
+    "jobDescription": {
+      "description": "A job description.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "jobDescriptions"
+        },
+        "id": {
+          "type": "string",
+          "description": "The Job Code which uniquely identifies a job description.",
+          "example": "AD001"
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "example": "Administrative Assistant I",
+              "description": "The job title."
+            },
+            "group": {
+              "type": "string",
+              "example": "Administration Group",
+              "description": "The job group."
+            },
+            "subGroup": {
+              "type": "string",
+              "example": "Administrative Services",
+              "description": "The job sub-group."
+            },
+            "summary": {
+              "type": "string",
+              "example": "Provides administrative support to a department or group of professionals in support of unit goals under direct supervision.",
+              "description": "Brief statement explaining the primary function of this job."
+            },
+            "education": {
+              "type": "string",
+              "example": "High School Diploma",
+              "description": "Preferred education level for this job."
+            },
+            "responsibilities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "Schedules logistics and secures resources for meetings, conferences, travel, and work unit operations.",
+                "Sends, receives, copies, and distributes communications to the appropriate entities according to established policies and procedures.",
+                "Serves as first point of contact for individuals and groups providing basic organizational information via phone, in person, and through other communication mediums, routing more complex inquiries to the appropriate entities.",
+                "Tracks, stocks, orders, and inventories office supplies to ensure adequate materials are available for workplace operation."
+              ],
+              "description": "Job responsibilities for this job."
+            },
+            "fairLaborStandardsActStatus": {
+              "type": "boolean",
+              "example": false,
+              "description": "The Fair Labor Standards Act status for this job description. If true, positions for this job description are exempt from certain FLSA provisions, namely overtime pay. If false, they are non-exempt. For more information on FLSA exemptions and exemption requirements, see: [Fair Labor Standards Act (FLSA) | Human Resources | UW\u2013Madison](https://hr.wisc.edu/flsa/) and [Wages and the Fair Labor Standards Act | U.S. Department of Labor](https://www.dol.gov/agencies/whd/flsa)"
+            },
+            "employeeCategory": {
+              "type": "string",
+              "example": "University Staff",
+              "description": "The employee category this job falls under."
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "salaryStructures": {
+              "description": "The salary structures associated with this standard job description.",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "salaryStructures"
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "The salary structure ID.",
+                        "example": "30d6a232973a1001722a090ff0940000"
+                      }
+                    }
+                  }
+                },
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "description": "Link to the salary structures associated with this standard job description.",
+                      "example": "https://api.wisc.edu/hr/standardJobDescriptions/AD001/salaryStructures"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "links": {
+          "description": "The link to the supervisory organization.",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+            }
+          }
+        }
+      }
+    },
+    "salaryStructure": {
+      "description": "A salary structure.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "salaryStructures"
+        },
+        "id": {
+          "type": "string",
+          "description": "The salary structure ID.",
+          "example": "30d6a232973a1001722a090ff0940000"
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "salaryGrade": {
+              "type": "string",
+              "example": "Grade 015",
+              "description": "The salary grade."
+            },
+            "salaryGradeProfile": {
+              "type": "string",
+              "example": "Grade 015: Grade 015 Madison Hourly",
+              "description": "The salary grade profile."
+            },
+            "payRangeMinimum": {
+              "type": "string",
+              "example": "17.0",
+              "pattern": "^\\d+(?:\\.\\d+)?$",
+              "description": "The minimum pay range. This value is provided as a string to avoid loss of precision."
+            },
+            "payRangeMaximum": {
+              "type": "string",
+              "example": "31.62",
+              "pattern": "^\\d+(?:\\.\\d+)?$",
+              "description": "The maximum pay range. This value is provided as a string to avoid loss of precision."
+            }
+          }
+        },
+        "links": {
+          "description": "The link to the supervisory organization.",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+            }
+          }
+        }
+      }
+    },
+    "selfLink": {
+      "description": "The link to the supervisory organization.",
+      "type": "object",
+      "properties": {
+        "self": {
+          "type": "string",
+          "example": "https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123"
+        }
+      }
+    },
+    "pagination": {
+      "description": "The links associated with a paginated collection",
+      "type": "object",
+      "properties": {
+        "self": {
+          "description": "The current page of data",
+          "type": "string",
+          "format": "uri-reference",
+          "example": "https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=3"
+        },
+        "prev": {
+          "description": "The previous page of data",
+          "type": "string",
+          "format": "uri-reference",
+          "example": "https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=2"
+        },
+        "next": {
+          "description": "The next page of data",
+          "type": "string",
+          "format": "uri-reference",
+          "example": "https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=4"
+        },
+        "first": {
+          "description": "The first page of data",
+          "type": "string",
+          "format": "uri-reference",
+          "example": "https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=1"
+        },
+        "last": {
+          "description": "The last page of data",
+          "type": "string",
+          "format": "uri-reference",
+          "example": "https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=6"
+        }
+      }
+    },
+    "errors": {
+      "description": "An error",
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "integer",
+          "example": 400
+        },
+        "title": {
+          "type": "string",
+          "example": "Error title"
+        },
+        "detail": {
+          "type": "string",
+          "example": "Additional details about the error"
+        },
+        "links": {
+          "type": "object"
+        },
+        "meta": {
+          "type": "object"
+        },
+        "source": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

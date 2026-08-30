@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/main/json-schema/university-of-wisconsin-madison-oauth-api-schema.json",
+  "title": "OAuth data model",
+  "description": "Component schemas extracted verbatim from openapi/university-of-wisconsin-madison-oauth-api-openapi.yml, a contract published by the University of Wisconsin-Madison. Refs are rewritten from #/$defs/ to #/$defs/; no schema was authored or altered here.",
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "derived",
+    "source": "openapi/university-of-wisconsin-madison-oauth-api-openapi.yml",
+    "x-operator": "institution"
+  },
+  "$defs": {
+    "error": {
+      "properties": {
+        "error": {
+          "description": "Type of error",
+          "type": "string"
+        },
+        "error_description": {
+          "description": "Details of error",
+          "type": "string"
+        }
+      }
+    },
+    "access_token": {
+      "properties": {
+        "access_token": {
+          "description": "The access token string as issued by the authorization server",
+          "type": "string",
+          "example": "NybGHmFc6e3tkZaO1T6vUZIqRKBK"
+        },
+        "token_type": {
+          "description": "The type of token this is",
+          "type": "string",
+          "example": "Bearer"
+        },
+        "expires_in": {
+          "description": "The number of seconds until the token expires",
+          "type": "integer",
+          "example": 3600
+        },
+        "scope": {
+          "description": "The granted scope, if the user modified the scope",
+          "type": "string",
+          "example": "create"
+        },
+        "api_product_list": {
+          "description": "The list of APIs that can be accessed",
+          "type": "string",
+          "example": "[sampleAPI]"
+        },
+        "api_product_list_json": {
+          "description": "The list of APIs that can be accessed",
+          "type": "array",
+          "items": {
+            "description": "API name",
+            "example": "sampleAPI",
+            "type": "string"
+          }
+        },
+        "organization_name": {
+          "description": "Name of the organization that generated the token",
+          "type": "string",
+          "example": "doit-ipt-apigee-dev-808d"
+        },
+        "developer.email": {
+          "description": "Name of the developer who owns the application",
+          "type": "string",
+          "example": "developer@wisc.edu"
+        },
+        "issued_at": {
+          "description": "Unix timestamp when the token was created",
+          "type": "integer",
+          "example": 1633975654430
+        },
+        "client_id": {
+          "description": "Client key used to request the access token",
+          "type": "string",
+          "example": "vtEFhNpirETN1eQ5NJZujlfqqOU6G0XqzlTrHAyQCi9uOgr6"
+        },
+        "application_name": {
+          "description": "Identifier of the application that requested the token",
+          "type": "string",
+          "example": "af25cbee-0467-45f1-8e2f-1cb85dd77813"
+        },
+        "status": {
+          "description": "Status of the access token",
+          "type": "string",
+          "example": "approved"
+        },
+        "refresh_token_expires_in": {
+          "description": "Number of seconds until the refresh token expires",
+          "type": "integer",
+          "example": 0
+        },
+        "refresh_count": {
+          "description": "Number of times the token has been refreshed",
+          "type": "string",
+          "example": 0
+        }
+      }
+    }
+  }
+}

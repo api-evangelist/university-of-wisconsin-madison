@@ -1,0 +1,871 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Supervisory Organizations API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+  description: 'Operations tagged Supervisory Organizations across 2 of this provider''s published API definitions: university-of-wisconsin-madison-hr-api-openapi.yml, university-of-wisconsin-madison-mock-hr-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.wisc.edu/hr
+- url: https://mock.api.wisc.edu/hr
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Supervisory Organizations
+paths:
+  /supervisoryOrganizations:
+    get:
+      description: 'Get a list of supervisory organizations. For more information on supervisory organizations, see this page: [https://secure.atp.wisconsin.edu/udds-guidance-ancillary-systems/](https://secure.atp.wisconsin.edu/udds-guidance-ancillary-systems/)'
+      summary: Get a list of supervisory organizations.
+      operationId: get_sup_orgs
+      tags:
+      - Supervisory Organizations
+      parameters:
+      - name: page
+        in: query
+        description: 'Define options for pagination of responses. For example, `page[number]` parameter (example: `page[number]=4`). The `page[number]` determines the page to display. The size of the page is a constant of 100.'
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          properties:
+            number:
+              type: integer
+              example: 5
+              default: 1
+              description: The page number to display.
+      - name: filter
+        in: query
+        description: Filter results of query using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [HR API Documentation](https://kb.wisc.edu/uw-apis/158637) for more information about the `filter` query param.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            attribute:
+              type: string
+              example: name
+      responses:
+        '200':
+          description: A collection of supervisory organizations.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                - meta
+                properties:
+                  data:
+                    description: A collection of supervisory organizations.
+                    type: array
+                    items:
+                      description: A supervisory organization.
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: supervisoryOrganizations
+                        id:
+                          type: string
+                          description: The supervisory organization ID.
+                          example: SO00002793
+                        attributes:
+                          type: object
+                          properties:
+                            code:
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | DoIT |
+                              description: The code that precedes the name of a supervisory organization.
+                            managerPositionId:
+                              type:
+                              - string
+                              - 'null'
+                              example: 0123456789
+                              description: The Workday position ID that manages the supervisory organization. This is present whether or not the position is currently filled.
+                            name:
+                              type: string
+                              example: AIS Enterprise Integration (EI)
+                              description: The name of the supervisory organization.
+                            supervisoryOrganizationType:
+                              type: string
+                              example: Division
+                              enum:
+                              - System
+                              - Institution
+                              - Executive
+                              - Division
+                              - College
+                              - School
+                              - Department
+                              - Subdepartment
+                              description: The type of supervisory organization.
+                            costCenterId:
+                              type: string
+                              example: CC000001
+                              description: The ID of the default Cost Center for this supervisory organization.
+                            costCenterName:
+                              type: string
+                              example: UWEAU | CHAN | Chancellor
+                              description: The name of the default Cost Center for this supervisory organization.
+                        relationships:
+                          type: object
+                          properties:
+                            academicUnits:
+                              description: Academic units of this supervisory organization.
+                              type: object
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: academicUnits
+                                      id:
+                                        type: string
+                                        description: ID of an academic unit.
+                                        example: AU000123
+                            superiorOrganization:
+                              description: The superior organization to this supervisory organization.
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      description: Link to the superior organization.
+                                      example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: supervisoryOrganizations
+                                    id:
+                                      type: string
+                                      description: ID of the superior organization.
+                                      example: SO0000456
+                            subordinateOrganizations:
+                              description: Subordinate organizations under this supervisory organization.
+                              type: object
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: supervisoryOrganizations
+                                      id:
+                                        type: string
+                                        description: ID of a subordinate organization.
+                                        example: SO0000567
+                        links:
+                          description: The link to the supervisory organization.
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                  links:
+                    description: Self and pagination links.
+                    allOf:
+                    - description: The links associated with a paginated collection
+                      type: object
+                      properties:
+                        self:
+                          description: The current page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=3
+                        prev:
+                          description: The previous page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=2
+                        next:
+                          description: The next page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=4
+                        first:
+                          description: The first page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=1
+                        last:
+                          description: The last page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=6
+                  meta:
+                    type: object
+                    properties:
+                      paging:
+                        type: object
+                        properties:
+                          pageNumber:
+                            type: integer
+                            example: 5
+                            description: The page number to display
+                          pageSize:
+                            type: integer
+                            example: 10
+                            description: The number of items per page
+                          totalCount:
+                            type: integer
+                            example: 100
+                            description: The total number of items available for the collection
+                          totalPages:
+                            type: integer
+                            example: 10
+                            description: The total number of pages available for the collection
+                        example: 100
+                        description: The total number of items in the collection
+              examples:
+                supervisory-organization:
+                  value:
+                    data:
+                    - attributes:
+                        code: UWSOM |
+                        managerPositionId: 0123456789
+                        name: Badger Department
+                        supervisoryOrganizationType: Department
+                        costCenterId: CC005678
+                        costCenterName: UWSOM | BADGER | DEPARTMENT
+                      id: SO00005678
+                      links:
+                        self: https://api.wisc.edu/hr/supervisoryOrganizations/SO00005678
+                      relationships:
+                        academicUnits:
+                          data:
+                          - id: AU000444
+                            type: academicUnits
+                          - id: AU000555
+                            type: academicUnits
+                        subordinateOrganizations:
+                          data:
+                          - id: SO00001234
+                            type: supervisoryOrganizations
+                        superiorOrganization:
+                          data:
+                            id: SO00005432
+                            type: supervisoryOrganizations
+                          links:
+                            related: https://api.wisc.edu/hr/supervisoryOrganizations/SO00005432
+                      type: supervisoryOrganizations
+                    meta:
+                      paging:
+                        pageNumber: 5
+                        pageSize: 10
+                        totalCount: 100
+                        totalPages: 10
+                    links:
+                      self: https://api.wisc.edu/hr/supervisoryOrganizations/SO00005678
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'jobs' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/hr
+  /supervisoryOrganizations/{supervisoryOrganizationId}:
+    get:
+      description: 'Get a supervisory organization. For more information on supervisory organizations, see this page: [https://secure.atp.wisconsin.edu/udds-guidance-ancillary-systems/](https://secure.atp.wisconsin.edu/udds-guidance-ancillary-systems/)'
+      summary: Get a supervisory organization.
+      operationId: get_sup_org
+      tags:
+      - Supervisory Organizations
+      parameters:
+      - name: supervisoryOrganizationId
+        description: Supervisory organization ID.
+        in: path
+        example: SO000001234
+        required: true
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: '[include related resources](https://jsonapi.org/format/#fetching-includes). The resources to include need to be direct relationships. For example, `include=allSubordinateOrganizations`.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A supervisory organization.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    description: A supervisory organization.
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: supervisoryOrganizations
+                      id:
+                        type: string
+                        description: The supervisory organization ID.
+                        example: SO00002793
+                      attributes:
+                        type: object
+                        properties:
+                          code:
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | DoIT |
+                            description: The code that precedes the name of a supervisory organization.
+                          managerPositionId:
+                            type:
+                            - string
+                            - 'null'
+                            example: 0123456789
+                            description: The Workday position ID that manages the supervisory organization. This is present whether or not the position is currently filled.
+                          name:
+                            type: string
+                            example: AIS Enterprise Integration (EI)
+                            description: The name of the supervisory organization.
+                          supervisoryOrganizationType:
+                            type: string
+                            example: Division
+                            enum:
+                            - System
+                            - Institution
+                            - Executive
+                            - Division
+                            - College
+                            - School
+                            - Department
+                            - Subdepartment
+                            description: The type of supervisory organization.
+                          costCenterId:
+                            type: string
+                            example: CC000001
+                            description: The ID of the default Cost Center for this supervisory organization.
+                          costCenterName:
+                            type: string
+                            example: UWEAU | CHAN | Chancellor
+                            description: The name of the default Cost Center for this supervisory organization.
+                      relationships:
+                        type: object
+                        properties:
+                          superiorOrganization:
+                            description: The superior organization to this supervisory organization.
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    description: Link to the superior organization.
+                                    example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                              data:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    example: supervisoryOrganizations
+                                  id:
+                                    type: string
+                                    description: ID of the superior organization.
+                                    example: SO0000123
+                          subordinateOrganizations:
+                            description: Subordinate organizations under this supervisory organization.
+                            type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: supervisoryOrganizations
+                                    id:
+                                      type: string
+                                      description: ID of a subordinate organization.
+                                      example: SO0000567
+                          allSubordinateOrganizations:
+                            description: All subordinate organizations under this supervisory organization.
+                            type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: supervisoryOrganizations
+                                    id:
+                                      type: string
+                                      description: ID of a subordinate organization.
+                                      example: SO0000567
+                      links:
+                        description: The link to the supervisory organization.
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                  links:
+                    description: The link to the supervisory organization.
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+              examples:
+                supervisory-organization:
+                  value:
+                    data:
+                      attributes:
+                        code: UWSOM |
+                        managerPositionId: 0123456789
+                        name: Badger Department
+                        supervisoryOrganizationType: Department
+                        costCenterId: CC005678
+                        costCenterName: UWSOM | BADGER | DEPARTMENT
+                      id: SO00005678
+                      links:
+                        self: https://api.wisc.edu/hr/supervisoryOrganizations/SO00005678
+                      relationships:
+                        academicUnits:
+                          data:
+                          - id: AU000444
+                            type: academicUnits
+                          - id: AU000555
+                            type: academicUnits
+                        subordinateOrganizations:
+                          data:
+                          - id: SO00001234
+                            type: supervisoryOrganizations
+                        superiorOrganization:
+                          data:
+                            id: SO00005432
+                            type: supervisoryOrganizations
+                          links:
+                            related: https://api.wisc.edu/hr/supervisoryOrganizations/SO00005432
+                        allSubordinateOrganizations:
+                          data:
+                          - id: SO00001234
+                            type: supervisoryOrganizations
+                      type: supervisoryOrganizations
+                    links:
+                      self: https://api.wisc.edu/hr/supervisoryOrganizations/SO00005678
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'jobs' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/hr
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-hr-api-openapi.yml
+- university-of-wisconsin-madison-mock-hr-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

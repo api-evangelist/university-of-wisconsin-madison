@@ -1,0 +1,1571 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Certificates API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+    url: https://go.wisc.edu/k701y6
+  description: 'Operations tagged certificates across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://mock.api.wisc.edu
+- url: https://api.wisc.edu
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: certificates
+paths:
+  /people/certificates:
+    get:
+      description: Get a collection of certificates. This endpoint is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
+      summary: Get certificates.
+      operationId: get_certificates
+      tags:
+      - certificates
+      responses:
+        '200':
+          description: A collection of certificates.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of certificates.
+                    type: array
+                    items:
+                      description: A certificate. This is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - links
+                      properties:
+                        type:
+                          type: string
+                          example: certificates
+                        id:
+                          type: string
+                          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+                          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+                        attributes:
+                          type: object
+                          required:
+                          - certificate
+                          properties:
+                            certificate:
+                              type: string
+                              example: '-----BEGIN CERTIFICATE-----
+
+                                MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
+
+                                BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
+
+                                TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
+
+                                DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
+
+                                BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
+
+                                dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+
+                                MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
+
+                                9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
+
+                                Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
+
+                                64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
+
+                                KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
+
+                                Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
+
+                                b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
+
+                                PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
+
+                                o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
+
+                                3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
+
+                                aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
+
+                                97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
+
+                                -----END CERTIFICATE-----'
+                            createdDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate resource was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                            startDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate is valid from, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                            expirationDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate is valid until, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-certificates:
+                  value:
+                    data:
+                    - attributes:
+                        certificate: '-----BEGIN CERTIFICATE-----
+
+                          MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
+
+                          BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
+
+                          TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
+
+                          DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
+
+                          BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
+
+                          dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+
+                          MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
+
+                          9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
+
+                          Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
+
+                          64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
+
+                          KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
+
+                          Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
+
+                          b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
+
+                          PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
+
+                          o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
+
+                          3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
+
+                          aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
+
+                          97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
+
+                          -----END CERTIFICATE-----'
+                        createdDate: '2024-01-01T00:00:00+00:00'
+                        startDate: '2024-01-01T00:00:00+00:00'
+                        expirationDate: '2024-12-31T23:59:59+00:00'
+                      id: z5wV9pQBauFab4m5jNFR
+                      type: certificates
+                      links:
+                        self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
+                    - attributes:
+                        certificate: '-----BEGIN CERTIFICATE-----
+
+                          MIIFZTCCA00CFDh1aa54BjsZ0h/P73Ey71V6/sqrMA0GCSqGSIb3DQEBCwUAMG8x
+
+                          CzAJBgNVBAYTAlVTMRIwEAYDVQQIDAlXaXNjb25zaW4xEDAOBgNVBAcMB01hZGlz
+
+                          b24xEzARBgNVBAoMClVXLU1hZGlzb24xDTALBgNVBAsMBERvSVQxFjAUBgNVBAMM
+
+                          DWRvaXQud2lzYy5lZHUwHhcNMjUwMjEzMTcxMzAxWhcNMjUwNTE0MTcxMzAxWjBv
+
+                          MQswCQYDVQQGEwJVUzESMBAGA1UECAwJV2lzY29uc2luMRAwDgYDVQQHDAdNYWRp
+
+                          c29uMRMwEQYDVQQKDApVVy1NYWRpc29uMQ0wCwYDVQQLDAREb0lUMRYwFAYDVQQD
+
+                          DA1kb2l0Lndpc2MuZWR1MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA
+
+                          n2oj4vs04UTRVxu+7jeJ5ri5df26cyzLkcek2eHwNufsyTriwZy4k3xk02Hahu1L
+
+                          LdgZ2tFBVxcUiZvEoLpMH7s4HZBeTefXtJ57tX3jnpk65PcB/1usHxYkZEdeKUTT
+
+                          y97nP4hmTu5qmzLDOBiIrP+j1swbn8o3mKZ7AyL/SnZlmryFTxGFlFdNrIfQtQXW
+
+                          KHX9gI8rKC/pDMRmVqoUWH5Mdku4j9eD8VxHfWmdQknyMSDN6wNBqRjiURRivufe
+
+                          ndYcEXrL8x9mzhIrfq1qNtKhePr19LCsbrOUZ7W2CvHkqLVwxar5c3o/2we87QHt
+
+                          nz7WdIopgDPB6VRnhQCpM6cUASZ0zxXOccE9tCi1dfnPkhcIDqKK0DRRya5hVeC3
+
+                          uM1GG3ut5dIcFHvJ3iQU9qAtK0P2hc5JcmNf/51Iu5oa2LbxWoOo2tF0fCBe2oY4
+
+                          I/ynp9qHCgCbXbBtZ/KC8NljBVmzP3NSEK5AH8lO4sGFqRMUZTuaVXdp0u6zxeud
+
+                          zIRRVisUIjRWz+GipuU1hfjVu/YuopHQDJ23s37Ouc7WnmnsdgvnJ5NkKf4camhc
+
+                          aAKxGTUVawg1lX7blB31TLiHsv/P8Hb0Y3a2B9GpPbW5ohR+OZy9vflDctrzQmvz
+
+                          b8wFhFF/dY+QK6MlE+QP6oVd6mQuKWJ/4Ryz4/eeBpsCAwEAATANBgkqhkiG9w0B
+
+                          AQsFAAOCAgEAgOOHJ2X5Aan7VUYadhdfb0p6byg6oBZCbT+KwggfDuPNLrFze6Sm
+
+                          zX0GFQnbS+C1FJ6NfulRiD3uinixPu1pH5p2bHQ3p7ZQPQ3Kx7R3rdpvvyd/RcbB
+
+                          kjD9Y40s4a4VGz0YfGP8evYaQJiUCvQBKFJgzXhA6ftGEXkytswxO0eiTo9x6GS0
+
+                          nRkYrJHNRHQviP02wf/Esxlrlnvn/WoG9K421KOrh0nsYDXsl9WhJWMzk/Fv7NYa
+
+                          FmKINDdM+2rYllNqd8tfzAFo1fPXJ2I6IUDaGPAzTZIZb95FJYHzhlIgpM4xtj2Q
+
+                          POdNlOHZ+dLqHGVDX+d9jxdGWFRyi0iKE2ED/QtKqwESR/jtFPX3oib4oh1in5NT
+
+                          OyuQTTVpyo1K+txRldM9nwxtLv/+fmPzUIyqUB4N/WfKPEL4LfGWgvkfakWlIqAf
+
+                          ViSFVd0HlCSt9VF0udN01ZxseXabJf97zch0AHv5i5+5tYwK4ZiLjmOYLE75IvsW
+
+                          q2844GQKPaQEhUGXlQbhwVBAU4e9MGVmbcEg2pr8iIx/Hr1XDJmC8S+mDZyBwBVY
+
+                          N3GFkDmNZq7/fTe0nu1fl0l0VIGAG17hO6CpQktX9y56cYfkFu+mZlfcYTbFtsQe
+
+                          Mg9KpPhbMm/1pyzinYxMW8cA9eqfjw+f6mUmsQBihy/J60LDWZKKPlU=
+
+                          -----END CERTIFICATE-----
+
+                          '
+                        createdDate: '2024-01-05T00:00:00Z'
+                        startDate: '2024-01-05T00:00:00Z'
+                        expirationDate: '2024-04-04T23:59:59Z'
+                      id: sJxRAJUBauFab4m5a9Jh
+                      type: certificates
+                      links:
+                        self: https://api.wisc.edu/people/certificates/sJxRAJUBauFab4m5a9Jh
+                    links:
+                      self: https://api.wisc.edu/people/certificates
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    post:
+      description: Create a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
+      summary: Create a certificate.
+      operationId: create_certificate
+      tags:
+      - certificates
+      requestBody:
+        description: A certificate request body. Only the attribute "certificate" can be set in a request.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              required:
+              - data
+              properties:
+                data:
+                  type: object
+                  required:
+                  - type
+                  - attributes
+                  properties:
+                    type:
+                      type: string
+                      example: certificates
+                      enum:
+                      - certificates
+                    attributes:
+                      type: object
+                      required:
+                      - certificate
+                      properties:
+                        certificate:
+                          type: string
+                          example: '-----BEGIN CERTIFICATE-----
+
+                            MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
+
+                            BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
+
+                            TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
+
+                            DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
+
+                            BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
+
+                            dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+
+                            MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
+
+                            9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
+
+                            Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
+
+                            64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
+
+                            KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
+
+                            Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
+
+                            b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
+
+                            PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
+
+                            o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
+
+                            3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
+
+                            aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
+
+                            97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
+
+                            -----END CERTIFICATE-----'
+      responses:
+        '201':
+          description: A single certificate.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A single certificate.
+                    type: object
+                    items:
+                      description: A certificate. This is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - links
+                      properties:
+                        type:
+                          type: string
+                          example: certificates
+                        id:
+                          type: string
+                          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+                          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+                        attributes:
+                          type: object
+                          required:
+                          - certificate
+                          properties:
+                            certificate:
+                              type: string
+                              example: '-----BEGIN CERTIFICATE-----
+
+                                MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
+
+                                BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
+
+                                TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
+
+                                DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
+
+                                BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
+
+                                dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+
+                                MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
+
+                                9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
+
+                                Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
+
+                                64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
+
+                                KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
+
+                                Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
+
+                                b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
+
+                                PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
+
+                                o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
+
+                                3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
+
+                                aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
+
+                                97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
+
+                                -----END CERTIFICATE-----'
+                            createdDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate resource was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                            startDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate is valid from, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                            expirationDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate is valid until, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-certificates:
+                  value:
+                    data:
+                      attributes:
+                        certificate: '-----BEGIN CERTIFICATE-----
+
+                          MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
+
+                          BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
+
+                          TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
+
+                          DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
+
+                          BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
+
+                          dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+
+                          MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
+
+                          9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
+
+                          Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
+
+                          64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
+
+                          KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
+
+                          Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
+
+                          b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
+
+                          PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
+
+                          o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
+
+                          3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
+
+                          aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
+
+                          97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
+
+                          -----END CERTIFICATE-----'
+                        createdDate: '2024-01-01T00:00:00+00:00'
+                        startDate: '2024-01-01T00:00:00+00:00'
+                        expirationDate: '2024-12-31T23:59:59+00:00'
+                      id: z5wV9pQBauFab4m5jNFR
+                      type: certificates
+                      links:
+                        self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
+                    links:
+                      self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '415':
+          description: 'Request includes a body but not the valid JSON API Content-Type header: application/vnd.api+json'
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unsupported-media-type-example:
+                  value:
+                    errors:
+                    - status: 415
+                      title: Unsupported Media Type
+                      detail: Requests with a body must include the Content-Type header with a value of application/vnd.api+json
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+  /people/certificates/{certificateId}:
+    get:
+      description: Get a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
+      summary: Get a certificate.
+      operationId: get_certificate
+      tags:
+      - certificates
+      parameters:
+      - name: certificateId
+        description: ID of a certificate. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
+        in: path
+        example: z5wV9pQBauFab4m5jNFR
+        required: true
+        schema:
+          type: string
+          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+      responses:
+        '200':
+          description: A single certificate.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A single certificate.
+                    type: object
+                    items:
+                      description: A certificate. This is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - links
+                      properties:
+                        type:
+                          type: string
+                          example: certificates
+                        id:
+                          type: string
+                          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+                          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+                        attributes:
+                          type: object
+                          required:
+                          - certificate
+                          properties:
+                            certificate:
+                              type: string
+                              example: '-----BEGIN CERTIFICATE-----
+
+                                MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
+
+                                BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
+
+                                TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
+
+                                DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
+
+                                BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
+
+                                dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+
+                                MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
+
+                                9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
+
+                                Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
+
+                                64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
+
+                                KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
+
+                                Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
+
+                                b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
+
+                                PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
+
+                                o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
+
+                                3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
+
+                                aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
+
+                                97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
+
+                                -----END CERTIFICATE-----'
+                            createdDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate resource was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                            startDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate is valid from, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                            expirationDate:
+                              type: string
+                              format: date-time
+                              example: '2024-01-01T00:00:00+00:00'
+                              description: The date-time in UTC this certificate is valid until, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-certificates:
+                  value:
+                    data:
+                      attributes:
+                        certificate: '-----BEGIN CERTIFICATE-----
+
+                          MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
+
+                          BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
+
+                          TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
+
+                          DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
+
+                          BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
+
+                          dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
+
+                          MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
+
+                          9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
+
+                          Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
+
+                          64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
+
+                          KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
+
+                          Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
+
+                          b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
+
+                          PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
+
+                          o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
+
+                          3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
+
+                          aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
+
+                          97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
+
+                          -----END CERTIFICATE-----'
+                        createdDate: '2024-01-01T00:00:00+00:00'
+                        startDate: '2024-01-01T00:00:00+00:00'
+                        expirationDate: '2024-12-31T23:59:59+00:00'
+                      id: z5wV9pQBauFab4m5jNFR
+                      type: certificates
+                      links:
+                        self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
+                    links:
+                      self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    delete:
+      description: Delete a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
+      summary: Delete a certificate.
+      operationId: delete_certificate
+      tags:
+      - certificates
+      parameters:
+      - name: certificateId
+        description: ID of a certificate. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
+        in: path
+        example: z5wV9pQBauFab4m5jNFR
+        required: true
+        schema:
+          type: string
+          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
+      responses:
+        '204':
+          description: Certificate deleted. Empty response.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
+- university-of-wisconsin-madison-mock-person-api-openapi.yml
+- university-of-wisconsin-madison-person-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

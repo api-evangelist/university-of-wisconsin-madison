@@ -1,0 +1,386 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/main/json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json",
+  "title": "Enterprise Billing API data model",
+  "description": "Component schemas extracted verbatim from openapi/university-of-wisconsin-madison-enterprise-billing-api-openapi.yml, a contract published by the University of Wisconsin-Madison. Refs are rewritten from #/$defs/ to #/$defs/; no schema was authored or altered here.",
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "derived",
+    "source": "openapi/university-of-wisconsin-madison-enterprise-billing-api-openapi.yml",
+    "x-operator": "institution"
+  },
+  "$defs": {
+    "error": {
+      "description": "Error object",
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "errorDuplicateBillingBatchName": {
+      "description": "Duplicate BillingBatchName error object",
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "Base fault reason."
+        },
+        "details": {
+          "type": "string",
+          "description": "Specific fault verbage. (from Apigee)"
+        },
+        "sfdcDetail": {
+          "type": "array",
+          "description": "Details from Salesforce.",
+          "items": {
+            "properties": {
+              "message": {
+                "type": "string",
+                "description": "Specific fault message."
+              },
+              "errorCode": {
+                "type": "string",
+                "description": "specific error code"
+              },
+              "fields": {
+                "type": "array",
+                "description": "Field API name(s) with issues."
+              }
+            }
+          }
+        }
+      }
+    },
+    "billingCustomer": {
+      "title": "Billing Customer",
+      "description": "Billing Customer information.",
+      "type": "object",
+      "properties": {
+        "totalSize": {
+          "readOnly": true,
+          "title": "totalSize",
+          "description": "Number of response records.",
+          "type": "integer"
+        },
+        "done": {
+          "readOnly": true,
+          "title": "done",
+          "description": "Response complete.",
+          "type": "boolean"
+        },
+        "records": {
+          "description": "A collection of BillingCustomers.",
+          "type": "array",
+          "items": {
+            "description": "A single BillingCustomer.",
+            "properties": {
+              "id": {
+                "readOnly": true,
+                "title": "Id",
+                "description": "Salesforce record identifier.",
+                "type": "string",
+                "format": "Salesforce Id",
+                "example": "a0ADh00000606IOMAY"
+              },
+              "name": {
+                "readOnly": true,
+                "title": "Name",
+                "description": "Name of Billing Customer.",
+                "type": "string",
+                "example": "ICUS000002"
+              },
+              "type": {
+                "readOnly": true,
+                "title": "Type",
+                "description": "Type of Billing Customer.",
+                "type": "string",
+                "example": "Internal"
+              },
+              "isActive": {
+                "readOnly": true,
+                "title": "Is Active",
+                "description": "Active status of Billing Customer.",
+                "type": "boolean",
+                "example": "true"
+              }
+            }
+          }
+        }
+      }
+    },
+    "billingBatch": {
+      "title": "Billing Batch",
+      "description": "Billing Batch information of submitted transaction data.",
+      "type": "object",
+      "properties": {
+        "totalSize": {
+          "readOnly": true,
+          "title": "totalSize",
+          "description": "Number of response records.",
+          "type": "integer"
+        },
+        "done": {
+          "readOnly": true,
+          "title": "done",
+          "description": "Response complete.",
+          "type": "boolean"
+        },
+        "records": {
+          "description": "A collection of BillingBatches.",
+          "type": "array",
+          "items": {
+            "description": "A single BillingCustomer.",
+            "type": "object",
+            "properties": {
+              "id": {
+                "readOnly": true,
+                "title": "Id",
+                "description": "Salesforce record identifier.",
+                "type": "string",
+                "format": "Salesforce Id"
+              },
+              "name": {
+                "readOnly": true,
+                "title": "Name",
+                "description": "Name of Billing Batch.",
+                "type": "string"
+              },
+              "type": {
+                "readOnly": true,
+                "title": "Type",
+                "description": "Type of Billing Batch.",
+                "type": "string"
+              },
+              "status": {
+                "readOnly": true,
+                "title": "Status",
+                "description": "Status of Billing Batch.",
+                "type": "string"
+              },
+              "ispDataRecordCount": {
+                "readOnly": true,
+                "title": "ISP Data Record Count",
+                "description": "Count of records per Billing Batch.",
+                "type": "integer"
+              },
+              "dataErrorRows": {
+                "readOnly": true,
+                "title": "Data Errors Rows",
+                "description": "Count of records with errors per Billing Batch.",
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "bulkjob": {
+      "title": "Bulkjob Status",
+      "description": "Bulkjob information.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "readOnly": true,
+          "title": "Id",
+          "description": "Salesforce record identifier.",
+          "type": "string",
+          "format": "Salesforce Id"
+        },
+        "operation": {
+          "readOnly": true,
+          "title": "Operation",
+          "description": "Bulkjob data operation of submitted data.",
+          "type": "string"
+        },
+        "object": {
+          "readOnly": true,
+          "title": "Object",
+          "description": "Bulkjob target object (api name).",
+          "type": "string"
+        },
+        "createdById": {
+          "readOnly": true,
+          "title": "Created By",
+          "description": "Salesforce user identifier whom created bulkjob. ",
+          "type": "string",
+          "format": "Salesforce Id"
+        },
+        "createdDate": {
+          "readOnly": true,
+          "title": "Created Date",
+          "description": "Bulkjob created date.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "systemModstamp": {
+          "readOnly": true,
+          "title": "System Modstamp",
+          "description": "",
+          "type": "string",
+          "format": "date-time"
+        },
+        "state": {
+          "readOnly": true,
+          "title": "State",
+          "description": "Bulkjob status.",
+          "type": "string"
+        },
+        "concurrencyMode": {
+          "readOnly": true,
+          "title": "Concurrency Mode",
+          "description": "Bulkjob run mode.",
+          "type": "string"
+        },
+        "contentType": {
+          "readOnly": true,
+          "title": "Content Type",
+          "description": "Bulkjob submitted data type.",
+          "type": "string"
+        },
+        "apiVersion": {
+          "readOnly": true,
+          "title": "APIVersion",
+          "description": "Bulkjob runtime api version.",
+          "type": "string"
+        },
+        "jobType": {
+          "readOnly": true,
+          "title": "Job Type",
+          "description": "Bulkjob type.",
+          "type": "string"
+        },
+        "lineEnding": {
+          "readOnly": true,
+          "title": "Line Ending",
+          "description": "Bulkjob submitted data lineEnding.",
+          "type": "string"
+        },
+        "columnDelimiter": {
+          "readOnly": true,
+          "title": "Column Delimiter",
+          "description": "Bulkjob submitted data column delimiter.",
+          "type": "string"
+        },
+        "numberRecordsProcessed": {
+          "readOnly": true,
+          "title": "Number of Records Processed",
+          "description": "Bulkjob total records processed.",
+          "type": "number"
+        },
+        "numberRecordsFailed": {
+          "readOnly": true,
+          "title": "Number of Records Failed",
+          "description": "Bulkjob records that failed.",
+          "type": "number"
+        },
+        "retries": {
+          "readOnly": true,
+          "title": "Retries",
+          "description": "Bulkjob retries.",
+          "type": "number"
+        },
+        "totalProcessingTime": {
+          "readOnly": true,
+          "title": "Total Processing Time",
+          "description": "Bulkjob processing time.",
+          "type": "number"
+        },
+        "apiActiveProcessingTime": {
+          "readOnly": true,
+          "title": "API Active Processing Time",
+          "description": "Bulkjob API active processing time.",
+          "type": "number"
+        },
+        "apexProcessingTime": {
+          "readOnly": true,
+          "title": "APEX Processing Time",
+          "description": "Bulkjob APEX processing time.",
+          "type": "number"
+        }
+      }
+    },
+    "billingTransactionsCSV": {
+      "title": "Billing Transaction CSV",
+      "description": "Billing transactions CSV file",
+      "type": "object",
+      "properties": {
+        "Billing_Batch_Name": {
+          "title": "Billing_Batch_Name",
+          "description": "Salesforce name of Billing Batch.",
+          "type": "string",
+          "example": "Cloud Services April 2025"
+        },
+        "ISP_Source_Record_ID": {
+          "title": "ISP_Source_Record_ID",
+          "description": "Source system record unique identifier.",
+          "type": "string"
+        },
+        "Billing_Customer_ID": {
+          "title": "Billing_Customer_ID",
+          "description": "Salesforce Billing_Customer_ID.",
+          "type": "string",
+          "example": "ICUS000002"
+        },
+        "Customer_PO_Number": {
+          "title": "Customer_PO_Number",
+          "description": "External Customer PO Number.",
+          "type": "string"
+        },
+        "Service_Billing_Table_Name": {
+          "title": "Service_Billing_Table_Name",
+          "description": "Salesforce name of provided service.",
+          "type": "string",
+          "example": "Digital Publishing and Printing Services"
+        },
+        "Quantity": {
+          "title": "Quantity",
+          "description": "Quantity consumed. (Quantity x Unit_Cost = Extended Amount)",
+          "type": "number"
+        },
+        "Unit_of_Measure": {
+          "title": "Unit_of_Measure",
+          "description": "Unit of Measure",
+          "type": "string"
+        },
+        "Unit_Cost": {
+          "title": "Unit_Cost",
+          "description": "Cost per Unit. (Quantity x Unit_Cost = Extended Amount)",
+          "type": "string"
+        },
+        "Extended_Amount": {
+          "title": "Extended_Amount",
+          "description": "(Quantity x Unit_Cost = Extended Amount)",
+          "type": "string"
+        },
+        "Transaction_Date": {
+          "title": "Transaction_Date",
+          "description": "Date of service.",
+          "type": "string",
+          "format": "date",
+          "example": "2024-11-27"
+        },
+        "From_Date": {
+          "title": "From_Date",
+          "description": "Start of date range for service.",
+          "type": "string",
+          "format": "date",
+          "example": "2024-07-23"
+        },
+        "To_Date": {
+          "title": "To_Date",
+          "description": "End of date range for service.",
+          "type": "string",
+          "format": "date",
+          "example": "2024-03-17"
+        },
+        "Memo": {
+          "title": "Memo",
+          "description": "Comments field.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

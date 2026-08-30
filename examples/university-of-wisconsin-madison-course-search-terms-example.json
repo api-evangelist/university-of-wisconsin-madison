@@ -1,0 +1,35 @@
+{
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "probed",
+    "x-operator": "institution",
+    "note": "Captured verbatim from a live unauthenticated request on 2026-08-19. Not a UW-Madison publication; response bodies only.",
+    "source": "https://public.enroll.wisc.edu/api/search/v1/terms",
+    "http_status": 200
+  },
+  "request": "GET https://public.enroll.wisc.edu/api/search/v1/terms",
+  "response": [
+    {
+      "termCode": "1266",
+      "shortDescription": "2026 Summr",
+      "longDescription": "Summer 2026",
+      "beginDate": 1778475600000,
+      "endDate": 1787547599999,
+      "instructionBeginDate": 1778475600000,
+      "instructionEndDate": 1787547599999,
+      "academicYear": "2025-26",
+      "pastTerm": false
+    },
+    {
+      "termCode": "1272",
+      "shortDescription": "2026 Fall",
+      "longDescription": "Fall 2026-2027",
+      "beginDate": 1787547600000,
+      "endDate": 1797832799999,
+      "instructionBeginDate": 1788325200000,
+      "instructionEndDate": 1796882399999,
+      "academicYear": "2026-27",
+      "pastTerm": false
+    }
+  ]
+}

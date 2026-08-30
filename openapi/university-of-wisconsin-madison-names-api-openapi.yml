@@ -1,0 +1,2334 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Names API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+    url: https://go.wisc.edu/k701y6
+  description: 'Operations tagged names across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://mock.api.wisc.edu
+- url: https://api.wisc.edu
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: names
+paths:
+  /people/{id}/names:
+    get:
+      description: Get a person's names, split into separate resource objects depending on the type of name. Refer to the [Names Documentation](/person-api/names) for more information.
+      summary: Get names.
+      operationId: get_person_names
+      tags:
+      - names
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: '700'
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: '12345'
+      - name: fields
+        in: query
+        description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              example: people
+      responses:
+        '200':
+          description: A collection of names.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of names
+                    type: array
+                    items:
+                      description: Details about a name used to refer to a person.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - links
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          example: names
+                        id:
+                          type: string
+                          example: '12345'
+                          description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+                        attributes:
+                          type: object
+                          required:
+                          - firstName
+                          - middleName
+                          - lastName
+                          - prefix
+                          - suffix
+                          - nameType
+                          - source
+                          - institution
+                          properties:
+                            firstName:
+                              description: A first name for this person.
+                              type: string
+                              minLength: 1
+                              maxLength: 255
+                              example: Amy
+                            middleName:
+                              description: A middle name for this person.
+                              type:
+                              - string
+                              - 'null'
+                              minLength: 1
+                              maxLength: 255
+                              example: Marie
+                            lastName:
+                              description: A last name for this person.
+                              type: string
+                              minLength: 1
+                              maxLength: 255
+                              example: Smith
+                            prefix:
+                              description: A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.
+                              type: string
+                              minLength: 1
+                              maxLength: 30
+                              pattern: ^[A-Za-z '.-]*$
+                              example: Dr
+                            suffix:
+                              description: A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.
+                              type: string
+                              minLength: 1
+                              maxLength: 30
+                              pattern: ^[A-Za-z '.-]*$
+                              example: II
+                            nameType:
+                              description: The type of name for the person.
+                              type: string
+                              enum:
+                              - nameInUse
+                              - primary
+                              - preferred
+                              example: nameInUse
+                            source:
+                              description: The source of the name.
+                              type: string
+                              enum:
+                              - profile
+                              - IAM
+                              - HRS
+                              - Workday
+                              example: profile
+                            institution:
+                              description: The institution associated with the resource.
+                              type: string
+                              example: UW-Madison
+                              enum:
+                              - Shared
+                              - UW-Eau Claire
+                              - UW-Green Bay
+                              - UW-La Crosse
+                              - UW-Madison
+                              - UW-Milwaukee
+                              - UW Oshkosh
+                              - UW-Parkside
+                              - UW-Platteville
+                              - UW-River Falls
+                              - UW-Stevens Point
+                              - UW-Stout
+                              - UW-Superior
+                              - UW-Whitewater
+                              - UW-Extension
+                              - UW System
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                        relationships:
+                          type: object
+                          properties:
+                            person:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-names:
+                  value:
+                    data:
+                    - attributes:
+                        firstName: Amy
+                        middleName: Marie
+                        lastName: Smith
+                        prefix: null
+                        suffix: null
+                        nameType: nameInUse
+                        source: profile
+                        institution: UW-Madison
+                      id: '100'
+                      relationships:
+                        person:
+                          data:
+                            id: '100'
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/100
+                      type: names
+                      links:
+                        self: https://api.wisc.edu/people/100/names/200
+                    links:
+                      self: https://api.wisc.edu/people/100/names
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    post:
+      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Create a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be created. Client-generated IDs are not supported. Refer to the [Names Documentation](/person-api/names) for more information.
+      summary: Create a name.
+      operationId: create_person_name
+      tags:
+      - names
+      requestBody:
+        description: A name request body.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  required:
+                  - type
+                  - attributes
+                  properties:
+                    type:
+                      type: string
+                      example: names
+                      enum:
+                      - names
+                    attributes:
+                      type: object
+                      required:
+                      - firstName
+                      - middleName
+                      - lastName
+                      - nameType
+                      - source
+                      - institution
+                      properties:
+                        firstName:
+                          description: A first name for this person.
+                          type: string
+                          minLength: 1
+                          maxLength: 255
+                          example: Amy
+                        middleName:
+                          description: A middle name for this person.
+                          type:
+                          - string
+                          - 'null'
+                          minLength: 1
+                          maxLength: 255
+                          example: Marie
+                        lastName:
+                          description: A last name for this person.
+                          type: string
+                          minLength: 1
+                          maxLength: 255
+                          example: Smith
+                        nameType:
+                          description: The type of name for the person.
+                          type: string
+                          enum:
+                          - nameInUse
+                          - primary
+                          example: nameInUse
+                        source:
+                          description: The source of the name.
+                          type: string
+                          enum:
+                          - profile
+                          - IAM
+                          - HRS
+                          example: profile
+                        institution:
+                          description: The institution associated with the resource.
+                          type: string
+                          example: UW-Madison
+                          enum:
+                          - Shared
+                          - UW-Eau Claire
+                          - UW-Green Bay
+                          - UW-La Crosse
+                          - UW-Madison
+                          - UW-Milwaukee
+                          - UW Oshkosh
+                          - UW-Parkside
+                          - UW-Platteville
+                          - UW-River Falls
+                          - UW-Stevens Point
+                          - UW-Stout
+                          - UW-Superior
+                          - UW-Whitewater
+                          - UW-Extension
+                          - UW System
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: '700'
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: '12345'
+      responses:
+        '201':
+          description: A single name.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: Details about a name used to refer to a person.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - attributes
+                    - links
+                    - relationships
+                    properties:
+                      type:
+                        type: string
+                        example: names
+                      id:
+                        type: string
+                        example: '12345'
+                        description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+                      attributes:
+                        type: object
+                        required:
+                        - firstName
+                        - middleName
+                        - lastName
+                        - prefix
+                        - suffix
+                        - nameType
+                        - source
+                        - institution
+                        properties:
+                          firstName:
+                            description: A first name for this person.
+                            type: string
+                            minLength: 1
+                            maxLength: 255
+                            example: Amy
+                          middleName:
+                            description: A middle name for this person.
+                            type:
+                            - string
+                            - 'null'
+                            minLength: 1
+                            maxLength: 255
+                            example: Marie
+                          lastName:
+                            description: A last name for this person.
+                            type: string
+                            minLength: 1
+                            maxLength: 255
+                            example: Smith
+                          prefix:
+                            description: A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.
+                            type: string
+                            minLength: 1
+                            maxLength: 30
+                            pattern: ^[A-Za-z '.-]*$
+                            example: Dr
+                          suffix:
+                            description: A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.
+                            type: string
+                            minLength: 1
+                            maxLength: 30
+                            pattern: ^[A-Za-z '.-]*$
+                            example: II
+                          nameType:
+                            description: The type of name for the person.
+                            type: string
+                            enum:
+                            - nameInUse
+                            - primary
+                            - preferred
+                            example: nameInUse
+                          source:
+                            description: The source of the name.
+                            type: string
+                            enum:
+                            - profile
+                            - IAM
+                            - HRS
+                            - Workday
+                            example: profile
+                          institution:
+                            description: The institution associated with the resource.
+                            type: string
+                            example: UW-Madison
+                            enum:
+                            - Shared
+                            - UW-Eau Claire
+                            - UW-Green Bay
+                            - UW-La Crosse
+                            - UW-Madison
+                            - UW-Milwaukee
+                            - UW Oshkosh
+                            - UW-Parkside
+                            - UW-Platteville
+                            - UW-River Falls
+                            - UW-Stevens Point
+                            - UW-Stout
+                            - UW-Superior
+                            - UW-Whitewater
+                            - UW-Extension
+                            - UW System
+                      links:
+                        description: The link to access a resource itself
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/link/to/self
+                      relationships:
+                        type: object
+                        properties:
+                          person:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    example: sampleType
+                                  id:
+                                    type: string
+                                    example: sampleId
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-names:
+                  value:
+                    data:
+                      attributes:
+                        firstName: Amy
+                        middleName: Marie
+                        lastName: Smith
+                        prefix: null
+                        suffix: null
+                        nameType: nameInUse
+                        source: profile
+                        institution: UW-Madison
+                      id: '100'
+                      relationships:
+                        person:
+                          data:
+                            id: '100'
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/100
+                      type: names
+                      links:
+                        self: https://api.wisc.edu/people/100/names/200
+                    links:
+                      self: https://api.wisc.edu/people/100/names/100
+        '202':
+          description: Name created, but additional processing is needed for it to show in the API.
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+  /people/{id}/names/{nameId}:
+    get:
+      description: Get a name by ID. Refer to the [Names Documentation](/person-api/names) for more information.
+      summary: Get a name.
+      operationId: get_person_name
+      tags:
+      - names
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: '700'
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: '12345'
+      - name: nameId
+        description: ID of a name. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
+        in: path
+        example: '710'
+        required: true
+        schema:
+          type: string
+          example: '12345'
+          description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+      responses:
+        '200':
+          description: A single name.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: Details about a name used to refer to a person.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - attributes
+                    - links
+                    - relationships
+                    properties:
+                      type:
+                        type: string
+                        example: names
+                      id:
+                        type: string
+                        example: '12345'
+                        description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+                      attributes:
+                        type: object
+                        required:
+                        - firstName
+                        - middleName
+                        - lastName
+                        - prefix
+                        - suffix
+                        - nameType
+                        - source
+                        - institution
+                        properties:
+                          firstName:
+                            description: A first name for this person.
+                            type: string
+                            minLength: 1
+                            maxLength: 255
+                            example: Amy
+                          middleName:
+                            description: A middle name for this person.
+                            type:
+                            - string
+                            - 'null'
+                            minLength: 1
+                            maxLength: 255
+                            example: Marie
+                          lastName:
+                            description: A last name for this person.
+                            type: string
+                            minLength: 1
+                            maxLength: 255
+                            example: Smith
+                          prefix:
+                            description: A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.
+                            type: string
+                            minLength: 1
+                            maxLength: 30
+                            pattern: ^[A-Za-z '.-]*$
+                            example: Dr
+                          suffix:
+                            description: A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.
+                            type: string
+                            minLength: 1
+                            maxLength: 30
+                            pattern: ^[A-Za-z '.-]*$
+                            example: II
+                          nameType:
+                            description: The type of name for the person.
+                            type: string
+                            enum:
+                            - nameInUse
+                            - primary
+                            - preferred
+                            example: nameInUse
+                          source:
+                            description: The source of the name.
+                            type: string
+                            enum:
+                            - profile
+                            - IAM
+                            - HRS
+                            - Workday
+                            example: profile
+                          institution:
+                            description: The institution associated with the resource.
+                            type: string
+                            example: UW-Madison
+                            enum:
+                            - Shared
+                            - UW-Eau Claire
+                            - UW-Green Bay
+                            - UW-La Crosse
+                            - UW-Madison
+                            - UW-Milwaukee
+                            - UW Oshkosh
+                            - UW-Parkside
+                            - UW-Platteville
+                            - UW-River Falls
+                            - UW-Stevens Point
+                            - UW-Stout
+                            - UW-Superior
+                            - UW-Whitewater
+                            - UW-Extension
+                            - UW System
+                      links:
+                        description: The link to access a resource itself
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/link/to/self
+                      relationships:
+                        type: object
+                        properties:
+                          person:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    example: sampleType
+                                  id:
+                                    type: string
+                                    example: sampleId
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-names:
+                  value:
+                    data:
+                      attributes:
+                        firstName: Amy
+                        middleName: Marie
+                        lastName: Smith
+                        prefix: null
+                        suffix: null
+                        nameType: nameInUse
+                        source: profile
+                        institution: UW-Madison
+                      id: '100'
+                      relationships:
+                        person:
+                          data:
+                            id: '100'
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/100
+                      type: names
+                      links:
+                        self: https://api.wisc.edu/people/100/names/200
+                    links:
+                      self: https://api.wisc.edu/people/100/names/100
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    patch:
+      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Update a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be updated. Updating the ID is not allowed. Refer to the [Names Documentation](/person-api/names) for more information.
+      summary: Update a name.
+      operationId: update_person_name
+      tags:
+      - names
+      requestBody:
+        description: A name request body.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  required:
+                  - type
+                  - id
+                  - attributes
+                  properties:
+                    type:
+                      type: string
+                      example: names
+                      enum:
+                      - names
+                    id:
+                      type: string
+                      example: '12345'
+                      description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+                    attributes:
+                      type: object
+                      required:
+                      - firstName
+                      - middleName
+                      - lastName
+                      - nameType
+                      - source
+                      - institution
+                      properties:
+                        firstName:
+                          description: A first name for this person.
+                          type: string
+                          minLength: 1
+                          maxLength: 255
+                          example: Amy
+                        middleName:
+                          description: A middle name for this person.
+                          type:
+                          - string
+                          - 'null'
+                          minLength: 1
+                          maxLength: 255
+                          example: Marie
+                        lastName:
+                          description: A last name for this person.
+                          type: string
+                          minLength: 1
+                          maxLength: 255
+                          example: Smith
+                        nameType:
+                          description: The type of name for the person.
+                          type: string
+                          enum:
+                          - nameInUse
+                          - primary
+                          example: nameInUse
+                        source:
+                          description: The source of the name.
+                          type: string
+                          enum:
+                          - profile
+                          - IAM
+                          - HRS
+                          example: profile
+                        institution:
+                          description: The institution associated with the resource.
+                          type: string
+                          example: UW-Madison
+                          enum:
+                          - Shared
+                          - UW-Eau Claire
+                          - UW-Green Bay
+                          - UW-La Crosse
+                          - UW-Madison
+                          - UW-Milwaukee
+                          - UW Oshkosh
+                          - UW-Parkside
+                          - UW-Platteville
+                          - UW-River Falls
+                          - UW-Stevens Point
+                          - UW-Stout
+                          - UW-Superior
+                          - UW-Whitewater
+                          - UW-Extension
+                          - UW System
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: '700'
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: '12345'
+      - name: nameId
+        description: ID of a name. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
+        in: path
+        example: '710'
+        required: true
+        schema:
+          type: string
+          example: '12345'
+          description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+      responses:
+        '200':
+          description: A single name.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: Details about a name used to refer to a person.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - attributes
+                    - links
+                    - relationships
+                    properties:
+                      type:
+                        type: string
+                        example: names
+                      id:
+                        type: string
+                        example: '12345'
+                        description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+                      attributes:
+                        type: object
+                        required:
+                        - firstName
+                        - middleName
+                        - lastName
+                        - prefix
+                        - suffix
+                        - nameType
+                        - source
+                        - institution
+                        properties:
+                          firstName:
+                            description: A first name for this person.
+                            type: string
+                            minLength: 1
+                            maxLength: 255
+                            example: Amy
+                          middleName:
+                            description: A middle name for this person.
+                            type:
+                            - string
+                            - 'null'
+                            minLength: 1
+                            maxLength: 255
+                            example: Marie
+                          lastName:
+                            description: A last name for this person.
+                            type: string
+                            minLength: 1
+                            maxLength: 255
+                            example: Smith
+                          prefix:
+                            description: A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.
+                            type: string
+                            minLength: 1
+                            maxLength: 30
+                            pattern: ^[A-Za-z '.-]*$
+                            example: Dr
+                          suffix:
+                            description: A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.
+                            type: string
+                            minLength: 1
+                            maxLength: 30
+                            pattern: ^[A-Za-z '.-]*$
+                            example: II
+                          nameType:
+                            description: The type of name for the person.
+                            type: string
+                            enum:
+                            - nameInUse
+                            - primary
+                            - preferred
+                            example: nameInUse
+                          source:
+                            description: The source of the name.
+                            type: string
+                            enum:
+                            - profile
+                            - IAM
+                            - HRS
+                            - Workday
+                            example: profile
+                          institution:
+                            description: The institution associated with the resource.
+                            type: string
+                            example: UW-Madison
+                            enum:
+                            - Shared
+                            - UW-Eau Claire
+                            - UW-Green Bay
+                            - UW-La Crosse
+                            - UW-Madison
+                            - UW-Milwaukee
+                            - UW Oshkosh
+                            - UW-Parkside
+                            - UW-Platteville
+                            - UW-River Falls
+                            - UW-Stevens Point
+                            - UW-Stout
+                            - UW-Superior
+                            - UW-Whitewater
+                            - UW-Extension
+                            - UW System
+                      links:
+                        description: The link to access a resource itself
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/link/to/self
+                      relationships:
+                        type: object
+                        properties:
+                          person:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    example: sampleType
+                                  id:
+                                    type: string
+                                    example: sampleId
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-names:
+                  value:
+                    data:
+                      attributes:
+                        firstName: Amy
+                        middleName: Marie
+                        lastName: Smith
+                        prefix: null
+                        suffix: null
+                        nameType: nameInUse
+                        source: profile
+                        institution: UW-Madison
+                      id: '100'
+                      relationships:
+                        person:
+                          data:
+                            id: '100'
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/100
+                      type: names
+                      links:
+                        self: https://api.wisc.edu/people/100/names/200
+                    links:
+                      self: https://api.wisc.edu/people/100/names/100
+        '202':
+          description: Name updated, but additional processing is needed for the updates to show in the API.
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    delete:
+      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Delete a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be deleted. Refer to the [Names Documentation](/person-api/names) for more information.
+      summary: Delete a name.
+      operationId: delete_person_name
+      tags:
+      - names
+      requestBody:
+        description: A request body to mark a name as inappropriate when deleting a name in use.
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                inappropriate:
+                  type: boolean
+                  example: true
+                  description: Indicates whether the name is inappropriate.
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: '700'
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: '12345'
+      - name: nameId
+        description: ID of a name. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
+        in: path
+        example: '710'
+        required: true
+        schema:
+          type: string
+          example: '12345'
+          description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+      responses:
+        '202':
+          description: Name deleted, but additional processing is needed before the name will stop appearing in the API.
+        '204':
+          description: Name deleted. Empty response.
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
+- university-of-wisconsin-madison-mock-person-api-openapi.yml
+- university-of-wisconsin-madison-person-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

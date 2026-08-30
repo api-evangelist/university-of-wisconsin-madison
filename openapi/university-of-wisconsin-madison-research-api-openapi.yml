@@ -1,0 +1,3713 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: finance-apis@doit.wisc.edu
+    name: DoIT Enterprise Business Systems (EBS) Integrated Business Solutions (IBS) API Team
+  description: 'An API for accessing and validating UW financial data.
+
+    ## Getting Started
+
+    For information on how to create an application on the portal and request access to the API, please visit the [Getting Started page](https://financeapis.wisc.edu/getting-started/) on our website.
+
+    ## Endpoints, Filtering, Inclusions, and Sourcing
+
+    Information on how to use the filter query parameter and include related resources, individual endpoints, and how we source our data can be found on the [Documentation page](https://financeapis.wisc.edu/documentation/) of our website.
+
+    ## Help/Support
+
+    If you need assistance in using the Finance API, have questions about the data, need to report a bug, or would like to suggest features/improvements, please fill out the form on the [Contact Us page](https://financeapis.wisc.edu/contact-us/) of our website or email us at [finance-apis@doit.wisc.edu](mailto:finance-apis@doit.wisc.edu).'
+  title: Finance Research API
+  version: 2026-02-18
+servers:
+- description: Production
+  url: https://api.wisc.edu/finance
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Research
+paths:
+  /awardTasks:
+    get:
+      description: Retrieves a paginated listing of all award tasks
+      parameters:
+      - description: The datetime that the record was last changed in the Finance API's database.
+        in: query
+        name: filter[lastModified]
+        required: false
+        schema:
+          format: datetime
+          type: string
+      - description: Page offset of records included in the response
+        in: query
+        name: page[number]
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - description: Number of records included in the response
+        in: query
+        name: page[size]
+        required: false
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - in: query
+        name: filter[name]
+        schema:
+          type: string
+      - in: query
+        name: filter[awardId]
+        schema:
+          type: string
+      - in: query
+        name: filter[company]
+        schema:
+          type: string
+      - in: query
+        name: filter[sponsorId]
+        schema:
+          type: string
+      - in: query
+        name: filter[grantId]
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                - attributes:
+                    awardId: AWD-000195
+                    awardType: schedule
+                    company: UWLAC
+                    dueDate: '2022-12-15'
+                    endDate: '2024-01-31'
+                    grantId: GRTEST00002
+                    isBillingMilestone: false
+                    isCloseoutTask: false
+                    lineNumber: 1
+                    name: Cash
+                    scheduleEndDate: '2025-06-30'
+                    scheduleStartDate: '2025-06-30'
+                    sponsorId: UWMSN_MSN100039
+                    startDate: '2025-06-30'
+                    status: NOT_STARTED
+                    taskType: 05_Final_Invoice/Report_Post-Submission_Final_Review
+                    taskTypeGroup: Final Review
+                  id: AWD-001050_GR000040572
+                  links:
+                    self: https://api.wisc.edu/finance/awardTasks/AWD-001050_GR000040572
+                  meta:
+                    lastModified: 2026-06-15 13:11:13
+                  type: awardTasks
+                links:
+                  first: https://api.wisc.edu/finance/awardTasks?page[number]=1
+                  last: https://api.wisc.edu/finance/awardTasks?page[number]=99
+                  next: https://api.wisc.edu/finance/awardTasks/page[number]=2
+                  prev: https://api.wisc.edu/finance/awardTasks?page[number]=1
+                  self: https://api.wisc.edu/finance/awardTasks
+                meta:
+                  pageNumber: 1
+                  pageSize: 100
+                  totalCount: 1234
+                  totalPages: 13
+              schema:
+                oneOf:
+                - properties:
+                    data:
+                      description: A collection of award tasks.
+                      items:
+                        description: A single award task record.
+                        properties:
+                          attributes:
+                            properties:
+                              awardId:
+                                description: Unique identifier for the award task.
+                                example: AWD-000195
+                                type: string
+                              awardType:
+                                description: Type of the award task.
+                                example: schedule
+                                type: string
+                              company:
+                                description: Company name.
+                                example: UWLAC
+                                type: string
+                              dueDate:
+                                description: Due date Customer Invoices.
+                                example: '2022-12-15'
+                                type: string
+                              endDate:
+                                description: End date of project.
+                                example: '2024-01-31'
+                                type:
+                                - string
+                                - 'null'
+                              grantId:
+                                description: Grant ID of the Award Tasks.
+                                example: GRTEST00002
+                                type: string
+                              isBillingMilestone:
+                                description: Whether is it Billing Milestone or not
+                                example: false
+                                type: boolean
+                              isCloseoutTask:
+                                description: Whether is it Closeout Task or not
+                                example: false
+                                type: boolean
+                              lineNumber:
+                                description: Line Number
+                                example: 1
+                                type: integer
+                              name:
+                                description: MSN Mod Testing - Award Pool 4
+                                example: Cash
+                                type: string
+                              scheduleEndDate:
+                                description: Task schedule end date
+                                example: '2025-06-30'
+                                format: date
+                                type: string
+                              scheduleStartDate:
+                                description: Task schedule start date
+                                example: '2025-06-30'
+                                format: date
+                                type: string
+                              sponsorId:
+                                description: Sponsor ID of the Award Task.
+                                example: UWMSN_MSN100039
+                                type: string
+                              startDate:
+                                description: Task start date
+                                example: '2025-06-30'
+                                format: date
+                                type:
+                                - string
+                                - 'null'
+                              status:
+                                description: Status of the account.
+                                example: NOT_STARTED
+                                type: string
+                              taskType:
+                                description: Type of the Task.
+                                example: 05_Final_Invoice/Report_Post-Submission_Final_Review
+                                type: string
+                              taskTypeGroup:
+                                description: Type Group of the Task.
+                                example: Final Review
+                                type: string
+                            type: object
+                          id:
+                            description: The unique identifier for an award task record.
+                            example: AWD-001050_GR000040572
+                            type: string
+                          links:
+                            description: Links related to this record
+                            properties:
+                              self:
+                                example: https://api.wisc.edu/finance/awardTasks/AWD-001050_GR000040572
+                                type: string
+                            type: object
+                          meta:
+                            properties:
+                              lastModified:
+                                description: Date/time of the last time this worktag was updated in the product database in ISO format.
+                                example: 2026-06-15 13:11:13
+                                type:
+                                - string
+                                - 'null'
+                            type: object
+                          type:
+                            example: awardTasks
+                            type: string
+                        type: object
+                      type: array
+                    links:
+                      properties:
+                        first:
+                          description: A link to the first page of results
+                          example: https://api.wisc.edu/finance/awardTasks?page[number]=1
+                          type: string
+                        last:
+                          description: A link to the last page of results
+                          example: https://api.wisc.edu/finance/awardTasks?page[number]=99
+                          type: string
+                        next:
+                          description: A link to the next page of results, if there is one
+                          example: https://api.wisc.edu/finance/awardTasks/page[number]=2
+                          type:
+                          - string
+                          - 'null'
+                        prev:
+                          description: A link to the previous page of results, if there is one
+                          example: https://api.wisc.edu/finance/awardTasks?page[number]=1
+                          type:
+                          - string
+                          - 'null'
+                        self:
+                          description: The link that generated this response
+                          example: https://api.wisc.edu/finance/awardTasks
+                          type: string
+                      type: object
+                    meta:
+                      properties:
+                        pageNumber:
+                          description: Page number requested.
+                          example: 1
+                          format: int64
+                          type: integer
+                        pageSize:
+                          description: Number of items on each page.
+                          example: 100
+                          format: int64
+                          type: integer
+                        totalCount:
+                          description: Total number of items across all pages.
+                          example: 1234
+                          format: int64
+                          type: integer
+                        totalPages:
+                          description: Total number of pages given pageSize.
+                          example: 13
+                          format: int64
+                          type: integer
+                      type: object
+                  type: object
+                - properties:
+                    attributes:
+                      properties:
+                        url:
+                          description: Presigned URL to download the data from S3. The URL is valid for 15 minutes.
+                          example: https://example.com/link
+                          type: string
+                      type: object
+                    id:
+                      description: The unique identifier for an presigned link.
+                      example: 670ac856-91ef-47ee-8f1d-b79d4f656a10
+                      type: string
+                    type:
+                      enum:
+                      - bulkDelivery
+                      example: bulkDelivery
+                      type: string
+                  type: object
+          description: An API response with a collection of award tasks, pagination, and metadata
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Research
+  /awardTasks/{id}:
+    get:
+      description: Retrieves a single award task by its ID.
+      parameters:
+      - description: An award task ID passed in as a URL parameter.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: The unique identifier for an award task record.
+          example: AWD-001050_GR000040572
+          type: string
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                  attributes:
+                    awardId: AWD-000195
+                    awardType: schedule
+                    company: UWLAC
+                    dueDate: '2022-12-15'
+                    endDate: '2024-01-31'
+                    grantId: GRTEST00002
+                    isBillingMilestone: false
+                    isCloseoutTask: false
+                    lineNumber: 1
+                    name: Cash
+                    scheduleEndDate: '2025-06-30'
+                    scheduleStartDate: '2025-06-30'
+                    sponsorId: UWMSN_MSN100039
+                    startDate: '2025-06-30'
+                    status: NOT_STARTED
+                    taskType: 05_Final_Invoice/Report_Post-Submission_Final_Review
+                    taskTypeGroup: Final Review
+                  id: AWD-001050_GR000040572
+                  links:
+                    self: https://api.wisc.edu/finance/awardTasks/AWD-001050_GR000040572
+                  meta:
+                    lastModified: 2026-06-15 13:11:13
+                  type: awardTasks
+                links:
+                  self: https://api.wisc.edu/finance/awardTasks/AWD-001050_GR000040572
+              schema:
+                properties:
+                  data:
+                    description: A single award task record.
+                    properties:
+                      attributes:
+                        properties:
+                          awardId:
+                            description: Unique identifier for the award task.
+                            example: AWD-000195
+                            type: string
+                          awardType:
+                            description: Type of the award task.
+                            example: schedule
+                            type: string
+                          company:
+                            description: Company name.
+                            example: UWLAC
+                            type: string
+                          dueDate:
+                            description: Due date Customer Invoices.
+                            example: '2022-12-15'
+                            type: string
+                          endDate:
+                            description: End date of project.
+                            example: '2024-01-31'
+                            type:
+                            - string
+                            - 'null'
+                          grantId:
+                            description: Grant ID of the Award Tasks.
+                            example: GRTEST00002
+                            type: string
+                          isBillingMilestone:
+                            description: Whether is it Billing Milestone or not
+                            example: false
+                            type: boolean
+                          isCloseoutTask:
+                            description: Whether is it Closeout Task or not
+                            example: false
+                            type: boolean
+                          lineNumber:
+                            description: Line Number
+                            example: 1
+                            type: integer
+                          name:
+                            description: MSN Mod Testing - Award Pool 4
+                            example: Cash
+                            type: string
+                          scheduleEndDate:
+                            description: Task schedule end date
+                            example: '2025-06-30'
+                            format: date
+                            type: string
+                          scheduleStartDate:
+                            description: Task schedule start date
+                            example: '2025-06-30'
+                            format: date
+                            type: string
+                          sponsorId:
+                            description: Sponsor ID of the Award Task.
+                            example: UWMSN_MSN100039
+                            type: string
+                          startDate:
+                            description: Task start date
+                            example: '2025-06-30'
+                            format: date
+                            type:
+                            - string
+                            - 'null'
+                          status:
+                            description: Status of the account.
+                            example: NOT_STARTED
+                            type: string
+                          taskType:
+                            description: Type of the Task.
+                            example: 05_Final_Invoice/Report_Post-Submission_Final_Review
+                            type: string
+                          taskTypeGroup:
+                            description: Type Group of the Task.
+                            example: Final Review
+                            type: string
+                        type: object
+                      id:
+                        description: The unique identifier for an award task record.
+                        example: AWD-001050_GR000040572
+                        type: string
+                      links:
+                        description: Links related to this record
+                        properties:
+                          self:
+                            example: https://api.wisc.edu/finance/awardTasks/AWD-001050_GR000040572
+                            type: string
+                        type: object
+                      meta:
+                        properties:
+                          lastModified:
+                            description: Date/time of the last time this worktag was updated in the product database in ISO format.
+                            example: 2026-06-15 13:11:13
+                            type:
+                            - string
+                            - 'null'
+                        type: object
+                      type:
+                        example: awardTasks
+                        type: string
+                    type: object
+                  links:
+                    description: Links related to this record
+                    properties:
+                      self:
+                        example: https://api.wisc.edu/finance/awardTasks/AWD-001050_GR000040572
+                        type: string
+                    type: object
+                type: object
+          description: Successful response.
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Research
+  /awards:
+    get:
+      description: Retrieves a paginated list of all awards.
+      parameters:
+      - description: The datetime that the record was last changed in the Finance API's database.
+        in: query
+        name: filter[lastModified]
+        required: false
+        schema:
+          format: datetime
+          type: string
+      - description: Page offset of records included in the response
+        in: query
+        name: page[number]
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - description: Number of records included in the response
+        in: query
+        name: page[size]
+        required: false
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - in: query
+        name: filter[name]
+        schema:
+          type: string
+      - in: query
+        name: filter[company]
+        schema:
+          type: string
+      - in: query
+        name: filter[costCenterId]
+        schema:
+          type: string
+      - in: query
+        name: filter[fundId]
+        schema:
+          type: string
+      - in: query
+        name: filter[piId]
+        schema:
+          type: string
+      - in: query
+        name: filter[sponsorId]
+        schema:
+          type: string
+      - in: query
+        name: filter[coPrincipalInvestigatorId]
+        schema:
+          type: string
+      - in: query
+        name: filter[coInvestigatorId]
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                - attributes:
+                    anticipatedFacilitiesAdminAmount: 0.0
+                    anticipatedSponsorDirectCostAmount: 0.0
+                    anticipatedSponsorTotalAmount: 0.0
+                    assistanceListingDescription: Office of International Science and Engineering
+                    assistanceListingNumber: '47.079'
+                    authorizedAmount: '1000.0'
+                    awardType: schedule
+                    billToSponsorId: SPN000065
+                    billToSponsorName: JOHN DEERE
+                    billedToDateAmount: 0.0
+                    billingLimitOverride: 0.0
+                    centralAwardAccountantId: 00331909
+                    centralAwardAccountantName: Jeffrey J Selner
+                    coInvestigators:
+                    - id: 00331909
+                      name: Jeffrey J Selner
+                    coPrincipalInvestigators:
+                    - id: 00331909
+                      name: Jeffrey J Selner
+                    company: UWRVF
+                    costCenterId: CC000199
+                    costShareRequiredBySponsor: true
+                    costShareTotalAmount: 0.0
+                    date: '2024-01-01 08:00:00'
+                    defaultPaymentType: Incoming ACH
+                    description: Wisys VentureHome
+                    enteredLineAmount: 0.0
+                    federalAwardId: R03AG080283
+                    fundId: FD0133
+                    institutionalId: MSN261852
+                    isSubAward: true
+                    letterOfCreditDocumentId: '1854284'
+                    letterOfCreditId: UWEAU_0039172000
+                    lifecycleStatus: '1'
+                    name: CG Test Award
+                    paymentTerms: Net 30
+                    piId: 00358885
+                    piName: Mark D Karau
+                    primeSponsorId: UWMIL_MIL100385
+                    primeSponsorName: JOHN DEERE
+                    purposeCode: Research
+                    scheduleEndDate: '2025-06-30 00:00:00'
+                    scheduleStartDate: '2025-06-30 00:00:00'
+                    signedDate: 2024-07-25-07:00
+                    sponsorAwardReferenceNumber: TEST-12345
+                    sponsorDirectCostAmount: 9075.0
+                    sponsorFacilitiesAdminAmount: 0.0
+                    sponsorId: SPN000084
+                    sponsorName: THE TEAGLE FOUNDATION
+                    sponsorTotalAmount: 0.0
+                    status: Approved
+                    totalAmount: 0.0
+                    versionNumber: '0'
+                    versionStatus: Award In Effect
+                  id: AWD-007199
+                  links:
+                    self: https://api.wisc.edu/finance/awards/AWD-007199
+                  meta:
+                    lastModified: 2026-06-15 13:11:13
+                  type: awards
+                links:
+                  first: https://api.wisc.edu/finance/awards?page[first]=1
+                  last: https://api.wisc.edu/finance/awards?page[last]=99
+                  next: https://api.wisc.edu/finance/awards/page[next]=2
+                  prev: https://api.wisc.edu/finance/awards?page[prev]=1
+                  self: https://api.wisc.edu/finance/awards
+                meta:
+                  pageNumber: 1
+                  pageSize: 100
+                  totalCount: 1234
+                  totalPages: 13
+              schema:
+                oneOf:
+                - properties:
+                    data:
+                      description: A collection of awards.
+                      items:
+                        description: A single award record.
+                        properties:
+                          attributes:
+                            properties:
+                              anticipatedFacilitiesAdminAmount:
+                                description: Anticipated facilities & admin dollar amount
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              anticipatedSponsorDirectCostAmount:
+                                description: Dollar amount of the anticipated sponsor's direct cost
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              anticipatedSponsorTotalAmount:
+                                description: Dollar amount of the anticipated sponsor's total
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              assistanceListingDescription:
+                                description: Central award Assistance Listing Description of the Awards.
+                                example: Office of International Science and Engineering
+                                type:
+                                - string
+                                - 'null'
+                              assistanceListingNumber:
+                                description: Central award Assistance Listing Number of the Awards.
+                                example: '47.079'
+                                type:
+                                - string
+                                - 'null'
+                              authorizedAmount:
+                                description: The total amount authorized for the award.
+                                example: '1000.0'
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              awardType:
+                                description: Type of the Awards.
+                                example: schedule
+                                type: string
+                              billToSponsorId:
+                                description: Unique ID of Bill to Sponsor
+                                example: SPN000065
+                                type: string
+                              billToSponsorName:
+                                description: Name of Bill to Sponsor
+                                example: JOHN DEERE
+                                type: string
+                              billedToDateAmount:
+                                description: Dollar amount billed to date
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              billingLimitOverride:
+                                description: Billing limit override dollar amount
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              centralAwardAccountantId:
+                                description: Central award accountant Unique Id of the Awards.
+                                example: 00331909
+                                type:
+                                - string
+                                - 'null'
+                              centralAwardAccountantName:
+                                description: Central award accountant Name of the Awards.
+                                example: Jeffrey J Selner
+                                type:
+                                - string
+                                - 'null'
+                              coInvestigators:
+                                items:
+                                  properties:
+                                    id:
+                                      description: Id of Co Investigators
+                                      example: 00331909
+                                      type:
+                                      - string
+                                      - 'null'
+                                    name:
+                                      description: The name of the co Investigators
+                                      example: Jeffrey J Selner
+                                      type: string
+                                  type:
+                                  - object
+                                  - 'null'
+                                minItems: 0
+                                type: array
+                              coPrincipalInvestigators:
+                                items:
+                                  properties:
+                                    id:
+                                      description: Id of Co Principal Investigators
+                                      example: 00331909
+                                      type:
+                                      - string
+                                      - 'null'
+                                    name:
+                                      description: The name of the co Principal Investigators
+                                      example: Jeffrey J Selner
+                                      type: string
+                                  type: object
+                                minItems: 0
+                                type:
+                                - array
+                                - 'null'
+                              company:
+                                description: The company (campus) the award is associated with.
+                                example: UWRVF
+                                type: string
+                              costCenterId:
+                                description: Cost center worktag ID.  Awards that have lines that use this worktag will be returned.
+                                example: CC000199
+                                type: string
+                              costShareRequiredBySponsor:
+                                description: Whether a cost share is required by the sponsor
+                                example: true
+                                type: boolean
+                              costShareTotalAmount:
+                                description: Cost share total dollar amount of the Award.
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              date:
+                                description: award date of the Awards.
+                                example: '2024-01-01 08:00:00'
+                                format: date
+                                type: string
+                              defaultPaymentType:
+                                description: Default payment type for the award
+                                example: Incoming ACH
+                                type:
+                                - string
+                                - 'null'
+                              description:
+                                description: Description of the Awards
+                                example: Wisys VentureHome
+                                type:
+                                - string
+                                - 'null'
+                              enteredLineAmount:
+                                description: Line amount entered dollar amount
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              federalAwardId:
+                                description: Classifies awards based on external financial reporting needs.
+                                example: R03AG080283
+                                type:
+                                - string
+                                - 'null'
+                              fundId:
+                                description: Classification of funding that identifies the funding source to facilitate financial reporting.
+                                example: FD0133
+                                type: string
+                              institutionalId:
+                                description: Institution/campus identifier of Awards.
+                                example: MSN261852
+                                type:
+                                - string
+                                - 'null'
+                              isSubAward:
+                                description: Purpose terms of the Awards.
+                                example: true
+                                type: boolean
+                              letterOfCreditDocumentId:
+                                description: Central award Letter of Credit Document Id of the Awards.
+                                example: '1854284'
+                                type:
+                                - string
+                                - 'null'
+                              letterOfCreditId:
+                                description: Central award  Letter of Credit Id of the Awards.
+                                example: UWEAU_0039172000
+                                type:
+                                - string
+                                - 'null'
+                              lifecycleStatus:
+                                description: Status of the external customer.
+                                example: '1'
+                                type: string
+                              name:
+                                description: Name of the Awards
+                                example: CG Test Award
+                                type: string
+                              paymentTerms:
+                                description: The payment terms set for the award, if applicable
+                                example: Net 30
+                                type:
+                                - string
+                                - 'null'
+                              piId:
+                                description: Principal Investigator Unique Id of the Awards.
+                                example: 00358885
+                                type:
+                                - string
+                                - 'null'
+                              piName:
+                                description: Principal Investigator Name of the Awards.
+                                example: Mark D Karau
+                                type:
+                                - string
+                                - 'null'
+                              primeSponsorId:
+                                description: Central award Prime Sponsor Id of the Awards.
+                                example: UWMIL_MIL100385
+                                type:
+                                - string
+                                - 'null'
+                              primeSponsorName:
+                                description: Central award Prime Sponsor Name Id of the Awards.
+                                example: JOHN DEERE
+                                type:
+                                - string
+                                - 'null'
+                              purposeCode:
+                                description: Purpose code of the Awards.
+                                example: Research
+                                type: string
+                              scheduleEndDate:
+                                description: Date/time of the scheduled end
+                                example: '2025-06-30 00:00:00'
+                                format: date
+                                type: string
+                              scheduleStartDate:
+                                description: Date/time of the scheduled start
+                                example: '2025-06-30 00:00:00'
+                                format: date
+                                type: string
+                              signedDate:
+                                description: Central award Signed Date of the Awards.
+                                example: 2024-07-25-07:00
+                                format: datetime
+                                type:
+                                - string
+                                - 'null'
+                              sponsorAwardReferenceNumber:
+                                description: Sponsor-Award Unique reference Id.
+                                example: TEST-12345
+                                type:
+                                - string
+                                - 'null'
+                              sponsorDirectCostAmount:
+                                description: Sponsor's direct cost dollar amount
+                                example: 9075.0
+                                format: currency
+                                type: number
+                              sponsorFacilitiesAdminAmount:
+                                description: Sponsor's allowed facilities & admin dollar amount
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              sponsorId:
+                                description: Sponsor-Award Unique reference ID.
+                                example: SPN000084
+                                type: string
+                              sponsorName:
+                                description: Description of the Sponsors.
+                                example: THE TEAGLE FOUNDATION
+                                type: string
+                              sponsorTotalAmount:
+                                description: Sponsor's total dollar amount
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              status:
+                                description: Status of Awards.
+                                example: Approved
+                                type: string
+                              totalAmount:
+                                description: Award Total dollar amount.
+                                example: 0.0
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                              versionNumber:
+                                description: version number of the Awards.
+                                example: '0'
+                                type: string
+                              versionStatus:
+                                description: version status of the awards.
+                                example: Award In Effect
+                                type: string
+                            type: object
+                          id:
+                            description: The unique identifier for an award record.
+                            example: AWD-007199
+                            type: string
+                          links:
+                            description: Links related to this record
+                            properties:
+                              self:
+                                description: The link to just this record
+                                example: https://api.wisc.edu/finance/awards/AWD-007199
+                                type: string
+                            type: object
+                          meta:
+                            properties:
+                              lastModified:
+                                description: Date/time of the last time this worktag was updated in the product database in ISO format.
+                                example: 2026-06-15 13:11:13
+                                type:
+                                - string
+                                - 'null'
+                            type: object
+                          type:
+                            enum:
+                            - awards
+                            example: awards
+                            type: string
+                        type: object
+                      type: array
+                    links:
+                      properties:
+                        first:
+                          description: A link to the first page of results
+                          example: https://api.wisc.edu/finance/awards?page[first]=1
+                          type: string
+                        last:
+                          description: A link to the last page of results
+                          example: https://api.wisc.edu/finance/awards?page[last]=99
+                          type: string
+                        next:
+                          description: A link to the next page of results, if there is one
+                          example: https://api.wisc.edu/finance/awards/page[next]=2
+                          type:
+                          - string
+                          - 'null'
+                        prev:
+                          description: A link to the previous page of results, if there is one
+                          example: https://api.wisc.edu/finance/awards?page[prev]=1
+                          type:
+                          - string
+                          - 'null'
+                        self:
+                          description: The link that generated this response
+                          example: https://api.wisc.edu/finance/awards
+                          type: string
+                      type: object
+                    meta:
+                      properties:
+                        pageNumber:
+                          description: Page number requested.
+                          example: 1
+                          format: int64
+                          type: integer
+                        pageSize:
+                          description: Number of items on each page.
+                          example: 100
+                          format: int64
+                          type: integer
+                        totalCount:
+                          description: Total number of items across all pages.
+                          example: 1234
+                          format: int64
+                          type: integer
+                        totalPages:
+                          description: Total number of pages given pageSize.
+                          example: 13
+                          format: int64
+                          type: integer
+                      type: object
+                  type: object
+                - properties:
+                    attributes:
+                      properties:
+                        url:
+                          description: Presigned URL to download the data from S3. The URL is valid for 15 minutes.
+                          example: https://example.com/link
+                          type: string
+                      type: object
+                    id:
+                      description: The unique identifier for an presigned link.
+                      example: 670ac856-91ef-47ee-8f1d-b79d4f656a10
+                      type: string
+                    type:
+                      enum:
+                      - bulkDelivery
+                      example: bulkDelivery
+                      type: string
+                  type: object
+          description: Successful response. Returns the default response by default, or bulkResponse if delivery=bulk query parameter is specified.
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Research
+  /awards/{id}:
+    get:
+      description: Retrieves a single award by its ID.
+      parameters:
+      - description: An award ID passed in as a URL parameter.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: The unique identifier for an award record.
+          example: AWD-007199
+          type: string
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                  attributes:
+                    anticipatedFacilitiesAdminAmount: 0.0
+                    anticipatedSponsorDirectCostAmount: 0.0
+                    anticipatedSponsorTotalAmount: 0.0
+                    assistanceListingDescription: Office of International Science and Engineering
+                    assistanceListingNumber: '47.079'
+                    authorizedAmount: '1000.0'
+                    awardType: schedule
+                    billToSponsorId: SPN000065
+                    billToSponsorName: JOHN DEERE
+                    billedToDateAmount: 0.0
+                    billingLimitOverride: 0.0
+                    centralAwardAccountantId: 00331909
+                    centralAwardAccountantName: Jeffrey J Selner
+                    coInvestigators:
+                    - id: 00331909
+                      name: Jeffrey J Selner
+                    coPrincipalInvestigators:
+                    - id: 00331909
+                      name: Jeffrey J Selner
+                    company: UWRVF
+                    costCenterId: CC000199
+                    costShareRequiredBySponsor: true
+                    costShareTotalAmount: 0.0
+                    date: '2024-01-01 08:00:00'
+                    defaultPaymentType: Incoming ACH
+                    description: Wisys VentureHome
+                    enteredLineAmount: 0.0
+                    federalAwardId: R03AG080283
+                    fundId: FD0133
+                    institutionalId: MSN261852
+                    isSubAward: true
+                    letterOfCreditDocumentId: '1854284'
+                    letterOfCreditId: UWEAU_0039172000
+                    lifecycleStatus: '1'
+                    name: CG Test Award
+                    paymentTerms: Net 30
+                    piId: 00358885
+                    piName: Mark D Karau
+                    primeSponsorId: UWMIL_MIL100385
+                    primeSponsorName: JOHN DEERE
+                    purposeCode: Research
+                    scheduleEndDate: '2025-06-30 00:00:00'
+                    scheduleStartDate: '2025-06-30 00:00:00'
+                    signedDate: 2024-07-25-07:00
+                    sponsorAwardReferenceNumber: TEST-12345
+                    sponsorDirectCostAmount: 9075.0
+                    sponsorFacilitiesAdminAmount: 0.0
+                    sponsorId: SPN000084
+                    sponsorName: THE TEAGLE FOUNDATION
+                    sponsorTotalAmount: 0.0
+                    status: Approved
+                    totalAmount: 0.0
+                    versionNumber: '0'
+                    versionStatus: Award In Effect
+                  id: AWD-007199
+                  links:
+                    self: https://api.wisc.edu/finance/awards/AWD-007199
+                  meta:
+                    lastModified: 2026-06-15 13:11:13
+                  type: awards
+                links:
+                  self: https://api.wisc.edu/finance/awards/AWD-007199
+              schema:
+                properties:
+                  data:
+                    description: A single award record.
+                    properties:
+                      attributes:
+                        properties:
+                          anticipatedFacilitiesAdminAmount:
+                            description: Anticipated facilities & admin dollar amount
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          anticipatedSponsorDirectCostAmount:
+                            description: Dollar amount of the anticipated sponsor's direct cost
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          anticipatedSponsorTotalAmount:
+                            description: Dollar amount of the anticipated sponsor's total
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          assistanceListingDescription:
+                            description: Central award Assistance Listing Description of the Awards.
+                            example: Office of International Science and Engineering
+                            type:
+                            - string
+                            - 'null'
+                          assistanceListingNumber:
+                            description: Central award Assistance Listing Number of the Awards.
+                            example: '47.079'
+                            type:
+                            - string
+                            - 'null'
+                          authorizedAmount:
+                            description: The total amount authorized for the award.
+                            example: '1000.0'
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          awardType:
+                            description: Type of the Awards.
+                            example: schedule
+                            type: string
+                          billToSponsorId:
+                            description: Unique ID of Bill to Sponsor
+                            example: SPN000065
+                            type: string
+                          billToSponsorName:
+                            description: Name of Bill to Sponsor
+                            example: JOHN DEERE
+                            type: string
+                          billedToDateAmount:
+                            description: Dollar amount billed to date
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          billingLimitOverride:
+                            description: Billing limit override dollar amount
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          centralAwardAccountantId:
+                            description: Central award accountant Unique Id of the Awards.
+                            example: 00331909
+                            type:
+                            - string
+                            - 'null'
+                          centralAwardAccountantName:
+                            description: Central award accountant Name of the Awards.
+                            example: Jeffrey J Selner
+                            type:
+                            - string
+                            - 'null'
+                          coInvestigators:
+                            items:
+                              properties:
+                                id:
+                                  description: Id of Co Investigators
+                                  example: 00331909
+                                  type:
+                                  - string
+                                  - 'null'
+                                name:
+                                  description: The name of the co Investigators
+                                  example: Jeffrey J Selner
+                                  type: string
+                              type:
+                              - object
+                              - 'null'
+                            minItems: 0
+                            type: array
+                          coPrincipalInvestigators:
+                            items:
+                              properties:
+                                id:
+                                  description: Id of Co Principal Investigators
+                                  example: 00331909
+                                  type:
+                                  - string
+                                  - 'null'
+                                name:
+                                  description: The name of the co Principal Investigators
+                                  example: Jeffrey J Selner
+                                  type: string
+                              type: object
+                            minItems: 0
+                            type:
+                            - array
+                            - 'null'
+                          company:
+                            description: The company (campus) the award is associated with.
+                            example: UWRVF
+                            type: string
+                          costCenterId:
+                            description: Cost center worktag ID.  Awards that have lines that use this worktag will be returned.
+                            example: CC000199
+                            type: string
+                          costShareRequiredBySponsor:
+                            description: Whether a cost share is required by the sponsor
+                            example: true
+                            type: boolean
+                          costShareTotalAmount:
+                            description: Cost share total dollar amount of the Award.
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          date:
+                            description: award date of the Awards.
+                            example: '2024-01-01 08:00:00'
+                            format: date
+                            type: string
+                          defaultPaymentType:
+                            description: Default payment type for the award
+                            example: Incoming ACH
+                            type:
+                            - string
+                            - 'null'
+                          description:
+                            description: Description of the Awards
+                            example: Wisys VentureHome
+                            type:
+                            - string
+                            - 'null'
+                          enteredLineAmount:
+                            description: Line amount entered dollar amount
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          federalAwardId:
+                            description: Classifies awards based on external financial reporting needs.
+                            example: R03AG080283
+                            type:
+                            - string
+                            - 'null'
+                          fundId:
+                            description: Classification of funding that identifies the funding source to facilitate financial reporting.
+                            example: FD0133
+                            type: string
+                          institutionalId:
+                            description: Institution/campus identifier of Awards.
+                            example: MSN261852
+                            type:
+                            - string
+                            - 'null'
+                          isSubAward:
+                            description: Purpose terms of the Awards.
+                            example: true
+                            type: boolean
+                          letterOfCreditDocumentId:
+                            description: Central award Letter of Credit Document Id of the Awards.
+                            example: '1854284'
+                            type:
+                            - string
+                            - 'null'
+                          letterOfCreditId:
+                            description: Central award  Letter of Credit Id of the Awards.
+                            example: UWEAU_0039172000
+                            type:
+                            - string
+                            - 'null'
+                          lifecycleStatus:
+                            description: Status of the external customer.
+                            example: '1'
+                            type: string
+                          name:
+                            description: Name of the Awards
+                            example: CG Test Award
+                            type: string
+                          paymentTerms:
+                            description: The payment terms set for the award, if applicable
+                            example: Net 30
+                            type:
+                            - string
+                            - 'null'
+                          piId:
+                            description: Principal Investigator Unique Id of the Awards.
+                            example: 00358885
+                            type:
+                            - string
+                            - 'null'
+                          piName:
+                            description: Principal Investigator Name of the Awards.
+                            example: Mark D Karau
+                            type:
+                            - string
+                            - 'null'
+                          primeSponsorId:
+                            description: Central award Prime Sponsor Id of the Awards.
+                            example: UWMIL_MIL100385
+                            type:
+                            - string
+                            - 'null'
+                          primeSponsorName:
+                            description: Central award Prime Sponsor Name Id of the Awards.
+                            example: JOHN DEERE
+                            type:
+                            - string
+                            - 'null'
+                          purposeCode:
+                            description: Purpose code of the Awards.
+                            example: Research
+                            type: string
+                          scheduleEndDate:
+                            description: Date/time of the scheduled end
+                            example: '2025-06-30 00:00:00'
+                            format: date
+                            type: string
+                          scheduleStartDate:
+                            description: Date/time of the scheduled start
+                            example: '2025-06-30 00:00:00'
+                            format: date
+                            type: string
+                          signedDate:
+                            description: Central award Signed Date of the Awards.
+                            example: 2024-07-25-07:00
+                            format: datetime
+                            type:
+                            - string
+                            - 'null'
+                          sponsorAwardReferenceNumber:
+                            description: Sponsor-Award Unique reference Id.
+                            example: TEST-12345
+                            type:
+                            - string
+                            - 'null'
+                          sponsorDirectCostAmount:
+                            description: Sponsor's direct cost dollar amount
+                            example: 9075.0
+                            format: currency
+                            type: number
+                          sponsorFacilitiesAdminAmount:
+                            description: Sponsor's allowed facilities & admin dollar amount
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          sponsorId:
+                            description: Sponsor-Award Unique reference ID.
+                            example: SPN000084
+                            type: string
+                          sponsorName:
+                            description: Description of the Sponsors.
+                            example: THE TEAGLE FOUNDATION
+                            type: string
+                          sponsorTotalAmount:
+                            description: Sponsor's total dollar amount
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          status:
+                            description: Status of Awards.
+                            example: Approved
+                            type: string
+                          totalAmount:
+                            description: Award Total dollar amount.
+                            example: 0.0
+                            format: currency
+                            type:
+                            - number
+                            - 'null'
+                          versionNumber:
+                            description: version number of the Awards.
+                            example: '0'
+                            type: string
+                          versionStatus:
+                            description: version status of the awards.
+                            example: Award In Effect
+                            type: string
+                        type: object
+                      id:
+                        description: The unique identifier for an award record.
+                        example: AWD-007199
+                        type: string
+                      links:
+                        description: Links related to this record
+                        properties:
+                          self:
+                            description: The link to just this record
+                            example: https://api.wisc.edu/finance/awards/AWD-007199
+                            type: string
+                        type: object
+                      meta:
+                        properties:
+                          lastModified:
+                            description: Date/time of the last time this worktag was updated in the product database in ISO format.
+                            example: 2026-06-15 13:11:13
+                            type:
+                            - string
+                            - 'null'
+                        type: object
+                      type:
+                        enum:
+                        - awards
+                        example: awards
+                        type: string
+                    type: object
+                  links:
+                    description: Links related to this record
+                    properties:
+                      self:
+                        description: The link to just this record
+                        example: https://api.wisc.edu/finance/awards/AWD-007199
+                        type: string
+                    type: object
+                type: object
+          description: Successful response.
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Research
+  /billingSchedules:
+    get:
+      description: Retrieves a paginated listing of all billing schedules.
+      parameters:
+      - description: Delivery mode for the response. When set to 'bulk', the API will save the response to S3 and return a link to download it instead of returning the data directly. Cannot be used with pagination parameters.
+        examples:
+          bulk:
+            description: Returns a link to download data from S3
+            summary: Bulk delivery mode
+            value: bulk
+          pagination:
+            description: Returns data with pagination support
+            summary: Pagination delivery mode
+            value: pagination
+        in: query
+        name: delivery
+        schema:
+          default: pagination
+          enum:
+          - pagination
+          - bulk
+          type: string
+      - description: The identifier of the record.
+        in: query
+        name: filter[id]
+        required: false
+        schema:
+          type: string
+      - description: The datetime that the record was last changed in the Finance API's database.
+        in: query
+        name: filter[lastModified]
+        required: false
+        schema:
+          format: datetime
+          type: string
+      - description: Page offset of records included in the response
+        in: query
+        name: page[number]
+        required: false
+        schema:
+          minimum: 1
+          type: integer
+      - description: Number of records included in the response
+        in: query
+        name: page[size]
+        required: false
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: integer
+      - in: query
+        name: filter[autoSubmitInvoicesForApproval]
+        schema:
+          type: boolean
+      - in: query
+        name: filter[awardId]
+        schema:
+          type: string
+      - in: query
+        name: filter[billToAddress]
+        schema:
+          type: string
+      - in: query
+        name: filter[billToContact]
+        schema:
+          type: string
+      - in: query
+        name: filter[billingCycle]
+        schema:
+          type: string
+      - in: query
+        name: filter[billingInstallments.amount]
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: filter[billingInstallments.installmentDate]
+        schema:
+          format: date
+          type: string
+      - in: query
+        name: filter[billingInstallments.installmentWid]
+        schema:
+          type: string
+      - in: query
+        name: filter[billingInstallments.onHold]
+        schema:
+          type: boolean
+      - in: query
+        name: filter[billingInstallments.scheduleId]
+        schema:
+          type: string
+      - in: query
+        name: filter[billingInstallments.status]
+        schema:
+          type: string
+      - in: query
+        name: filter[billingLimit]
+        schema:
+          format: int64
+          type: integer
+      - in: query
+        name: filter[billingTypeOfTransaction]
+        schema:
+          type: boolean
+      - in: query
+        name: filter[company]
+        schema:
+          type: string
+      - in: query
+        name: filter[costReimbursableThresholdAmount]
+        schema:
+          type: boolean
+      - in: query
+        name: filter[customer]
+        schema:
+          type: string
+      - in: query
+        name: filter[customerContractLines.contractLineType]
+        schema:
+          type: string
+      - in: query
+        name: filter[customerContractLines.lineCurrentAmount]
+        schema:
+          format: double
+          type: number
+      - in: query
+        name: filter[customerContractLines.referenceId]
+        schema:
+          type: string
+      - in: query
+        name: filter[customerContractLines.scheduleId]
+        schema:
+          type: string
+      - in: query
+        name: filter[customerInvoiceType]
+        schema:
+          type: string
+      - in: query
+        name: filter[deliveryType]
+        schema:
+          type: string
+      - in: query
+        name: filter[description]
+        schema:
+          type: string
+      - in: query
+        name: filter[invoiceMemo]
+        schema:
+          type: string
+      - in: query
+        name: filter[letterOfCredit]
+        schema:
+          type: string
+      - in: query
+        name: filter[letterOfCreditDocumentId]
+        schema:
+          type: string
+      - in: query
+        name: filter[letterOfCreditDrawId]
+        schema:
+          type: string
+      - in: query
+        name: filter[onHold]
+        schema:
+          type: boolean
+      - in: query
+        name: filter[paymentType]
+        schema:
+          type: string
+      - in: query
+        name: filter[poNumber]
+        schema:
+          type: string
+      - in: query
+        name: filter[prepaidConsumptionStatus]
+        schema:
+          type: boolean
+      - in: query
+        name: filter[scheduleDistributionMethod]
+        schema:
+          type: string
+      - in: query
+        name: filter[scheduleName]
+        schema:
+          type: string
+      - in: query
+        name: filter[scheduleType]
+        schema:
+          type: string
+      - in: query
+        name: filter[status]
+        schema:
+          type: string
+      - in: query
+        name: filter[totalPrepayment]
+        schema:
+          format: double
+          type: number
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                - attributes:
+                    autoSubmitInvoicesForApproval: true
+                    awardId: AWD-000195
+                    billToAddress: Precollege Scholarship Program P.O.Box 7841 Madison, WI 53707-7841
+                    billToContact: Accounts Payable
+                    billingCycle: Monthly
+                    billingInstallments:
+                    - amount: 25862.52
+                      installmentDate: '2024-06-30'
+                      installmentWid: b323c596667a1001cef98c5c157f0000
+                      onHold: false
+                      scheduleId: BIUWLAC_AAG8815_1_B101
+                      status: Complete
+                    billingLimit: 37819
+                    billingTypeOfTransaction: false
+                    company: UWLAC
+                    costReimbursableThresholdAmount: true
+                    customer: WISCONSIN DEPT OF PUBLIC INSTRUCTION
+                    customerContractLines:
+                    - contractLineType: Cost Reimbursable
+                      lineCurrentAmount: 25862.52
+                      referenceId: UWLAC_AAG8815
+                      scheduleId: BIUWLAC_AAG8815_1_B101
+                    customerInvoiceType: SP Lump Sum
+                    deliveryType: WD Emailed Invoice
+                    description: Sponsor Invoice Format Required
+                    invoiceMemo: Invoice Memo test BCM
+                    letterOfCredit: UWEAU - RYAQZNSJN9Q9
+                    letterOfCreditDocumentId: P042A201568
+                    letterOfCreditDrawId: '000001'
+                    onHold: false
+                    paymentType: Incoming ACH
+                    poNumber: 00358885
+                    prepaidConsumptionStatus: true
+                    scheduleDistributionMethod: Custom
+                    scheduleName: BIUWLAC_AAG8815_1_B101
+                    scheduleType: Sponsored Prepaid
+                    status: Approved
+                    totalPrepayment: 25862.52
+                  id: BILLING_SCHEDULE-6-11561
+                  links:
+                    self: https://api.wisc.edu/finance/billingSchedules/BILLING_SCHEDULE-6-11561
+                  meta:
+                    lastModified: 2026-06-15 13:11:13
+                  type: billingSchedules
+                links:
+                  first: https://api.wisc.edu/finance/billingSchedules?page[number]=1
+                  last: https://api.wisc.edu/finance/billingSchedules?page[number]=99
+                  next: https://api.wisc.edu/finance/billingSchedules?page[number]=2
+                  prev: https://api.wisc.edu/finance/billingSchedules?page[number]=1
+                  self: https://api.wisc.edu/finance/billingSchedules
+                meta:
+                  pageNumber: 1
+                  pageSize: 100
+                  totalCount: 1234
+                  totalPages: 13
+              schema:
+                oneOf:
+                - properties:
+                    data:
+                      description: A collection of billing schedules.
+                      items:
+                        description: A single billing schedule record.
+                        properties:
+                          attributes:
+                            properties:
+                              autoSubmitInvoicesForApproval:
+                                description: If the billing schedule's invoices are automatically submitted for approval.
+                                example: true
+                                type: boolean
+                              awardId:
+                                description: ID of the award associated with the billing schedule.
+                                example: AWD-000195
+                                type:
+                                - string
+                                - 'null'
+                              billToAddress:
+                                description: Billing address.
+                                example: Precollege Scholarship Program P.O.Box 7841 Madison, WI 53707-7841
+                                type:
+                                - string
+                                - 'null'
+                              billToContact:
+                                description: Billing contact person or department.
+                                example: Accounts Payable
+                                type:
+                                - string
+                                - 'null'
+                              billingCycle:
+                                description: Billing cycle/frequency.
+                                example: Monthly
+                                type:
+                                - string
+                                - 'null'
+                              billingInstallments:
+                                description: List of billing installments.
+                                items:
+                                  properties:
+                                    amount:
+                                      description: Installment amount, in dollars.
+                                      example: 25862.52
+                                      format: currency
+                                      type: number
+                                    installmentDate:
+                                      description: Date of the installment.
+                                      example: '2024-06-30'
+                                      format: date
+                                      type:
+                                      - string
+                                      - 'null'
+                                    installmentWid:
+                                      description: Workday ID for the installment.
+                                      example: b323c596667a1001cef98c5c157f0000
+                                      type: string
+                                    onHold:
+                                      description: If the installment is on hold.
+                                      example: false
+                                      type: boolean
+                                    scheduleId:
+                                      description: Schedule ID for the installment.
+                                      example: BIUWLAC_AAG8815_1_B101
+                                      type: string
+                                    status:
+                                      description: Status of the installment.
+                                      example: Complete
+                                      type: string
+                                  type: object
+                                minItems: 0
+                                type:
+                                - array
+                                - 'null'
+                              billingLimit:
+                                description: Billing limit assigned to the billing schedule.
+                                example: 37819
+                                format: int64
+                                type:
+                                - integer
+                                - 'null'
+                              billingTypeOfTransaction:
+                                description: Whether this is a billing transaction and is cost-reimbursable.
+                                example: false
+                                type:
+                                - boolean
+                                - 'null'
+                              company:
+                                description: The company name.
+                                example: UWLAC
+                                type: string
+                              costReimbursableThresholdAmount:
+                                description: 'Whether cost reimbursable bills are allowed over the prepaid invoice total (`totalPrepaid`). Used to ensure consumption does not exceed the invoiced installments.
+
+                                  '
+                                example: true
+                                type:
+                                - boolean
+                                - 'null'
+                              customer:
+                                description: The customer name.
+                                example: WISCONSIN DEPT OF PUBLIC INSTRUCTION
+                                type: string
+                              customerContractLines:
+                                description: List of customer contract lines.
+                                items:
+                                  properties:
+                                    contractLineType:
+                                      description: Type of contract line.
+                                      example: Cost Reimbursable
+                                      type: string
+                                    lineCurrentAmount:
+                                      description: Current dollar amount for the contract line.
+                                      example: 25862.52
+                                      format: currency
+                                      type: number
+                                    referenceId:
+                                      description: Reference ID for the contract line.
+                                      example: UWLAC_AAG8815
+                                      type: string
+                                    scheduleId:
+                                      description: Schedule ID for the contract line.
+                                      example: BIUWLAC_AAG8815_1_B101
+                                      type: string
+                                  type:
+                                  - object
+                                  - 'null'
+                                type: array
+                              customerInvoiceType:
+                                description: Type of customer invoice.
+                                example: SP Lump Sum
+                                type:
+                                - string
+                                - 'null'
+                              deliveryType:
+                                description: Delivery method for the invoice.
+                                example: WD Emailed Invoice
+                                type: string
+                              description:
+                                description: Description of the billing schedule.
+                                example: Sponsor Invoice Format Required
+                                type:
+                                - string
+                                - 'null'
+                              invoiceMemo:
+                                description: Invoice memo.
+                                example: Invoice Memo test BCM
+                                type:
+                                - string
+                                - 'null'
+                              letterOfCredit:
+                                description: Letter of credit details.
+                                example: UWEAU - RYAQZNSJN9Q9
+                                type:
+                                - string
+                                - 'null'
+                              letterOfCreditDocumentId:
+                                description: Document ID for the letter of credit.
+                                example: P042A201568
+                                type:
+                                - string
+                                - 'null'
+                              letterOfCreditDrawId:
+                                description: Draw ID for the letter of credit.
+                                example: '000001'
+                                type:
+                                - string
+                                - 'null'
+                              onHold:
+                                description: Indicates if the account is on hold.
+                                example: false
+                                type: boolean
+                              paymentType:
+                                description: Type of payment method.
+                                example: Incoming ACH
+                                type:
+                                - string
+                                - 'null'
+                              poNumber:
+                                description: Purchase order number.
+                                example: 00358885
+                                type:
+                                - string
+                                - 'null'
+                              prepaidConsumptionStatus:
+                                description: Whether consumption is enabled for the prepaid balance.
+                                example: true
+                                type:
+                                - boolean
+                                - 'null'
+                              scheduleDistributionMethod:
+                                description: Distribution method for the billing schedule.
+                                example: Custom
+                                type:
+                                - string
+                                - 'null'
+                              scheduleName:
+                                description: Name of the billing schedule.
+                                example: BIUWLAC_AAG8815_1_B101
+                                type:
+                                - string
+                                - 'null'
+                              scheduleType:
+                                description: Type of the billing schedule.
+                                example: Sponsored Prepaid
+                                type:
+                                - string
+                                - 'null'
+                              status:
+                                description: Status of the the billing schedule.
+                                example: Approved
+                                type: string
+                              totalPrepayment:
+                                description: Total dollar amount prepaid.
+                                example: 25862.52
+                                format: currency
+                                type:
+                                - number
+                                - 'null'
+                            type: object
+                          id:
+                            description: The unique identifier for a billing schedule record.
+                            example: BILLING_SCHEDULE-6-11561
+                            type: string
+                          links:
+                            description: Links related to this record
+                            properties:
+                              self:
+                                example: https://api.wisc.edu/finance/billingSchedules/BILLING_SCHEDULE-6-11561
+                                type: string
+                            type: object
+                          meta:
+                            properties:
+                              lastModified:
+                                description: Date/time of the last time this worktag was updated in the product database in ISO format.
+                                example: 2026-06-15 13:11:13
+                                type:
+                                - string
+                                - 'null'
+                            type: object
+                          type:
+                            enum:
+                            - billingSchedules
+                            example: billingSchedules
+                            type: string
+                        type: object
+                      type: array
+                    links:
+                      properties:
+                        first:
+                          description: A link to the first page of results
+                          example: https://api.wisc.edu/finance/billingSchedules?page[number]=1
+                          type: string
+                        last:
+                          description: A link to the last page of results
+                          example: https://api.wisc.edu/finance/billingSchedules?page[number]=99
+                          type: string
+                        next:
+                          description: A link to the next page of results, if there is one
+                          example: https://api.wisc.edu/finance/billingSchedules?page[number]=2
+                          type:
+                          - string
+                          - 'null'
+                        prev:
+                          description: A link to the previous page of results, if there is one
+                          example: https://api.wisc.edu/finance/billingSchedules?page[number]=1
+                          type:
+                          - string
+                          - 'null'
+                        self:
+                          description: The link that generated this response
+                          example: https://api.wisc.edu/finance/billingSchedules
+                          type: string
+                      type: object
+                    meta:
+                      properties:
+                        pageNumber:
+                          description: Page number requested.
+                          example: 1
+                          format: int64
+                          type: integer
+                        pageSize:
+                          description: Number of items on each page.
+                          example: 100
+                          format: int64
+                          type: integer
+                        totalCount:
+                          description: Total number of items across all pages.
+                          example: 1234
+                          format: int64
+                          type: integer
+                        totalPages:
+                          description: Total number of pages given pageSize.
+                          example: 13
+                          format: int64
+                          type: integer
+                      type: object
+                  type: object
+                - properties:
+                    attributes:
+                      properties:
+                        url:
+                          description: Presigned URL to download the data from S3. The URL is valid for 15 minutes.
+                          example: https://example.com/link
+                          type: string
+                      type: object
+                    id:
+                      description: The unique identifier for an presigned link.
+                      example: 670ac856-91ef-47ee-8f1d-b79d4f656a10
+                      type: string
+                    type:
+                      enum:
+                      - bulkDelivery
+                      example: bulkDelivery
+                      type: string
+                  type: object
+          description: An API response with a collection of billing schedules, pagination, and metadata
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Research
+  /billingSchedules/{id}:
+    get:
+      description: Retrieves a single billing schedule by its ID.
+      parameters:
+      - description: A billing schedule ID passed in as a URL parameter.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: The unique identifier for a billing schedule record.
+          example: BILLING_SCHEDULE-6-11561
+          type: string
+      - description: Delivery mode for the response. When set to 'bulk', the API will save the response to S3 and return a link to download it instead of returning the data directly. Cannot be used with pagination parameters.
+        examples:
+          bulk:
+            description: Returns a link to download data from S3
+            summary: Bulk delivery mode
+            value: bulk
+          pagination:
+            description: Returns data with pagination support
+            summary: Pagination delivery mode
+            value: pagination
+        in: query
+        name: delivery
+        schema:
+          default: pagination
+          enum:
+          - pagination
+          - bulk
+          type: string
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                  attributes:
+                    autoSubmitInvoicesForApproval: true
+                    awardId: AWD-000195
+                    billToAddress: Precollege Scholarship Program P.O.Box 7841 Madison, WI 53707-7841
+                    billToContact: Accounts Payable
+                    billingCycle: Monthly
+                    billingInstallments:
+                    - amount: 25862.52
+                      installmentDate: '2024-06-30'
+                      installmentWid: b323c596667a1001cef98c5c157f0000
+                      onHold: false
+                      scheduleId: BIUWLAC_AAG8815_1_B101
+                      status: Complete
+                    billingLimit: 37819
+                    billingTypeOfTransaction: false
+                    company: UWLAC
+                    costReimbursableThresholdAmount: true
+                    customer: WISCONSIN DEPT OF PUBLIC INSTRUCTION
+                    customerContractLines:
+                    - contractLineType: Cost Reimbursable
+                      lineCurrentAmount: 25862.52
+                      referenceId: UWLAC_AAG8815
+                      scheduleId: BIUWLAC_AAG8815_1_B101
+                    customerInvoiceType: SP Lump Sum
+                    deliveryType: WD Emailed Invoice
+                    description: Sponsor Invoice Format Required
+                    invoiceMemo: Invoice Memo test BCM
+                    letterOfCredit: UWEAU - RYAQZNSJN9Q9
+                    letterOfCreditDocumentId: P042A201568
+                    letterOfCreditDrawId: '000001'
+                    onHold: false
+                    paymentType: Incoming ACH
+                    poNumber: 00358885
+                    prepaidConsumptionStatus: true
+                    scheduleDistributionMethod: Custom
+                    scheduleName: BIUWLAC_AAG8815_1_B101
+                    scheduleType: Sponsored Prepaid
+                    status: Approved
+                    totalPrepayment: 25862.52
+                  id: BILLING_SCHEDULE-6-11561
+                  links:
+                    self: https://api.wisc.edu/finance/billingSchedules/BILLING_SCHEDULE-6-11561
+                  meta:
+                    lastModified: 2026-06-15 13:11:13
+                  type: billingSchedules
+                links:
+                  self: https://api.wisc.edu/finance/billingSchedules/BILLING_SCHEDULE-6-11561
+              schema:
+                oneOf:
+                - properties:
+                    data:
+                      description: A single billing schedule record.
+                      properties:
+                        attributes:
+                          properties:
+                            autoSubmitInvoicesForApproval:
+                              description: If the billing schedule's invoices are automatically submitted for approval.
+                              example: true
+                              type: boolean
+                            awardId:
+                              description: ID of the award associated with the billing schedule.
+                              example: AWD-000195
+                              type:
+                              - string
+                              - 'null'
+                            billToAddress:
+                              description: Billing address.
+                              example: Precollege Scholarship Program P.O.Box 7841 Madison, WI 53707-7841
+                              type:
+                              - string
+                              - 'null'
+                            billToContact:
+                              description: Billing contact person or department.
+                              example: Accounts Payable
+                              type:
+                              - string
+                              - 'null'
+                            billingCycle:
+                              description: Billing cycle/frequency.
+                              example: Monthly
+                              type:
+                              - string
+                              - 'null'
+                            billingInstallments:
+                              description: List of billing installments.
+                              items:
+                                properties:
+                                  amount:
+                                    description: Installment amount, in dollars.
+                                    example: 25862.52
+                                    format: currency
+                                    type: number
+                                  installmentDate:
+                                    description: Date of the installment.
+                                    example: '2024-06-30'
+                                    format: date
+                                    type:
+                                    - string
+                                    - 'null'
+                                  installmentWid:
+                                    description: Workday ID for the installment.
+                                    example: b323c596667a1001cef98c5c157f0000
+                                    type: string
+                                  onHold:
+                                    description: If the installment is on hold.
+                                    example: false
+                                    type: boolean
+                                  scheduleId:
+                                    description: Schedule ID for the installment.
+                                    example: BIUWLAC_AAG8815_1_B101
+                                    type: string
+                                  status:
+                                    description: Status of the installment.
+                                    example: Complete
+                                    type: string
+                                type: object
+                              minItems: 0
+                              type:
+                              - array
+                              - 'null'
+                            billingLimit:
+                              description: Billing limit assigned to the billing schedule.
+                              example: 37819
+                              format: int64
+                              type:
+                              - integer
+                              - 'null'
+                            billingTypeOfTransaction:
+                              description: Whether this is a billing transaction and is cost-reimbursable.
+                              example: false
+                              type:
+                              - boolean
+                              - 'null'
+                            company:
+                              description: The company name.
+                              example: UWLAC
+                              type: string
+                            costReimbursableThresholdAmount:
+                              description: 'Whether cost reimbursable bills are allowed over the prepaid invoice total (`totalPrepaid`). Used to ensure consumption does not exceed the invoiced installments.
+
+                                '
+                              example: true
+                              type:
+                              - boolean
+                              - 'null'
+                            customer:
+                              description: The customer name.
+                              example: WISCONSIN DEPT OF PUBLIC INSTRUCTION
+                              type: string
+                            customerContractLines:
+                              description: List of customer contract lines.
+                              items:
+                                properties:
+                                  contractLineType:
+                                    description: Type of contract line.
+                                    example: Cost Reimbursable
+                                    type: string
+                                  lineCurrentAmount:
+                                    description: Current dollar amount for the contract line.
+                                    example: 25862.52
+                                    format: currency
+                                    type: number
+                                  referenceId:
+                                    description: Reference ID for the contract line.
+                                    example: UWLAC_AAG8815
+                                    type: string
+                                  scheduleId:
+                                    description: Schedule ID for the contract line.
+                                    example: BIUWLAC_AAG8815_1_B101
+                                    type: string
+                                type:
+                                - object
+                                - 'null'
+                              type: array
+                            customerInvoiceType:
+                              description: Type of customer invoice.
+                              example: SP Lump Sum
+                              type:
+                              - string
+                              - 'null'
+                            deliveryType:
+                              description: Delivery method for the invoice.
+                              example: WD Emailed Invoice
+                              type: string
+                            description:
+                              description: Description of the billing schedule.
+                              example: Sponsor Invoice Format Required
+                              type:
+                              - string
+                              - 'null'
+                            invoiceMemo:
+                              description: Invoice memo.
+                              example: Invoice Memo test BCM
+                              type:
+                              - string
+                              - 'null'
+                            letterOfCredit:
+                              description: Letter of credit details.
+                              example: UWEAU - RYAQZNSJN9Q9
+                              type:
+                              - string
+                              - 'null'
+                            letterOfCreditDocumentId:
+                              description: Document ID for the letter of credit.
+                              example: P042A201568
+                              type:
+                              - string
+                              - 'null'
+                            letterOfCreditDrawId:
+                              description: Draw ID for the letter of credit.
+                              example: '000001'
+                              type:
+                              - string
+                              - 'null'
+                            onHold:
+                              description: Indicates if the account is on hold.
+                              example: false
+                              type: boolean
+                            paymentType:
+                              description: Type of payment method.
+                              example: Incoming ACH
+                              type:
+                              - string
+                              - 'null'
+                            poNumber:
+                              description: Purchase order number.
+                              example: 00358885
+                              type:
+                              - string
+                              - 'null'
+                            prepaidConsumptionStatus:
+                              description: Whether consumption is enabled for the prepaid balance.
+                              example: true
+                              type:
+                              - boolean
+                              - 'null'
+                            scheduleDistributionMethod:
+                              description: Distribution method for the billing schedule.
+                              example: Custom
+                              type:
+                              - string
+                              - 'null'
+                            scheduleName:
+                              description: Name of the billing schedule.
+                              example: BIUWLAC_AAG8815_1_B101
+                              type:
+                              - string
+                              - 'null'
+                            scheduleType:
+                              description: Type of the billing schedule.
+                              example: Sponsored Prepaid
+                              type:
+                              - string
+                              - 'null'
+                            status:
+                              description: Status of the the billing schedule.
+                              example: Approved
+                              type: string
+                            totalPrepayment:
+                              description: Total dollar amount prepaid.
+                              example: 25862.52
+                              format: currency
+                              type:
+                              - number
+                              - 'null'
+                          type: object
+                        id:
+                          description: The unique identifier for a billing schedule record.
+                          example: BILLING_SCHEDULE-6-11561
+                          type: string
+                        links:
+                          description: Links related to this record
+                          properties:
+                            self:
+                              example: https://api.wisc.edu/finance/billingSchedules/BILLING_SCHEDULE-6-11561
+                              type: string
+                          type: object
+                        meta:
+                          properties:
+                            lastModified:
+                              description: Date/time of the last time this worktag was updated in the product database in ISO format.
+                              example: 2026-06-15 13:11:13
+                              type:
+                              - string
+                              - 'null'
+                          type: object
+                        type:
+                          enum:
+                          - billingSchedules
+                          example: billingSchedules
+                          type: string
+                      type: object
+                    links:
+                      description: Links related to this record
+                      properties:
+                        self:
+                          example: https://api.wisc.edu/finance/billingSchedules/BILLING_SCHEDULE-6-11561
+                          type: string
+                      type: object
+                  type: object
+                - properties:
+                    attributes:
+                      properties:
+                        url:
+                          description: Presigned URL to download the data from S3. The URL is valid for 15 minutes.
+                          example: https://example.com/link
+                          type: string
+                      type: object
+                    id:
+                      description: The unique identifier for an presigned link.
+                      example: 670ac856-91ef-47ee-8f1d-b79d4f656a10
+                      type: string
+                    type:
+                      enum:
+                      - bulkDelivery
+                      example: bulkDelivery
+                      type: string
+                  type: object
+          description: An API response with a single billing schedule record
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Research
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://api.wisc.edu/oauth/token
+      type: oauth2

@@ -1,0 +1,73 @@
+x-generated: '2026-08-19'
+x-method: derived
+x-source: >-
+  openapi/ (12 contracts) + UW-Madison API Standards
+  (https://git.doit.wisc.edu/interop/external-docs/api-publisher-documentation)
+x-operator: institution
+x-note: >-
+  A Spectral-shaped ruleset describing the conventions UW-Madison's own contracts actually
+  follow, derived by reading all 12 of them. This is a description of observed house style plus
+  the gaps measured against it — it is NOT a ruleset UW-Madison publishes, and must not be
+  credited to them as one.
+rules:
+  uw-oas3-only:
+    description: Every published contract must be OpenAPI 3.0.x.
+    severity: error
+    observed: pass
+    detail: 11 of 11 portal contracts are 3.0.0 / 3.0.2 / 3.0.4.
+  uw-institution-server:
+    description: servers[] must resolve under wisc.edu.
+    severity: error
+    observed: pass
+    detail: >-
+      All servers are api.wisc.edu, mock.api.wisc.edu or doit.dev.api.wisc.edu. No vendor host
+      appears in any contract — the failure mode this cohort was re-profiled for does not occur here.
+  uw-contact-required:
+    description: info.contact must name a UW-Madison team and a wisc.edu address.
+    severity: warn
+    observed: partial
+    detail: >-
+      9 of 12 carry a DoIT contact (api@doit.wisc.edu, finance-apis@doit.wisc.edu,
+      locations-api@doit.wisc.edu). Enterprise Billing and OAuth declare no contact at all.
+  uw-jsonapi-envelope:
+    description: Enterprise integration APIs should use JSON:API resource envelopes.
+    severity: warn
+    observed: partial
+    detail: >-
+      7 of 12 conform (Person x3, HR x2, Manifest x2). Finance, Locations, Enterprise Billing
+      and OAuth do not.
+  uw-oauth-client-credentials:
+    description: Gated APIs must declare OAuth2 client-credentials against api.wisc.edu/oauth/token.
+    severity: error
+    observed: partial
+    detail: >-
+      10 of 12 declare it. Enterprise Billing declares an empty securitySchemes object despite
+      being a manually-approved API product.
+  uw-scopes-declared:
+    description: OAuth2 flows should declare the scopes they issue.
+    severity: warn
+    observed: fail
+    detail: >-
+      Every OAuth2ClientCredentials flow declares `scopes: {}`. Zero scopes across the whole
+      estate; authorization is carried by Apigee product grants outside the contract.
+  uw-license-declared:
+    description: info.license should be set.
+    severity: warn
+    observed: fail
+    detail: No contract declares a license.
+  uw-terms-of-service:
+    description: info.termsOfService should be set.
+    severity: warn
+    observed: fail
+    detail: No contract declares termsOfService.
+  uw-no-dev-host-in-production-catalog:
+    description: A contract published in the production portal must not declare only a dev server.
+    severity: error
+    observed: fail
+    detail: >-
+      Enterprise Billing API declares exactly one server, https://doit.dev.api.wisc.edu/enterprise-billing.
+  uw-problem-details:
+    description: Errors should use RFC 9457 application/problem+json.
+    severity: info
+    observed: fail
+    detail: House style is the JSON:API errors array or plain JSON; no problem+json anywhere.

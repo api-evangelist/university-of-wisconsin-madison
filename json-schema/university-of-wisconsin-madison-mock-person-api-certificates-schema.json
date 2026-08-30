@@ -1,0 +1,2590 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/main/json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json",
+  "title": "Mock Person API data model",
+  "description": "Component schemas extracted verbatim from openapi/university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, a contract published by the University of Wisconsin-Madison. Refs are rewritten from #/$defs/ to #/$defs/; no schema was authored or altered here.",
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "derived",
+    "source": "openapi/university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml",
+    "x-operator": "institution"
+  },
+  "$defs": {
+    "people": {
+      "description": "A person.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "relationships",
+        "links",
+        "meta"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "people"
+        },
+        "id": {
+          "type": "string",
+          "description": "An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.",
+          "example": "12345"
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "firstName",
+            "lastName",
+            "emailAddress",
+            "officeAddress",
+            "officePhoneNumber",
+            "dateOfBirth",
+            "legalSex",
+            "deceased"
+          ],
+          "properties": {
+            "firstName": {
+              "type": "string",
+              "example": "John",
+              "description": "First name, derived from the person's current UW affiliations."
+            },
+            "lastName": {
+              "type": "string",
+              "example": "Smith",
+              "description": "Last name, derived from the person's current UW affiliations."
+            },
+            "emailAddress": {
+              "type": "string",
+              "example": "john.smith@wisc.edu",
+              "description": "The email address this person has designated as their primary, if set.  Otherwise, their Campus Business Email, or other email derived from their current UW affiliations."
+            },
+            "officeAddress": {
+              "type": "string",
+              "description": "Primary work-related address derived from the person's current UW affiliations.  May or may not be a fully-formed street address.",
+              "example": "1210 W. Dayton Street Madison, WI 53706-1613",
+              "nullable": true
+            },
+            "officePhoneNumber": {
+              "type": "string",
+              "example": "608-262-1204",
+              "description": "Primary work-related phone number derived from the person's current UW affiliations.  May or may not be associated with the officeAddress.",
+              "nullable": true
+            },
+            "dateOfBirth": {
+              "type": "string",
+              "format": "date",
+              "example": "1980-01-01",
+              "description": "Date of birth.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission."
+            },
+            "legalSex": {
+              "type": "string",
+              "enum": [
+                "Female",
+                "Male",
+                "Non-binary",
+                "Other",
+                "Unknown"
+              ],
+              "example": "Male",
+              "description": "Legal sex.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission."
+            },
+            "deceased": {
+              "type": "boolean",
+              "example": false,
+              "description": "Indicates whether or not this person is deceased.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission.",
+              "nullable": true
+            },
+            "continuousServiceDate": {
+              "type": "string",
+              "format": "date",
+              "example": "2000-01-01",
+              "description": "Adjusted date of civil service employment with the state of Wisconsin - required for a classified permanent job. The adjusted continuous service date is used, for example, to allocate annual vacation for leave accounting, and to rank employees for layoff provisions, including reinstatements, etc. Please see https://policy.wisc.edu/library/UW-5029 for more details."
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "required": [
+            "identifiers",
+            "jobs",
+            "names",
+            "wiscard",
+            "addresses",
+            "phoneNumbers",
+            "emailAddresses",
+            "affiliations"
+          ],
+          "properties": {
+            "identifiers": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "jobs": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "names": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "wiscard": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            },
+            "addresses": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "phoneNumbers": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "emailAddresses": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "affiliations": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        },
+        "meta": {
+          "type": "object",
+          "properties": {
+            "ferpa": {
+              "type": "boolean",
+              "example": false,
+              "description": "Indicates whether or not a student has elected FERPA coverage on one or more of their attributes. Please see https://registrar.wisc.edu/ferpa/ for more details about how to handle FERPA data."
+            },
+            "ferpaAttributes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Not currently used."
+            },
+            "privateAttributes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Not currently used."
+            }
+          }
+        }
+      }
+    },
+    "identifier": {
+      "description": "Details about an identifier associated with a person.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "identifiers"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "name",
+            "source",
+            "value",
+            "current"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "pvi",
+              "enum": [
+                "pvi",
+                "netId",
+                "emplId",
+                "libraryPatronId",
+                "campusId",
+                "predictedPhotoId",
+                "eppn",
+                "workerId"
+              ],
+              "description": "The name of this identifier."
+            },
+            "source": {
+              "type": "string",
+              "example": "IAM",
+              "enum": [
+                "IAM",
+                "HRS",
+                "SIS",
+                "LIBRARY",
+                "WISCARD",
+                "Workday"
+              ],
+              "description": "The source of this identifier."
+            },
+            "value": {
+              "type": "string",
+              "example": "UW123A456"
+            },
+            "current": {
+              "description": "Property that indicates if this identifier is currently used.",
+              "type": "boolean",
+              "example": true
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "job": {
+      "description": "Details about a job associated with a person.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "jobs"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "title",
+            "division",
+            "divisionCode",
+            "departmentUnit",
+            "beginDate",
+            "endDate",
+            "effectiveDate",
+            "fullTimeEquivalent",
+            "payBasis",
+            "employeeCategoryCode",
+            "employeeCategory",
+            "jobCode",
+            "businessTitle",
+            "position",
+            "current",
+            "primary",
+            "supervisoryOrganizationId",
+            "costCenterId",
+            "source",
+            "institution",
+            "locationId",
+            "workspaceId",
+            "action",
+            "actionReason"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "example": "Software Eng/Developer I",
+              "description": "Title of the person's position at this job."
+            },
+            "division": {
+              "type": "string",
+              "example": "INFORMATION TECHNOLOGY",
+              "description": "High level organizational unit where the job is located.",
+              "nullable": true
+            },
+            "divisionCode": {
+              "type": "string",
+              "example": "A067040",
+              "description": "Code for the location of the job.",
+              "nullable": true
+            },
+            "departmentUnit": {
+              "type": "string",
+              "example": "L&S/COMPUTER SCI/COMP SCI",
+              "description": "Organization path where the job is located.",
+              "nullable": true
+            },
+            "beginDate": {
+              "type": "string",
+              "format": "date",
+              "example": "2018-01-01",
+              "description": "The date the job began."
+            },
+            "endDate": {
+              "type": "string",
+              "format": "date",
+              "example": "2025-01-01",
+              "description": "The date the job ended.",
+              "nullable": true
+            },
+            "effectiveDate": {
+              "type": "string",
+              "format": "date",
+              "example": "2018-01-01",
+              "description": "The date the newest action on this job is effective."
+            },
+            "fullTimeEquivalent": {
+              "type": "string",
+              "example": "0.5",
+              "description": "The full time equivalency of the job. Represented as a decimal for HRS jobs and as a percentage for Workday jobs."
+            },
+            "payBasis": {
+              "type": "string",
+              "enum": [
+                "Academic",
+                "Annual",
+                "Hourly",
+                "Lump",
+                "No Pay Basis",
+                "Summer Service",
+                "Summer Session",
+                "Unknown",
+                "Salary",
+                "No_Pay",
+                "Period_Activity_Pay",
+                "One_Time_Payment"
+              ],
+              "example": "Annual",
+              "description": "The pay basis for this position.  HRS jobs have a value of Academic, Annual, Hourly, Lump, No Pay Basis, Summer Service, Summer Session, or Unknown.  Workday jobs have a value of Hourly, Salary, No_Pay, Period_Activity_Pay, or One_Time_Payment."
+            },
+            "employeeCategoryCode": {
+              "type": "string",
+              "example": "AS",
+              "description": "Unique identifier for an employee category."
+            },
+            "employeeCategory": {
+              "type": "string",
+              "example": "Academic Staff",
+              "description": "See this document for information on this field: https://kb.wisc.edu/ohr/policies/page.php?id=53496"
+            },
+            "jobCode": {
+              "type": "string",
+              "example": "IT002",
+              "description": "Unique identifier for the job title."
+            },
+            "businessTitle": {
+              "type": "string",
+              "example": "Software Engineer/Developer",
+              "description": "Business title of the person's position at this job."
+            },
+            "position": {
+              "type": "string",
+              "example": "00123456-1",
+              "description": "An identifier to be used to uniquely identify a job for a person. This is a concatenation of the position and job record from Peoplesoft HRS, separated by a hyphen '-' (without quotes). It is not recommended to parse this value, but instead use it as an opaque identifier."
+            },
+            "current": {
+              "type": "boolean",
+              "example": true,
+              "description": "Property that indicates if this job is current."
+            },
+            "primary": {
+              "type": "boolean",
+              "example": true,
+              "description": "Property that indicates if this is the primary job."
+            },
+            "supervisoryOrganizationId": {
+              "type": "string",
+              "example": "SO00001234",
+              "description": "The ID of the supervisory organization for this job.",
+              "nullable": true
+            },
+            "costCenterId": {
+              "type": "string",
+              "example": "CC001234",
+              "description": "The ID of the cost center for this job.",
+              "nullable": true
+            },
+            "costCenterName": {
+              "type": "string",
+              "example": "UWMSN | DOIT | Application Infrastructure Services",
+              "description": "The name of the cost center for this job. Only available for jobs with source Workday.",
+              "nullable": true
+            },
+            "source": {
+              "type": "string",
+              "example": "HRS",
+              "enum": [
+                "HRS",
+                "Workday"
+              ],
+              "description": "The source of this job."
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            },
+            "supervisoryOrganizationName": {
+              "type": "string",
+              "example": "Application Infrastructure Services",
+              "description": "The name of the supervisory organization for this job. Only available for jobs with source Workday.",
+              "nullable": true
+            },
+            "supervisoryOrganizationCode": {
+              "type": "string",
+              "example": "UWMSN | DOIT |",
+              "description": "The code of the supervisory organization for this job. Only available for jobs with source Workday.",
+              "nullable": true
+            },
+            "relatedSupervisoryOrganizationIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "SO00000000",
+                "SO00001234",
+                "SO00002345"
+              ],
+              "description": "The IDs of the supervisory organizations related to this job. This list contains IDs of all parent supervisory organizations and IDs of supervisory organizations that this position manages.",
+              "nullable": true
+            },
+            "managedSupervisoryOrganizationIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "SO00002345"
+              ],
+              "description": "The IDs of the supervisory organizations that this job manages.",
+              "nullable": true
+            },
+            "locationId": {
+              "type": "string",
+              "example": "LCMSN_0048",
+              "description": "The ID of the location for this job.  Only available for jobs with source Workday.",
+              "nullable": true
+            },
+            "workspaceId": {
+              "type": "string",
+              "example": "LCMSN_0048_03_0323",
+              "description": "The ID of the workspace for this job.  Only available for jobs with source Workday.",
+              "nullable": true
+            },
+            "action": {
+              "type": "string",
+              "example": "Change Job",
+              "description": "Workday business process.",
+              "nullable": true
+            },
+            "actionReason": {
+              "type": "string",
+              "example": "CJ9",
+              "description": "Reason for the action. Not all actions have a reason.",
+              "nullable": true
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "required": [
+            "person",
+            "supervisor"
+          ],
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            },
+            "supervisor": {
+              "description": "The supervisor for the job. If the job reports to a position that has 0 or greater than 2 people occupying it, this relationship is empty. If the job reports to a position occupied by 2 people, this relationship points to the person with the most recently entered job.",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/people/123"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "people"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "123"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "wiscard": {
+      "description": "Details and metadata from someone's Wiscard.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "wiscard"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "wiscardId",
+            "expirationDate",
+            "issueCode",
+            "institution"
+          ],
+          "properties": {
+            "wiscardId": {
+              "description": "The ID number printed on this Wiscard.",
+              "type": "string",
+              "example": "123213213"
+            },
+            "expirationDate": {
+              "description": "The date this Wiscard will expire.",
+              "type": "string",
+              "format": "date",
+              "example": "2024-01-01"
+            },
+            "issueCode": {
+              "description": "The number of times a new Wiscard was issued for the holder of this Wiscard, starting with 0.",
+              "type": "string",
+              "example": "0"
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "name": {
+      "description": "Details about a name used to refer to a person.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "names"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "firstName",
+            "middleName",
+            "lastName",
+            "prefix",
+            "suffix",
+            "nameType",
+            "source",
+            "institution"
+          ],
+          "properties": {
+            "firstName": {
+              "description": "A first name for this person.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "example": "Amy"
+            },
+            "middleName": {
+              "description": "A middle name for this person.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "example": "Marie",
+              "nullable": true
+            },
+            "lastName": {
+              "description": "A last name for this person.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255,
+              "example": "Smith"
+            },
+            "prefix": {
+              "description": "A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 30,
+              "pattern": "^[A-Za-z '.-]*$",
+              "example": "Dr"
+            },
+            "suffix": {
+              "description": "A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 30,
+              "pattern": "^[A-Za-z '.-]*$",
+              "example": "II"
+            },
+            "nameType": {
+              "description": "The type of name for the person.",
+              "type": "string",
+              "enum": [
+                "nameInUse",
+                "primary",
+                "preferred"
+              ],
+              "example": "nameInUse"
+            },
+            "source": {
+              "description": "The source of the name.",
+              "type": "string",
+              "enum": [
+                "profile",
+                "IAM",
+                "HRS",
+                "Workday"
+              ],
+              "example": "profile"
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "address": {
+      "description": "Details about an address associated with a person.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "addresses"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "line1",
+            "line2",
+            "line3",
+            "line4",
+            "city",
+            "state",
+            "county",
+            "country",
+            "postalCode",
+            "source",
+            "addressType",
+            "institution"
+          ],
+          "properties": {
+            "line1": {
+              "description": "Line 1 of the address.",
+              "type": "string",
+              "example": "123 Main Street"
+            },
+            "line2": {
+              "description": "Line 2 of the address.",
+              "type": "string",
+              "example": "Apartment 1"
+            },
+            "line3": {
+              "description": "Line 3 of the address.",
+              "type": "string"
+            },
+            "line4": {
+              "description": "Line 4 of the address.",
+              "type": "string"
+            },
+            "city": {
+              "description": "The city associated with the address.",
+              "type": "string",
+              "example": "Madison"
+            },
+            "state": {
+              "description": "The state associated with the address.",
+              "type": "string",
+              "example": "WI"
+            },
+            "county": {
+              "description": "The county associated with the address.",
+              "type": "string",
+              "example": "Dane"
+            },
+            "country": {
+              "description": "The country associated with the address.",
+              "type": "string",
+              "example": "US"
+            },
+            "postalCode": {
+              "description": "The postal/zip code associated with the address.",
+              "type": "string",
+              "example": "53715"
+            },
+            "source": {
+              "description": "The source of the address.",
+              "type": "string",
+              "enum": [
+                "CSIS",
+                "HRS",
+                "SIS",
+                "Summer Research Opportunities Program",
+                "UW-Madison Special Authorization",
+                "UW Hospital and Clinics",
+                "UW Medical Foundation",
+                "Workday"
+              ],
+              "example": "HRS"
+            },
+            "addressType": {
+              "description": "The type of address.",
+              "type": "string",
+              "enum": [
+                "currentHome",
+                "permanentHome",
+                "office"
+              ],
+              "example": "office"
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "socialSecurityNumber": {
+      "description": "Details about a social security number for a person. Refer to the [SSN Documentation](/person-api/social-security-numbers) for more information (login required).",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "socialSecurityNumbers"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "socialSecurityNumber",
+            "source",
+            "institution"
+          ],
+          "properties": {
+            "socialSecurityNumber": {
+              "description": "Encrypted and base64 encoded social security number value.",
+              "type": "string",
+              "example": "Zae76TT06NKu4AUW4/uV9+hVfPqjYdij0/3tVcqSekpKXLC71VvFHcv+vKNir7Eq2S7B/w+889ZoVi8fM0xP5XyMudP4t2rpMjjmOoZClLfzTacBXliz/AcfBac0MXVI2VD52FjjVDEtezcSAUvn5RN54hww7vA9eDRgh/6RfTIDxSIJGMWz/2I4D+mODrFHNtfkAfHiIjApbz21Kr6LQdGgn7A4x7hQWHtU76eUPrPDgaa0trsjOOjaae2B526fYsNpaHsxkJnIUXIj9Zne/r/uAyagkwQuU6Ci56bDiIoKK1PSeMeC7iSP7ZhbKZ+0yrtXpz5u7J/+DowAGJCFlQ=="
+            },
+            "source": {
+              "description": "The source of the social security number.",
+              "type": "string",
+              "enum": [
+                "HRS",
+                "Workday"
+              ],
+              "example": "HRS"
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "affiliation": {
+      "description": "Details about an affiliation associated with a person.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "affiliations"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "affiliation",
+            "institution"
+          ],
+          "properties": {
+            "affiliation": {
+              "description": "An affiliation someone has with the institution.",
+              "type": "string",
+              "enum": [
+                "Emeritus",
+                "Retiree"
+              ],
+              "example": "Emeritus"
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "phoneNumber": {
+      "description": "Details about a phone number associated with a person.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "phoneNumbers"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "phoneNumberType",
+            "phoneNumber",
+            "source",
+            "institution"
+          ],
+          "properties": {
+            "phoneNumberType": {
+              "description": "The type of phone number for the person.",
+              "type": "string",
+              "enum": [
+                "office",
+                "home",
+                "mobile"
+              ],
+              "example": "office"
+            },
+            "phoneNumber": {
+              "description": "The phone number for the person.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20,
+              "example": "123/456-7890"
+            },
+            "source": {
+              "description": "The source of the phone number.",
+              "type": "string",
+              "enum": [
+                "HRS",
+                "SIS",
+                "UW-Madison Special Authorization",
+                "UW Hospital and Clinics",
+                "UW Medical Foundation",
+                "Workday"
+              ],
+              "example": "HRS"
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "emailAddress": {
+      "description": "Details about an email address associated with a person.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "emailAddresses"
+        },
+        "id": {
+          "type": "string",
+          "example": "12345",
+          "description": "Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "emailAddressType",
+            "emailAddress",
+            "source",
+            "institution"
+          ],
+          "properties": {
+            "emailAddressType": {
+              "description": "The type of email address for the person.",
+              "type": "string",
+              "enum": [
+                "business",
+                "home",
+                "preferred"
+              ],
+              "example": "business"
+            },
+            "emailAddress": {
+              "description": "The email address for the person.",
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100,
+              "example": "business.email@wisc.edu"
+            },
+            "source": {
+              "description": "The source of the email address.",
+              "type": "string",
+              "enum": [
+                "HRS",
+                "SIS",
+                "Workday"
+              ],
+              "example": "HRS"
+            },
+            "institution": {
+              "description": "The institution associated with the resource.",
+              "type": "string",
+              "example": "UW-Madison",
+              "enum": [
+                "Shared",
+                "UW-Eau Claire",
+                "UW-Green Bay",
+                "UW-La Crosse",
+                "UW-Madison",
+                "UW-Milwaukee",
+                "UW Oshkosh",
+                "UW-Parkside",
+                "UW-Platteville",
+                "UW-River Falls",
+                "UW-Stevens Point",
+                "UW-Stout",
+                "UW-Superior",
+                "UW-Whitewater",
+                "UW-Extension",
+                "UW System"
+              ]
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "properties": {
+            "person": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "webhook": {
+      "description": "A webhook represents the configuration for an application to subscribe to events from the Person API. Webhook events are HTTP requests that will be sent to a server when data changes about a person. Refer to the [Webhooks Documentation](/person-api/webhooks) for more information.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links",
+        "relationships"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "webhooks"
+        },
+        "id": {
+          "type": "string",
+          "description": "An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.",
+          "example": "b463e0f7-c882-4b08-a9c7-e0a2fd90d04b"
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "url",
+            "expired"
+          ],
+          "properties": {
+            "url": {
+              "type": "string",
+              "format": "url",
+              "example": "https://department.wisc.edu/person-api-webhook",
+              "description": "URL that accepts Person API webhook events. This URL must use HTTPS."
+            },
+            "token": {
+              "type": "string",
+              "readOnly": true,
+              "description": "A secret token sent with each webhook event. A server must verify this token when receiving a webhook from the Person API to ensure it is authenticate. This token is only returned when creating a webhook and cannot be set by the client. It cannot be retrieved again in future requests."
+            },
+            "expired": {
+              "type": "boolean",
+              "readOnly": false,
+              "description": "Indicates whether the webhook subscription has expired. This value can be set to false to un-expire a webhook but can not be set to true to expire it."
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "required": [
+            "replay",
+            "webhookFilters",
+            "webhookRelationshipFilters"
+          ],
+          "properties": {
+            "replay": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            },
+            "webhookFilters": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "webhookRelationshipFilters": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "example": "sampleType"
+                      },
+                      "id": {
+                        "type": "string",
+                        "example": "sampleId"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "webhookFilter": {
+      "description": "A webhook filter allows applications to specify who they will receive webhook events for. Refer to the [Webhooks Documentation](/person-api/webhooks) for more information.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "webhookFilters"
+        },
+        "id": {
+          "type": "string",
+          "description": "An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.",
+          "example": "b463e0f7-c882-4b08-a9c7-e0a2fd90d04b"
+        },
+        "attributes": {
+          "type": "object",
+          "description": "Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).",
+          "required": [
+            "attribute",
+            "values"
+          ],
+          "properties": {
+            "attribute": {
+              "type": "string",
+              "example": "jobs.divisionCode",
+              "description": "A valid attribute or relationship attribute on the people resource."
+            },
+            "operator": {
+              "type": "string",
+              "example": "STARTS_WITH",
+              "enum": [
+                "STARTS_WITH",
+                "ENDS_WITH",
+                "CONTAINS",
+                "EQUALS",
+                "IN"
+              ],
+              "description": "The comparison to be performed on the values."
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "A192",
+                "A193"
+              ],
+              "description": "A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. \"true\")."
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "required": [
+            "webhook"
+          ],
+          "properties": {
+            "webhook": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        }
+      }
+    },
+    "webhookRelationshipFilter": {
+      "description": "A webhook relationship filter allows applications to specify what they will receive webhook events about. Refer to the [Webhooks Documentation](/person-api/webhooks) for more information.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "webhookRelationshipFilters"
+        },
+        "id": {
+          "type": "string",
+          "description": "An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.",
+          "example": "b463e0f7-c882-4b08-a9c7-e0a2fd90d04b"
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "relationship"
+          ],
+          "properties": {
+            "relationship": {
+              "type": "string",
+              "example": "jobs",
+              "description": "A valid relationship on the people resource. If there are no changes to this relationship in a webhook event, the webhook event will not be sent to you."
+            }
+          }
+        },
+        "relationships": {
+          "type": "object",
+          "required": [
+            "webhook"
+          ],
+          "properties": {
+            "webhook": {
+              "description": "A generic relationship object",
+              "type": "object",
+              "properties": {
+                "links": {
+                  "type": "object",
+                  "properties": {
+                    "related": {
+                      "type": "string",
+                      "example": "https://api.wisc.edu/link/to/related/object"
+                    }
+                  }
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "example": "sampleType"
+                    },
+                    "id": {
+                      "type": "string",
+                      "example": "sampleId"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        }
+      }
+    },
+    "export": {
+      "description": "An export allows applications to get bulk person data. Refer to the [Exports Documentation](/person-api/exports) for more information.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "exports"
+        },
+        "id": {
+          "type": "string",
+          "description": "An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.",
+          "example": "b463e0f7-c882-4b08-a9c7-e0a2fd90d04b"
+        },
+        "attributes": {
+          "type": "object",
+          "properties": {
+            "relationships": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "names",
+                "jobs"
+              ],
+              "description": "Relationships to include in the exported data. By default, only the root person data will be included."
+            },
+            "filters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "description": "Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).",
+                "required": [
+                  "attribute",
+                  "values"
+                ],
+                "properties": {
+                  "attribute": {
+                    "type": "string",
+                    "example": "jobs.divisionCode",
+                    "description": "A valid attribute or relationship attribute on the people resource."
+                  },
+                  "operator": {
+                    "type": "string",
+                    "example": "STARTS_WITH",
+                    "enum": [
+                      "STARTS_WITH",
+                      "ENDS_WITH",
+                      "CONTAINS",
+                      "EQUALS",
+                      "IN"
+                    ],
+                    "description": "The comparison to be performed on the values."
+                  },
+                  "values": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "A192",
+                      "A193"
+                    ],
+                    "description": "A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. \"true\")."
+                  }
+                }
+              },
+              "description": "Filters to apply when generating the exported data."
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "Pending",
+                "Completed",
+                "Deleted",
+                "Error"
+              ],
+              "readOnly": true,
+              "example": "Pending",
+              "description": "Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation."
+            },
+            "exportUrl": {
+              "type": "string",
+              "format": "url",
+              "readOnly": true,
+              "description": "URL of the exported data. This field will only contain the URL when the status of the export is \"Completed\"."
+            },
+            "requestTime": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true,
+              "example": "2024-01-01T00:00:00+00:00",
+              "description": "The time the export request was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset."
+            },
+            "completionTime": {
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true,
+              "example": "2024-01-01T00:05:00+00:00",
+              "description": "The time the export was done processing. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.",
+              "nullable": true
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        }
+      }
+    },
+    "certificate": {
+      "description": "A certificate. This is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "certificates"
+        },
+        "id": {
+          "type": "string",
+          "description": "An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.",
+          "example": "b463e0f7-c882-4b08-a9c7-e0a2fd90d04b"
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "certificate"
+          ],
+          "properties": {
+            "certificate": {
+              "type": "string",
+              "example": "-----BEGIN CERTIFICATE-----\nMIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL\nBQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH\nTWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X\nDTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ\nBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz\ndGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A\nMIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL\n9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O\nQn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE\n64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ\nKiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf\nFb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls\nb2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4\nPLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc\no+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA\n3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3\naIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65\n97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=\n-----END CERTIFICATE-----"
+            },
+            "createdDate": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-01-01T00:00:00+00:00",
+              "description": "The date-time in UTC this certificate resource was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset."
+            },
+            "startDate": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-01-01T00:00:00+00:00",
+              "description": "The date-time in UTC this certificate is valid from, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset."
+            },
+            "expirationDate": {
+              "type": "string",
+              "format": "date-time",
+              "example": "2024-01-01T00:00:00+00:00",
+              "description": "The date-time in UTC this certificate is valid until, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset."
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        }
+      }
+    },
+    "webhookEvent": {
+      "description": "Details about the payloads of events sent to webhook receivers. Refer to the [Webhooks Documentation](/person-api/webhooks) for more information.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "events"
+        },
+        "id": {
+          "type": "string",
+          "description": "An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.",
+          "example": "b463e0f7-c882-4b08-a9c7-e0a2fd90d04b"
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "eventType"
+          ],
+          "properties": {
+            "eventType": {
+              "type": "string",
+              "example": "updated",
+              "enum": [
+                "created",
+                "updated",
+                "merged",
+                "deleted"
+              ],
+              "description": "The type of this event."
+            },
+            "relationships": {
+              "type": "object",
+              "required": [
+                "person",
+                "identifiers"
+              ],
+              "properties": {
+                "identifiers": {
+                  "description": "A generic relationship object",
+                  "type": "object",
+                  "properties": {
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "related": {
+                          "type": "string",
+                          "example": "https://api.wisc.edu/link/to/related/object"
+                        }
+                      }
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "type": {
+                            "type": "string",
+                            "example": "sampleType"
+                          },
+                          "id": {
+                            "type": "string",
+                            "example": "sampleId"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "person": {
+                  "description": "A generic relationship object",
+                  "type": "object",
+                  "properties": {
+                    "links": {
+                      "type": "object",
+                      "properties": {
+                        "related": {
+                          "type": "string",
+                          "example": "https://api.wisc.edu/link/to/related/object"
+                        }
+                      }
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "example": "sampleType"
+                        },
+                        "id": {
+                          "type": "string",
+                          "example": "sampleId"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "included": {
+              "description": "Included related resources",
+              "type": "array",
+              "items": {
+                "description": "A generic resource object",
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "sampleType"
+                  },
+                  "id": {
+                    "type": "string",
+                    "example": "sampleId"
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "properties": {
+                      "attribute1": {
+                        "type": "string",
+                        "example": "sampleStringAttribute"
+                      },
+                      "attribute2": {
+                        "type": "number",
+                        "example": 123
+                      }
+                    }
+                  },
+                  "relationships": {
+                    "type": "object",
+                    "properties": {
+                      "relatedResource": {
+                        "description": "A generic relationship object",
+                        "type": "object",
+                        "properties": {
+                          "links": {
+                            "type": "object",
+                            "properties": {
+                              "related": {
+                                "type": "string",
+                                "example": "https://api.wisc.edu/link/to/related/object"
+                              }
+                            }
+                          },
+                          "data": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "example": "sampleType"
+                              },
+                              "id": {
+                                "type": "string",
+                                "example": "sampleId"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "links": {
+                    "description": "The link to access a resource itself",
+                    "type": "object",
+                    "properties": {
+                      "self": {
+                        "type": "string",
+                        "example": "https://api.wisc.edu/link/to/self"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "example": {
+        "data": {
+          "type": "events",
+          "id": "3a8c6ff6-35d0-40de-8f01-f77a216d721e",
+          "attributes": {
+            "eventType": "updated"
+          },
+          "relationships": {
+            "person": {
+              "data": {
+                "id": "80259",
+                "type": "people"
+              },
+              "links": {
+                "related": "https://api.wisc.edu/people/80259"
+              }
+            },
+            "identifiers": {
+              "data": [
+                {
+                  "id": "9949757",
+                  "type": "identifiers"
+                },
+                {
+                  "id": "9949758",
+                  "type": "identifiers"
+                },
+                {
+                  "id": "9949759",
+                  "type": "identifiers"
+                },
+                {
+                  "id": "9949760",
+                  "type": "identifiers"
+                },
+                {
+                  "id": "12670596",
+                  "type": "identifiers"
+                },
+                {
+                  "id": "12670599",
+                  "type": "identifiers"
+                }
+              ],
+              "links": {
+                "related": "https://api.wisc.edu/people/80259/identifiers"
+              }
+            }
+          }
+        },
+        "included": [
+          {
+            "attributes": {
+              "current": true,
+              "name": "emplId",
+              "source": "HRS",
+              "value": "00712529",
+              "institution": "UW-Madison"
+            },
+            "id": "9949757",
+            "type": "identifiers"
+          },
+          {
+            "attributes": {
+              "current": false,
+              "name": "pvi",
+              "source": "IAM",
+              "value": "UW539D609",
+              "institution": "Shared"
+            },
+            "id": "9949758",
+            "type": "identifiers"
+          },
+          {
+            "attributes": {
+              "current": false,
+              "name": "pvi",
+              "source": "IAM",
+              "value": "UW706Q479",
+              "institution": "Shared"
+            },
+            "id": "9949759",
+            "type": "identifiers"
+          },
+          {
+            "attributes": {
+              "current": true,
+              "name": "pvi",
+              "source": "IAM",
+              "value": "UW736J839",
+              "institution": "Shared"
+            },
+            "id": "9949760",
+            "type": "identifiers"
+          },
+          {
+            "attributes": {
+              "current": true,
+              "name": "emplId",
+              "source": "SIS",
+              "value": "0000600917",
+              "institution": "UW-Madison"
+            },
+            "id": "12670596",
+            "type": "identifiers"
+          },
+          {
+            "attributes": {
+              "current": true,
+              "name": "eppn",
+              "source": "IAM",
+              "value": "BADGER@WISC.EDU",
+              "institution": "UW-Madison"
+            },
+            "id": "12670599",
+            "type": "identifiers"
+          }
+        ]
+      }
+    }
+  }
+}

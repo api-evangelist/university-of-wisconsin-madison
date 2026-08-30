@@ -1,0 +1,59 @@
+openapi: 3.2.0
+info:
+  title: Enterprise Billing Billing Batch Delete API
+  description: Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API.  For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/.  For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438.
+  version: 0.1.0
+servers:
+- url: https://doit.dev.api.wisc.edu/enterprise-billing
+  description: Dev server
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Billing Batch Delete
+paths:
+  /billingBatch/{id}:
+    parameters:
+    - in: path
+      name: id
+      schema:
+        type: string
+      required: true
+      description: Salesforce Billing Batch Id
+    summary: represents Billing Batch information regarding a imported set of transactions
+    delete:
+      tags:
+      - Billing Batch Delete
+      summary: Delete a single Billing Batch
+      description: Delete a Billing Batch and child ISP data transaction records.
+      responses:
+        '204':
+          description: Empty response.
+        '403':
+          $ref: '#/components/responses/NoAuthorization'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  responses:
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.
+  schemas:
+    error:
+      description: Error object
+      type: object
+      properties:
+        message:
+          type: string

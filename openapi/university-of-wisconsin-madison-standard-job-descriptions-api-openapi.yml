@@ -1,0 +1,1205 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Standard Job Descriptions API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+  description: 'Operations tagged Standard Job Descriptions across 2 of this provider''s published API definitions: university-of-wisconsin-madison-hr-api-openapi.yml, university-of-wisconsin-madison-mock-hr-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.wisc.edu/hr
+- url: https://mock.api.wisc.edu/hr
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Standard Job Descriptions
+paths:
+  /standardJobDescriptions:
+    get:
+      description: Get a list of standard job descriptions.
+      summary: Get a list of standard job descriptions.
+      operationId: get_job_descriptions
+      tags:
+      - Standard Job Descriptions
+      parameters:
+      - name: page
+        in: query
+        description: 'Define options for pagination of responses. For example, `page[number]` parameter (example: `page[number]=4`). The `page[number]` determines the page to display. The size of the page is a constant of 100.'
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          properties:
+            number:
+              type: integer
+              example: 5
+              default: 1
+              description: The page number to display.
+      - name: include
+        in: query
+        description: '[include related resources](https://jsonapi.org/format/#fetching-includes). The resources to include need to be direct relationships. For example, `include=allSubordinateOrganizations`.'
+        schema:
+          type: string
+      - name: filter
+        in: query
+        description: Filter results of query using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [HR API Documentation](https://kb.wisc.edu/uw-apis/158637) for more information about the `filter` query param.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            attribute:
+              type: string
+              example: name
+      responses:
+        '200':
+          description: A collection of standard job descriptions.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                - meta
+                properties:
+                  data:
+                    description: A collection of standard job descriptions.
+                    type: array
+                    items:
+                      description: A job description.
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: jobDescriptions
+                        id:
+                          type: string
+                          description: The Job Code which uniquely identifies a job description.
+                          example: AD001
+                        attributes:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: Administrative Assistant I
+                              description: The job title.
+                            group:
+                              type: string
+                              example: Administration Group
+                              description: The job group.
+                            subGroup:
+                              type: string
+                              example: Administrative Services
+                              description: The job sub-group.
+                            summary:
+                              type: string
+                              example: Provides administrative support to a department or group of professionals in support of unit goals under direct supervision.
+                              description: Brief statement explaining the primary function of this job.
+                            education:
+                              type: string
+                              example: High School Diploma
+                              description: Preferred education level for this job.
+                            responsibilities:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - Schedules logistics and secures resources for meetings, conferences, travel, and work unit operations.
+                              - Sends, receives, copies, and distributes communications to the appropriate entities according to established policies and procedures.
+                              - Serves as first point of contact for individuals and groups providing basic organizational information via phone, in person, and through other communication mediums, routing more complex inquiries to the appropriate entities.
+                              - Tracks, stocks, orders, and inventories office supplies to ensure adequate materials are available for workplace operation.
+                              description: Job responsibilities for this job.
+                            fairLaborStandardsActStatus:
+                              type: boolean
+                              example: false
+                              description: 'The Fair Labor Standards Act status for this job description. If true, positions for this job description are exempt from certain FLSA provisions, namely overtime pay. If false, they are non-exempt. For more information on FLSA exemptions and exemption requirements, see: [Fair Labor Standards Act (FLSA) | Human Resources | UW–Madison](https://hr.wisc.edu/flsa/) and [Wages and the Fair Labor Standards Act | U.S. Department of Labor](https://www.dol.gov/agencies/whd/flsa)'
+                            employeeCategory:
+                              type: string
+                              example: University Staff
+                              description: The employee category this job falls under.
+                        relationships:
+                          type: object
+                          properties:
+                            salaryStructures:
+                              description: The salary structures associated with this standard job description.
+                              type: object
+                              properties:
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: salaryStructures
+                                      id:
+                                        type: string
+                                        description: The salary structure ID.
+                                        example: 30d6a232973a1001722a090ff0940000
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      description: Link to the salary structures associated with this standard job description.
+                                      example: https://api.wisc.edu/hr/standardJobDescriptions/AD001/salaryStructures
+                        links:
+                          description: The link to the supervisory organization.
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                  relationships:
+                    description: Relationships to other resources.
+                    type: object
+                    properties:
+                      salaryStructures:
+                        description: The salary structures associated with this standard job description.
+                        type: object
+                        properties:
+                          data:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                  example: salaryStructures
+                                id:
+                                  type: string
+                                  description: The salary structure ID.
+                                  example: 30d6a232973a1001722a090ff0940000
+                  links:
+                    description: Self and pagination links.
+                    allOf:
+                    - description: The links associated with a paginated collection
+                      type: object
+                      properties:
+                        self:
+                          description: The current page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=3
+                        prev:
+                          description: The previous page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=2
+                        next:
+                          description: The next page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=4
+                        first:
+                          description: The first page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=1
+                        last:
+                          description: The last page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=6
+                  meta:
+                    type: object
+                    properties:
+                      paging:
+                        type: object
+                        properties:
+                          pageNumber:
+                            type: integer
+                            example: 5
+                            description: The page number to display
+                          pageSize:
+                            type: integer
+                            example: 10
+                            description: The number of items per page
+                          totalCount:
+                            type: integer
+                            example: 100
+                            description: The total number of items available for the collection
+                          totalPages:
+                            type: integer
+                            example: 10
+                            description: The total number of pages available for the collection
+                        example: 100
+                        description: The total number of items in the collection
+              examples:
+                standard-job-descriptions:
+                  value:
+                    data:
+                    - id: AD001
+                      type: standardJobDescriptions
+                      attributes:
+                        title: Administrative Assistant I
+                        group: Administration Group
+                        subGroup: Administrative Services
+                        summary: Provides administrative support to a department or group of professionals in support of unit goals under direct supervision.
+                        education: High School Diploma
+                        responsibilities:
+                        - Schedules logistics and secures resources for meetings, conferences, travel, and work unit operations.
+                        - Sends, receives, copies, and distributes communications to the appropriate entities according to established policies and procedures.
+                        - Serves as first point of contact for individuals and groups providing basic organizational information via phone, in person, and through other communication mediums, routing more complex inquiries to the appropriate entities.
+                        - Tracks, stocks, orders, and inventories office supplies to ensure adequate materials are available for workplace operation.
+                        fairLaborStandardsActStatus: false
+                        employeeCategory: University Staff
+                      relationships:
+                        salaryStructures:
+                          data:
+                          - id: 30d6a232973a1001722a090ff0940000
+                            type: salaryStructures
+                          - id: 30d6a232973a1001722b18e92f860000
+                            type: salaryStructures
+                          - id: 30d6a232973a1001722c549806240000
+                            type: salaryStructures
+                          links:
+                            related: https://api.wisc.edu/hr/standardJobDescriptions/AD001/salaryStructures
+                      links:
+                        self: https://api.wisc.edu/hr/standardJobDescriptions/AD001
+                    meta:
+                      paging:
+                        pageNumber: 5
+                        pageSize: 10
+                        totalCount: 100
+                        totalPages: 10
+                    links:
+                      self: https://api.wisc.edu/hr/standardJobDescriptions
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'jobs' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/hr
+  /standardJobDescriptions/{jobCode}:
+    get:
+      description: Get a standard job description.
+      summary: Get a standard job description.
+      operationId: get_job_description
+      tags:
+      - Standard Job Descriptions
+      parameters:
+      - name: jobCode
+        description: The Job Code which uniquely identifies a job description.
+        in: path
+        example: AD001
+        required: true
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: '[include related resources](https://jsonapi.org/format/#fetching-includes). The resources to include need to be direct relationships. For example, `include=allSubordinateOrganizations`.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A standard job description.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A job description.
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: jobDescriptions
+                      id:
+                        type: string
+                        description: The Job Code which uniquely identifies a job description.
+                        example: AD001
+                      attributes:
+                        type: object
+                        properties:
+                          title:
+                            type: string
+                            example: Administrative Assistant I
+                            description: The job title.
+                          group:
+                            type: string
+                            example: Administration Group
+                            description: The job group.
+                          subGroup:
+                            type: string
+                            example: Administrative Services
+                            description: The job sub-group.
+                          summary:
+                            type: string
+                            example: Provides administrative support to a department or group of professionals in support of unit goals under direct supervision.
+                            description: Brief statement explaining the primary function of this job.
+                          education:
+                            type: string
+                            example: High School Diploma
+                            description: Preferred education level for this job.
+                          responsibilities:
+                            type: array
+                            items:
+                              type: string
+                            example:
+                            - Schedules logistics and secures resources for meetings, conferences, travel, and work unit operations.
+                            - Sends, receives, copies, and distributes communications to the appropriate entities according to established policies and procedures.
+                            - Serves as first point of contact for individuals and groups providing basic organizational information via phone, in person, and through other communication mediums, routing more complex inquiries to the appropriate entities.
+                            - Tracks, stocks, orders, and inventories office supplies to ensure adequate materials are available for workplace operation.
+                            description: Job responsibilities for this job.
+                          fairLaborStandardsActStatus:
+                            type: boolean
+                            example: false
+                            description: 'The Fair Labor Standards Act status for this job description. If true, positions for this job description are exempt from certain FLSA provisions, namely overtime pay. If false, they are non-exempt. For more information on FLSA exemptions and exemption requirements, see: [Fair Labor Standards Act (FLSA) | Human Resources | UW–Madison](https://hr.wisc.edu/flsa/) and [Wages and the Fair Labor Standards Act | U.S. Department of Labor](https://www.dol.gov/agencies/whd/flsa)'
+                          employeeCategory:
+                            type: string
+                            example: University Staff
+                            description: The employee category this job falls under.
+                      relationships:
+                        type: object
+                        properties:
+                          salaryStructures:
+                            description: The salary structures associated with this standard job description.
+                            type: object
+                            properties:
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: salaryStructures
+                                    id:
+                                      type: string
+                                      description: The salary structure ID.
+                                      example: 30d6a232973a1001722a090ff0940000
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    description: Link to the salary structures associated with this standard job description.
+                                    example: https://api.wisc.edu/hr/standardJobDescriptions/AD001/salaryStructures
+                      links:
+                        description: The link to the supervisory organization.
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                  links:
+                    description: The link to the supervisory organization.
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+              examples:
+                standard-job-description:
+                  value:
+                    data:
+                      id: AD001
+                      type: standardJobDescriptions
+                      attributes:
+                        title: Administrative Assistant I
+                        group: Administration Group
+                        subGroup: Administrative Services
+                        summary: Provides administrative support to a department or group of professionals in support of unit goals under direct supervision.
+                        education: High School Diploma
+                        responsibilities:
+                        - Schedules logistics and secures resources for meetings, conferences, travel, and work unit operations.
+                        - Sends, receives, copies, and distributes communications to the appropriate entities according to established policies and procedures.
+                        - Serves as first point of contact for individuals and groups providing basic organizational information via phone, in person, and through other communication mediums, routing more complex inquiries to the appropriate entities.
+                        - Tracks, stocks, orders, and inventories office supplies to ensure adequate materials are available for workplace operation.
+                        fairLaborStandardsActStatus: false
+                        employeeCategory: University Staff
+                      relationships:
+                        salaryStructures:
+                          data:
+                          - id: 30d6a232973a1001722a090ff0940000
+                            type: salaryStructures
+                          - id: 30d6a232973a1001722b18e92f860000
+                            type: salaryStructures
+                          - id: 30d6a232973a1001722c549806240000
+                            type: salaryStructures
+                          links:
+                            related: https://api.wisc.edu/hr/standardJobDescriptions/AD001/salaryStructures
+                      links:
+                        self: https://api.wisc.edu/hr/standardJobDescriptions/AD001
+                    links:
+                      self: https://api.wisc.edu/hr/standardJobDescriptions/AD001
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'jobs' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/hr
+  /standardJobDescriptions/{jobCode}/salaryStructures:
+    get:
+      description: Get a list of salary structures associated with a standard job description.
+      summary: Get a list of salary structures associated with a standard job description.
+      operationId: get_job_description_salary_structures
+      tags:
+      - Standard Job Descriptions
+      parameters:
+      - name: jobCode
+        description: The Job Code which uniquely identifies a job description.
+        in: path
+        example: AD001
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A collection of salary structures.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of salary structures.
+                    type: array
+                    items:
+                      description: A salary structure.
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: salaryStructures
+                        id:
+                          type: string
+                          description: The salary structure ID.
+                          example: 30d6a232973a1001722a090ff0940000
+                        attributes:
+                          type: object
+                          properties:
+                            salaryGrade:
+                              type: string
+                              example: Grade 015
+                              description: The salary grade.
+                            salaryGradeProfile:
+                              type: string
+                              example: 'Grade 015: Grade 015 Madison Hourly'
+                              description: The salary grade profile.
+                            payRangeMinimum:
+                              type: string
+                              example: '17.0'
+                              pattern: ^\d+(?:\.\d+)?$
+                              description: The minimum pay range. This value is provided as a string to avoid loss of precision.
+                            payRangeMaximum:
+                              type: string
+                              example: '31.62'
+                              pattern: ^\d+(?:\.\d+)?$
+                              description: The maximum pay range. This value is provided as a string to avoid loss of precision.
+                        links:
+                          description: The link to the supervisory organization.
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                  links:
+                    description: Self and pagination links.
+                    allOf:
+                    - description: The links associated with a paginated collection
+                      type: object
+                      properties:
+                        self:
+                          description: The current page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=3
+                        prev:
+                          description: The previous page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=2
+                        next:
+                          description: The next page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=4
+                        first:
+                          description: The first page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=1
+                        last:
+                          description: The last page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=6
+                  meta:
+                    type: object
+                    properties:
+                      paging:
+                        type: object
+                        properties:
+                          pageNumber:
+                            type: integer
+                            example: 5
+                            description: The page number to display
+                          pageSize:
+                            type: integer
+                            example: 10
+                            description: The number of items per page
+                          totalCount:
+                            type: integer
+                            example: 100
+                            description: The total number of items available for the collection
+                          totalPages:
+                            type: integer
+                            example: 10
+                            description: The total number of pages available for the collection
+                        example: 100
+                        description: The total number of items in the collection
+              examples:
+                salary-structures:
+                  value:
+                    data:
+                    - id: 30d6a232973a1001722a090ff0940000
+                      type: salaryStructures
+                      attributes:
+                        salaryGrade: Grade 015
+                        salaryGradeProfile: 'Grade 015: Grade 015 Madison Hourly'
+                        payRangeMinimum: '17.0'
+                        payRangeMaximum: '31.62'
+                      links:
+                        self: https://api.wisc.edu/hr/salaryStructures/30d6a232973a1001722a090ff0940000
+                    - id: 30d6a232973a1001722b18e92f860000
+                      type: salaryStructures
+                      attributes:
+                        salaryGrade: Grade 015
+                        salaryGradeProfile: 'Grade 015: Grade 015 Milwaukee Hourly'
+                        payRangeMinimum: '15.0'
+                        payRangeMaximum: '30.29'
+                      links:
+                        self: https://api.wisc.edu/hr/salaryStructures/30d6a232973a1001722b18e92f860000
+                    - id: 30d6a232973a1001722c549806240000
+                      type: salaryStructures
+                      attributes:
+                        salaryGrade: Grade 015
+                        salaryGradeProfile: 'Grade 015: Grade 015 Comprehensive Hourly'
+                        payRangeMinimum: '15.0'
+                        payRangeMaximum: '30.29'
+                      links:
+                        self: https://api.wisc.edu/hr/salaryStructures/30d6a232973a1001722c549806240000
+                    links:
+                      self: https://api.wisc.edu/hr/salaryStructures
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'jobs' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/hr
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-hr-api-openapi.yml
+- university-of-wisconsin-madison-mock-hr-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

@@ -1,0 +1,1511 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison People API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+    url: https://go.wisc.edu/k701y6
+  description: 'Operations tagged people across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://mock.api.wisc.edu
+- url: https://api.wisc.edu
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: people
+paths:
+  /people:
+    get:
+      description: Get a collection of people. The attributes `dateOfBirth`, `deceased`, and `legalSex` will only show up if you have the 'Sensitive Person Demographics' permission.
+      summary: Get people.
+      operationId: get_people
+      tags:
+      - people
+      parameters:
+      - name: filter
+        in: query
+        description: Filter results of query using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](/person-api/filter-query-parameter) for more information about the `filter` query param.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            attribute:
+              type: string
+              example: firstName
+      - name: fields
+        in: query
+        description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              example: people
+      - name: include
+        in: query
+        description: '[include related resources](https://jsonapi.org/format/#fetching-includes). The resources to include need to be direct relationships. Nested relationships are not supported. For example, `include=jobs,identifiers` is supported but `include=person.jobs` is not supported.'
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: 'Define options for pagination of responses. For example, `page[size]=5&page[after]=400&page[before]=800` will return a response with data about 5 people whose `id` value falls after `400` but before `800`. So `page[size]` determines the number of people resources in a response, `page[after]` is the ID of the person at the end of the previous page, `page[before]` is the ID of the person at the start of the next page. Offset pagination is also supported using `page[number]` parameter (example: `page[number]=4&page[size]=10`), but it is disabled by default. The `page[number]` determines the page to display. Offset pagination has significantly worse performance than cursor pagination, so it should only be used by applications that can''t support cursor pagination. Contact the developers if you would like to enable it.'
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          properties:
+            size:
+              type: integer
+              example: 50
+              maximum: 1000
+              minimum: 1
+              default: 100
+              description: Size of page for paginated results.
+            after:
+              type: string
+              description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+              example: '12345'
+            before:
+              type: string
+              description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+              example: '12345'
+            number:
+              type: integer
+              example: 1
+              minimum: 1
+              description: Page number for paginated results. This parameter is disabled by default. Contact the developers if you would like to enable it.
+      responses:
+        '200':
+          description: A collection of people
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of people
+                    type: array
+                    items:
+                      description: A person.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - relationships
+                      - links
+                      - meta
+                      properties:
+                        type:
+                          type: string
+                          example: people
+                        id:
+                          type: string
+                          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+                          example: '12345'
+                        attributes:
+                          type: object
+                          required:
+                          - firstName
+                          - lastName
+                          - emailAddress
+                          - officeAddress
+                          - officePhoneNumber
+                          - dateOfBirth
+                          - legalSex
+                          - deceased
+                          properties:
+                            firstName:
+                              type: string
+                              example: John
+                              description: First name, derived from the person's current UW affiliations.
+                            lastName:
+                              type: string
+                              example: Smith
+                              description: Last name, derived from the person's current UW affiliations.
+                            emailAddress:
+                              type: string
+                              example: john.smith@wisc.edu
+                              description: The email address this person has designated as their primary, if set.  Otherwise, their Campus Business Email, or other email derived from their current UW affiliations.
+                            officeAddress:
+                              type:
+                              - string
+                              - 'null'
+                              description: Primary work-related address derived from the person's current UW affiliations.  May or may not be a fully-formed street address.
+                              example: 1210 W. Dayton Street Madison, WI 53706-1613
+                            officePhoneNumber:
+                              type:
+                              - string
+                              - 'null'
+                              example: 608-262-1204
+                              description: Primary work-related phone number derived from the person's current UW affiliations.  May or may not be associated with the officeAddress.
+                            dateOfBirth:
+                              type: string
+                              format: date
+                              example: '1980-01-01'
+                              description: Date of birth.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission.
+                            legalSex:
+                              type: string
+                              enum:
+                              - Female
+                              - Male
+                              - Non-binary
+                              - Other
+                              - Unknown
+                              example: Male
+                              description: Legal sex.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission.
+                            deceased:
+                              type:
+                              - boolean
+                              - 'null'
+                              example: false
+                              description: Indicates whether or not this person is deceased.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission.
+                            continuousServiceDate:
+                              type: string
+                              format: date
+                              example: '2000-01-01'
+                              description: Adjusted date of civil service employment with the state of Wisconsin - required for a classified permanent job. The adjusted continuous service date is used, for example, to allocate annual vacation for leave accounting, and to rank employees for layoff provisions, including reinstatements, etc. Please see https://policy.wisc.edu/library/UW-5029 for more details.
+                        relationships:
+                          type: object
+                          required:
+                          - identifiers
+                          - jobs
+                          - names
+                          - wiscard
+                          - addresses
+                          - phoneNumbers
+                          - emailAddresses
+                          - affiliations
+                          properties:
+                            identifiers:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: sampleType
+                                      id:
+                                        type: string
+                                        example: sampleId
+                            jobs:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: sampleType
+                                      id:
+                                        type: string
+                                        example: sampleId
+                            names:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: sampleType
+                                      id:
+                                        type: string
+                                        example: sampleId
+                            wiscard:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                            addresses:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: sampleType
+                                      id:
+                                        type: string
+                                        example: sampleId
+                            phoneNumbers:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: sampleType
+                                      id:
+                                        type: string
+                                        example: sampleId
+                            emailAddresses:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: sampleType
+                                      id:
+                                        type: string
+                                        example: sampleId
+                            affiliations:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: array
+                                  items:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: sampleType
+                                      id:
+                                        type: string
+                                        example: sampleId
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                        meta:
+                          type: object
+                          properties:
+                            ferpa:
+                              type: boolean
+                              example: false
+                              description: Indicates whether or not a student has elected FERPA coverage on one or more of their attributes. Please see https://registrar.wisc.edu/ferpa/ for more details about how to handle FERPA data.
+                            ferpaAttributes:
+                              type: array
+                              items:
+                                type: string
+                              description: Not currently used.
+                            privateAttributes:
+                              type: array
+                              items:
+                                type: string
+                              description: Not currently used.
+                  links:
+                    description: Self and pagination links
+                    allOf:
+                    - description: The link to access a resource itself
+                      type: object
+                      properties:
+                        self:
+                          type: string
+                          example: https://api.wisc.edu/link/to/self
+                    - description: The links associated with a paginated collection
+                      type: object
+                      properties:
+                        self:
+                          description: The current page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/people?page[after]=6
+                        prev:
+                          description: The previous page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/people?page[before]=7
+                        next:
+                          description: The next page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/people?page[after]=8
+                        first:
+                          description: Available when using offset pagination. The first page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/people?page[number]=1
+                        last:
+                          description: Available when using offset pagination. The last page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/people?page[number]=10
+                  meta:
+                    type: object
+                    properties:
+                      paging:
+                        type: object
+                        properties:
+                          totalPeople:
+                            type: integer
+                            example: 100
+                            description: The total number of people available for the collection
+                        example: 100
+                        description: The total number of people in the collection
+                  included:
+                    description: Included related resources
+                    type: array
+                    items:
+                      description: A generic resource object
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: sampleType
+                        id:
+                          type: string
+                          example: sampleId
+                        attributes:
+                          type: object
+                          properties:
+                            attribute1:
+                              type: string
+                              example: sampleStringAttribute
+                            attribute2:
+                              type: number
+                              example: 123
+                        relationships:
+                          type: object
+                          properties:
+                            relatedResource:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+              examples:
+                example-people:
+                  value:
+                    data:
+                    - attributes:
+                        emailAddress: john.smith@wisc.edu
+                        firstName: John
+                        lastName: Smith
+                        officeAddress: 1210 W Dayton St, Madison, WI 53706
+                        officePhoneNumber: 608-555-1234
+                        dateOfBirth: '1980-01-01'
+                        legalSex: Male
+                        deceased: false
+                        continuousServiceDate: '2000-01-01'
+                      id: '100'
+                      links:
+                        self: https://api.wisc.edu/people/100
+                      meta:
+                        ferpa: false
+                        ferpaAttributes: []
+                        privateAttributes: []
+                      relationships:
+                        identifiers:
+                          data:
+                          - id: '100'
+                            type: identifiers
+                          links:
+                            related: https://api.wisc.edu/people/100/identifiers
+                        jobs:
+                          data:
+                          - id: '100'
+                            type: jobs
+                          links:
+                            related: https://api.wisc.edu/people/100/jobs
+                        names:
+                          data:
+                          - id: '100'
+                            type: names
+                          links:
+                            related: https://api.wisc.edu/people/100/names
+                        wiscard:
+                          data:
+                            id: '100'
+                            type: wiscard
+                          links:
+                            related: https://api.wisc.edu/people/100/wiscard
+                        addresses:
+                          data:
+                          - id: '100'
+                            type: addresses
+                          links:
+                            related: https://api.wisc.edu/people/100/addresses
+                        phoneNumbers:
+                          data:
+                          - id: '100'
+                            type: phoneNumbers
+                          links:
+                            related: https://api.wisc.edu/people/100/phoneNumbers
+                        emailAddresses:
+                          data:
+                          - id: '100'
+                            type: emailAddresses
+                          links:
+                            related: https://api.wisc.edu/people/100/emailAddresses
+                        affiliations:
+                          data:
+                          - id: '100'
+                            type: affiliations
+                          links:
+                            related: https://api.wisc.edu/people/100/affiliations
+                      type: people
+                    links:
+                      self: https://api.wisc.edu/people
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+  /people/{id}:
+    get:
+      description: Get a person. The attributes `dateOfBirth`, `deceased`, and `legalSex` will only show up if you have the 'Sensitive Person Demographics' permission.  It is not recommended to manually build this URL or other URLs that contain path parameters, for example, by using concatenation. Instead, use the fully-qualified links returned in other resources to use this resource and other "Get By ID" resources.
+      summary: Get a person.
+      operationId: get_person
+      tags:
+      - people
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: '700'
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+          example: '12345'
+      - name: include
+        in: query
+        description: '[include related resources](https://jsonapi.org/format/#fetching-includes). The resources to include need to be direct relationships. Nested relationships are not supported. For example, `include=jobs,identifiers` is supported but `include=person.jobs` is not supported.'
+        schema:
+          type: string
+      - name: fields
+        in: query
+        description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              example: people
+      responses:
+        '200':
+          description: A single person
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A person.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - attributes
+                    - relationships
+                    - links
+                    - meta
+                    properties:
+                      type:
+                        type: string
+                        example: people
+                      id:
+                        type: string
+                        description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+                        example: '12345'
+                      attributes:
+                        type: object
+                        required:
+                        - firstName
+                        - lastName
+                        - emailAddress
+                        - officeAddress
+                        - officePhoneNumber
+                        - dateOfBirth
+                        - legalSex
+                        - deceased
+                        properties:
+                          firstName:
+                            type: string
+                            example: John
+                            description: First name, derived from the person's current UW affiliations.
+                          lastName:
+                            type: string
+                            example: Smith
+                            description: Last name, derived from the person's current UW affiliations.
+                          emailAddress:
+                            type: string
+                            example: john.smith@wisc.edu
+                            description: The email address this person has designated as their primary, if set.  Otherwise, their Campus Business Email, or other email derived from their current UW affiliations.
+                          officeAddress:
+                            type:
+                            - string
+                            - 'null'
+                            description: Primary work-related address derived from the person's current UW affiliations.  May or may not be a fully-formed street address.
+                            example: 1210 W. Dayton Street Madison, WI 53706-1613
+                          officePhoneNumber:
+                            type:
+                            - string
+                            - 'null'
+                            example: 608-262-1204
+                            description: Primary work-related phone number derived from the person's current UW affiliations.  May or may not be associated with the officeAddress.
+                          dateOfBirth:
+                            type: string
+                            format: date
+                            example: '1980-01-01'
+                            description: Date of birth.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission.
+                          legalSex:
+                            type: string
+                            enum:
+                            - Female
+                            - Male
+                            - Non-binary
+                            - Other
+                            - Unknown
+                            example: Male
+                            description: Legal sex.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission.
+                          deceased:
+                            type:
+                            - boolean
+                            - 'null'
+                            example: false
+                            description: Indicates whether or not this person is deceased.  This is a sensitive attribute and is only available if the requesting application has the 'Sensitive Person Demographics' permission.
+                          continuousServiceDate:
+                            type: string
+                            format: date
+                            example: '2000-01-01'
+                            description: Adjusted date of civil service employment with the state of Wisconsin - required for a classified permanent job. The adjusted continuous service date is used, for example, to allocate annual vacation for leave accounting, and to rank employees for layoff provisions, including reinstatements, etc. Please see https://policy.wisc.edu/library/UW-5029 for more details.
+                      relationships:
+                        type: object
+                        required:
+                        - identifiers
+                        - jobs
+                        - names
+                        - wiscard
+                        - addresses
+                        - phoneNumbers
+                        - emailAddresses
+                        - affiliations
+                        properties:
+                          identifiers:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                          jobs:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                          names:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                          wiscard:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    example: sampleType
+                                  id:
+                                    type: string
+                                    example: sampleId
+                          addresses:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                          phoneNumbers:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                          emailAddresses:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                          affiliations:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                      links:
+                        description: The link to access a resource itself
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/link/to/self
+                      meta:
+                        type: object
+                        properties:
+                          ferpa:
+                            type: boolean
+                            example: false
+                            description: Indicates whether or not a student has elected FERPA coverage on one or more of their attributes. Please see https://registrar.wisc.edu/ferpa/ for more details about how to handle FERPA data.
+                          ferpaAttributes:
+                            type: array
+                            items:
+                              type: string
+                            description: Not currently used.
+                          privateAttributes:
+                            type: array
+                            items:
+                              type: string
+                            description: Not currently used.
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+                  included:
+                    description: Included related resources
+                    type: array
+                    items:
+                      description: A generic resource object
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: sampleType
+                        id:
+                          type: string
+                          example: sampleId
+                        attributes:
+                          type: object
+                          properties:
+                            attribute1:
+                              type: string
+                              example: sampleStringAttribute
+                            attribute2:
+                              type: number
+                              example: 123
+                        relationships:
+                          type: object
+                          properties:
+                            relatedResource:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+              examples:
+                example-people:
+                  value:
+                    data:
+                      attributes:
+                        emailAddress: john.smith@wisc.edu
+                        firstName: John
+                        lastName: Smith
+                        officeAddress: 1210 W Dayton St, Madison, WI 53706
+                        officePhoneNumber: 608-555-1234
+                        dateOfBirth: '1980-01-01'
+                        legalSex: Male
+                        deceased: false
+                        continuousServiceDate: '2000-01-01'
+                      id: '100'
+                      links:
+                        self: https://api.wisc.edu/people/100
+                      meta:
+                        ferpa: false
+                      relationships:
+                        identifiers:
+                          data:
+                          - id: '100'
+                            type: identifiers
+                          links:
+                            related: https://api.wisc.edu/people/100/identifiers
+                        jobs:
+                          data:
+                          - id: '100'
+                            type: jobs
+                          links:
+                            related: https://api.wisc.edu/people/100/jobs
+                        names:
+                          data:
+                          - id: '100'
+                            type: names
+                          links:
+                            related: https://api.wisc.edu/people/100/names
+                        wiscard:
+                          data:
+                            id: '100'
+                            type: wiscard
+                          links:
+                            related: https://api.wisc.edu/people/100/wiscard
+                        addresses:
+                          data:
+                          - id: '100'
+                            type: addresses
+                          links:
+                            related: https://api.wisc.edu/people/100/addresses
+                        phoneNumbers:
+                          data:
+                          - id: '100'
+                            type: phoneNumbers
+                          links:
+                            related: https://api.wisc.edu/people/100/phoneNumbers
+                        emailAddresses:
+                          data:
+                          - id: '100'
+                            type: emailAddresses
+                          links:
+                            related: https://api.wisc.edu/people/100/emailAddresses
+                        affiliations:
+                          data:
+                          - id: '100'
+                            type: affiliations
+                          links:
+                            related: https://api.wisc.edu/people/100/affiliations
+                      type: people
+                    links:
+                      self: https://api.wisc.edu/people
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: null
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
+- university-of-wisconsin-madison-mock-person-api-openapi.yml
+- university-of-wisconsin-madison-person-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

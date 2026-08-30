@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/main/json-schema/university-of-wisconsin-madison-manifest-api-schema.json",
+  "title": "Manifest API data model",
+  "description": "Component schemas extracted verbatim from openapi/university-of-wisconsin-madison-manifest-api-openapi.yml, a contract published by the University of Wisconsin-Madison. Refs are rewritten from #/$defs/ to #/$defs/; no schema was authored or altered here.",
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "derived",
+    "source": "openapi/university-of-wisconsin-madison-manifest-api-openapi.yml",
+    "x-operator": "institution"
+  },
+  "$defs": {
+    "groups": {
+      "description": "Manifest group.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "groups"
+        },
+        "id": {
+          "type": "string",
+          "description": "ID of the Manifest group."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "description": "Group name.",
+              "type": "string",
+              "example": "uw:org:my:group:name"
+            },
+            "description": {
+              "description": "Group description.",
+              "type": "string",
+              "example": "A sample group"
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        }
+      }
+    },
+    "members": {
+      "description": "Manifest group member.",
+      "type": "object",
+      "required": [
+        "type",
+        "id",
+        "attributes",
+        "links"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "example": "members"
+        },
+        "id": {
+          "type": "string",
+          "description": "Manifest ID for the person/member."
+        },
+        "attributes": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "description": "Name of the group member.",
+              "type": "string",
+              "example": "John Doe"
+            },
+            "netId": {
+              "description": "Net ID of the group member.",
+              "type": "string",
+              "example": "jdoe"
+            },
+            "emailAddress": {
+              "description": "Email address of the group member.",
+              "type": "string",
+              "example": "jdoe@wisc.edu"
+            }
+          }
+        },
+        "links": {
+          "description": "The link to access a resource itself",
+          "type": "object",
+          "properties": {
+            "self": {
+              "type": "string",
+              "example": "https://api.wisc.edu/link/to/self"
+            }
+          }
+        }
+      }
+    }
+  }
+}

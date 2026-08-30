@@ -1,0 +1,110 @@
+openapi: 3.2.0
+info:
+  title: Enterprise Billing Billing Customers API
+  description: Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API.  For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/.  For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438.
+  version: 0.1.0
+servers:
+- url: https://doit.dev.api.wisc.edu/enterprise-billing
+  description: Dev server
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: BillingCustomers
+paths:
+  /billingCustomers:
+    summary: represents Billing Customers
+    get:
+      summary: testste
+      description: Retrieve Billing Customers.
+      responses:
+        '200':
+          description: A JSON representation of Billing Customers.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/billingCustomer'
+              example:
+                totalSize: 5
+                done: true
+                records:
+                  id: a0ADh00000606IOMAY
+                  name: ICUS000002
+                  type: Internal
+                  isActive: false
+        '403':
+          $ref: '#/components/responses/NoAuthorization'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      tags:
+      - BillingCustomers
+components:
+  responses:
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.
+  schemas:
+    billingCustomer:
+      title: Billing Customer
+      description: Billing Customer information.
+      type: object
+      properties:
+        totalSize:
+          readOnly: true
+          title: totalSize
+          description: Number of response records.
+          type: integer
+        done:
+          readOnly: true
+          title: done
+          description: Response complete.
+          type: boolean
+        records:
+          description: A collection of BillingCustomers.
+          type: array
+          items:
+            description: A single BillingCustomer.
+            properties:
+              id:
+                readOnly: true
+                title: Id
+                description: Salesforce record identifier.
+                type: string
+                format: Salesforce Id
+                example: a0ADh00000606IOMAY
+              name:
+                readOnly: true
+                title: Name
+                description: Name of Billing Customer.
+                type: string
+                example: ICUS000002
+              type:
+                readOnly: true
+                title: Type
+                description: Type of Billing Customer.
+                type: string
+                example: Internal
+              isActive:
+                readOnly: true
+                title: Is Active
+                description: Active status of Billing Customer.
+                type: boolean
+                example: 'true'
+    error:
+      description: Error object
+      type: object
+      properties:
+        message:
+          type: string

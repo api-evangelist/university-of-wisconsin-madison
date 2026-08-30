@@ -1,0 +1,187 @@
+openapi: 3.2.0
+info:
+  title: Enterprise Billing Bulk Job Status API
+  description: Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API.  For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/.  For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438.
+  version: 0.1.0
+servers:
+- url: https://doit.dev.api.wisc.edu/enterprise-billing
+  description: Dev server
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Bulk Job Status
+paths:
+  /bulkjob/{id}:
+    parameters:
+    - in: path
+      name: id
+      schema:
+        type: string
+      required: true
+      description: Salesforce bulkjobId
+    summary: represents status of a bulk job
+    get:
+      tags:
+      - Bulk Job Status
+      summary: represents a single bulk job status
+      description: Retrieve status of a bulkjob.
+      responses:
+        '200':
+          description: A JSON representation of bulkjob status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/bulkjob'
+              example:
+                id: 750Dh0000095JICIA2
+                operation: insert
+                object: blng_Billing_ISP_Data__c
+                createdById: 005Dh000007Z12uIAC
+                createdDate: 2025-03-20T13:29:35.000+0000
+                systemModstamp: 2025-03-20T13:29:37.000+0000
+                state: JobComplete
+                concurrencyMode: Parallel
+                contentType: CSV
+                apiVersion: 58.0,
+                jobType: V2Ingest
+                lineEnding: CRLF
+                columnDelimiter: COMMA
+                numberRecordsProcessed: 2
+                numberRecordsFailed: 0
+                retries: 0
+                totalProcessingTime: 848
+                apiActiveProcessingTime: 790
+                apexProcessingTime: 329
+        '403':
+          $ref: '#/components/responses/NoAuthorization'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    error:
+      description: Error object
+      type: object
+      properties:
+        message:
+          type: string
+    bulkjob:
+      title: Bulkjob Status
+      description: Bulkjob information.
+      type: object
+      properties:
+        id:
+          readOnly: true
+          title: Id
+          description: Salesforce record identifier.
+          type: string
+          format: Salesforce Id
+        operation:
+          readOnly: true
+          title: Operation
+          description: Bulkjob data operation of submitted data.
+          type: string
+        object:
+          readOnly: true
+          title: Object
+          description: Bulkjob target object (api name).
+          type: string
+        createdById:
+          readOnly: true
+          title: Created By
+          description: 'Salesforce user identifier whom created bulkjob. '
+          type: string
+          format: Salesforce Id
+        createdDate:
+          readOnly: true
+          title: Created Date
+          description: Bulkjob created date.
+          type: string
+          format: date-time
+        systemModstamp:
+          readOnly: true
+          title: System Modstamp
+          description: ''
+          type: string
+          format: date-time
+        state:
+          readOnly: true
+          title: State
+          description: Bulkjob status.
+          type: string
+        concurrencyMode:
+          readOnly: true
+          title: Concurrency Mode
+          description: Bulkjob run mode.
+          type: string
+        contentType:
+          readOnly: true
+          title: Content Type
+          description: Bulkjob submitted data type.
+          type: string
+        apiVersion:
+          readOnly: true
+          title: APIVersion
+          description: Bulkjob runtime api version.
+          type: string
+        jobType:
+          readOnly: true
+          title: Job Type
+          description: Bulkjob type.
+          type: string
+        lineEnding:
+          readOnly: true
+          title: Line Ending
+          description: Bulkjob submitted data lineEnding.
+          type: string
+        columnDelimiter:
+          readOnly: true
+          title: Column Delimiter
+          description: Bulkjob submitted data column delimiter.
+          type: string
+        numberRecordsProcessed:
+          readOnly: true
+          title: Number of Records Processed
+          description: Bulkjob total records processed.
+          type: number
+        numberRecordsFailed:
+          readOnly: true
+          title: Number of Records Failed
+          description: Bulkjob records that failed.
+          type: number
+        retries:
+          readOnly: true
+          title: Retries
+          description: Bulkjob retries.
+          type: number
+        totalProcessingTime:
+          readOnly: true
+          title: Total Processing Time
+          description: Bulkjob processing time.
+          type: number
+        apiActiveProcessingTime:
+          readOnly: true
+          title: API Active Processing Time
+          description: Bulkjob API active processing time.
+          type: number
+        apexProcessingTime:
+          readOnly: true
+          title: APEX Processing Time
+          description: Bulkjob APEX processing time.
+          type: number
+  responses:
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.

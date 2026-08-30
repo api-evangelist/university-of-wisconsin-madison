@@ -1,0 +1,1307 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: finance-apis@doit.wisc.edu
+    name: DoIT Enterprise Business Systems (EBS) Integrated Business Solutions (IBS) API Team
+  description: 'An API for accessing and validating UW financial data.
+
+    ## Getting Started
+
+    For information on how to create an application on the portal and request access to the API, please visit the [Getting Started page](https://financeapis.wisc.edu/getting-started/) on our website.
+
+    ## Endpoints, Filtering, Inclusions, and Sourcing
+
+    Information on how to use the filter query parameter and include related resources, individual endpoints, and how we source our data can be found on the [Documentation page](https://financeapis.wisc.edu/documentation/) of our website.
+
+    ## Help/Support
+
+    If you need assistance in using the Finance API, have questions about the data, need to report a bug, or would like to suggest features/improvements, please fill out the form on the [Contact Us page](https://financeapis.wisc.edu/contact-us/) of our website or email us at [finance-apis@doit.wisc.edu](mailto:finance-apis@doit.wisc.edu).'
+  title: Finance Journals API
+  version: 2026-02-18
+servers:
+- description: Production
+  url: https://api.wisc.edu/finance
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Journals
+paths:
+  /journalEntryLines/search:
+    post:
+      description: Retrieves a set of journal entry lines according to the specified filters.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                data:
+                  properties:
+                    afterDate:
+                      description: Return only journal entry lines from after this date
+                      example: 2000-07-09
+                      type: string
+                    beforeDate:
+                      description: Return only journal entry lines from before this date
+                      example: 2000-07-09
+                      format: date
+                      type: string
+                    company:
+                      description: Return only journal entry lines from this campus.
+                      example: UWRVF
+                      type: string
+                    costCenters:
+                      description: Return only journal entry lines assigned to these cost centers.
+                      items:
+                        description: A cost center ID
+                        example: CC0000123
+                        type: string
+                      type: array
+                    functions:
+                      description: Return only journal entry lines associated with this function
+                      items:
+                        description: A function ID
+                        example: FN0100
+                        type: string
+                      type: array
+                    funds:
+                      description: Return only journal entry lines associated with this fund
+                      items:
+                        description: A fund ID
+                        example: FD0101
+                        type: string
+                      type: array
+                    gifts:
+                      description: Return only journal entry lines associated with this gift
+                      items:
+                        description: A gift ID
+                        example: GF000123
+                        type: string
+                      type: array
+                    grants:
+                      description: Return only journal entry lines associated with this grant
+                      items:
+                        description: A grant ID
+                        example: GR00000123
+                        type: string
+                      type: array
+                    programs:
+                      description: Return only journal entry lines associated with this program
+                      items:
+                        description: A program ID
+                        example: PG000033899
+                        type: string
+                      type: array
+                    projects:
+                      description: Return only journal entry lines associated with this project
+                      items:
+                        description: A project ID
+                        example: PJ000000224
+                        type: string
+                      type: array
+                    revenueCategories:
+                      description: Return only journal entry lines associated with this revenueCategory
+                      items:
+                        description: A revenue category ID
+                        example: RC00001
+                        type: string
+                      type: array
+                    spendCategories:
+                      description: Return only journal entry lines associated with this spendCategory
+                      items:
+                        description: A spend category ID
+                        example: CSC00001
+                        type: string
+                      type: array
+                  type: object
+              type: object
+        description: Search criteria to use in narrowing journal entry line results
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                  attributes:
+                    url: https:://s3.aws.come/klajdfliojiowejmioqmwe
+                  id: 12345678-1234-987654321
+                  relationships:
+                    status:
+                      links:
+                        related: https://api.wisc.edu/finance/journalEntryLines/search/status/12345678-1234-987654321
+                  type: journalsSearch
+              schema:
+                properties:
+                  data:
+                    properties:
+                      attributes:
+                        properties:
+                          url:
+                            description: A link to the search results as a CSV file
+                            example: https:://s3.aws.come/klajdfliojiowejmioqmwe
+                            type: string
+                        type: object
+                      id:
+                        description: Query execution ID
+                        example: 12345678-1234-987654321
+                        type: string
+                      relationships:
+                        properties:
+                          status:
+                            properties:
+                              links:
+                                properties:
+                                  related:
+                                    description: A link where you can retrieve the current status of the job
+                                    example: https://api.wisc.edu/finance/journalEntryLines/search/status/12345678-1234-987654321
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
+                      type:
+                        description: Type of response. Always equal to 'journalsSearch'
+                        example: journalsSearch
+                        type: string
+                    type: object
+                type: object
+          description: A response with a link to the location where the completed search results will be available.
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Journals
+  /journalEntryLines/search/status/{id}:
+    get:
+      description: Retrieves the status of a previously requested search of journal entry line records.
+      parameters:
+      - description: A journal lines search ID passed in as a URL parameter.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: The unique identifier for a search of journal entry lines.
+          example: 12345678-1234-987654321
+          type: string
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                  attributes:
+                    details: null
+                    status: FINISHED
+                  id: 12345678-1234-987654321
+                  type: journalsSearchStatus
+              schema:
+                properties:
+                  data:
+                    properties:
+                      attributes:
+                        properties:
+                          details:
+                            description: Details of the current status, if available
+                            type:
+                            - string
+                            - 'null'
+                          status:
+                            description: Current status of the search job
+                            example: FINISHED
+                            type: string
+                        type: object
+                      id:
+                        description: Query execution ID
+                        example: 12345678-1234-987654321
+                        type: string
+                      type:
+                        description: Type of response. Always equal to 'journalsSearchStatus'
+                        example: journalsSearchStatus
+                        type: string
+                    type: object
+                type: object
+          description: Successful response
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Journals
+  /journals/search:
+    post:
+      description: Retrieves a set of journals according to the specified filters.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                data:
+                  properties:
+                    afterDate:
+                      description: Return only journals from after this date
+                      example: 2000-07-09
+                      type: string
+                    beforeDate:
+                      description: Return only journals from before this date
+                      example: 2000-07-09
+                      format: date
+                      type: string
+                    company:
+                      description: Return only journals from this campus.
+                      example: UWRVF
+                      type: string
+                    costCenter:
+                      description: Return only journals assigned to this cost center.
+                      example: CC0000123
+                      type: string
+                    functions:
+                      description: Return only journals associated with this function
+                      items:
+                        description: A function ID
+                        example: FN0100
+                        type: string
+                      type: array
+                    funds:
+                      description: Return only journals associated with this fund
+                      items:
+                        description: A fund ID
+                        example: FD0101
+                        type: string
+                      type: array
+                    gifts:
+                      description: Return only journals associated with this gift
+                      items:
+                        description: A gift ID
+                        example: GF000123
+                        type: string
+                      type: array
+                    grants:
+                      description: Return only journals associated with this grant
+                      items:
+                        description: A grant ID
+                        example: GR00000123
+                        type: string
+                      type: array
+                    programs:
+                      description: Return only journals associated with this program
+                      items:
+                        description: A program ID
+                        example: PG000033899
+                        type: string
+                      type: array
+                    projects:
+                      description: Return only journals associated with this project
+                      items:
+                        description: A project ID
+                        example: PJ000000224
+                        type: string
+                      type: array
+                    revenueCategories:
+                      description: Return only journals associated with this revenueCategory
+                      items:
+                        description: A revenue category ID
+                        example: RC00001
+                        type: string
+                      type: array
+                    spendCategories:
+                      description: Return only journals associated with this spendCategory
+                      items:
+                        description: A spend category ID
+                        example: CSC00001
+                        type: string
+                      type: array
+                  type: object
+              type: object
+        description: Search criteria to use in narrowing journal results
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                  attributes:
+                    url: https:://s3.aws.come/klajdfliojiowejmioqmwe
+                  id: 12345678-1234-987654321
+                  relationships:
+                    status:
+                      links:
+                        related: https://api.wisc.edu/finance/journals/search/status/12345678-1234-987654321
+                  type: journalsSearch
+              schema:
+                properties:
+                  data:
+                    properties:
+                      attributes:
+                        properties:
+                          url:
+                            description: A link to the search results as a CSV file
+                            example: https:://s3.aws.come/klajdfliojiowejmioqmwe
+                            type: string
+                        type: object
+                      id:
+                        description: Query execution ID
+                        example: 12345678-1234-987654321
+                        type: string
+                      relationships:
+                        properties:
+                          status:
+                            properties:
+                              links:
+                                properties:
+                                  related:
+                                    description: A link where you can retrieve the current status of the job
+                                    example: https://api.wisc.edu/finance/journals/search/status/12345678-1234-987654321
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
+                      type:
+                        description: Type of response. Always equal to 'journalsSearch'
+                        example: journalsSearch
+                        type: string
+                    type: object
+                type: object
+          description: A response with a link to the location where the completed search results will be available.
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Journals
+  /journals/search/status/{id}:
+    get:
+      description: Retrieves the status of a previously requested search of journal records.
+      parameters:
+      - description: A journal search ID passed in as a URL parameter.
+        in: path
+        name: id
+        required: true
+        schema:
+          description: The unique identifier for a search of journals.
+          example: 12345678-1234-987654321
+          type: string
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              example:
+                data:
+                  attributes:
+                    details: null
+                    status: FINISHED
+                  id: 12345678-1234-987654321
+                  type: journalsSearchStatus
+              schema:
+                properties:
+                  data:
+                    properties:
+                      attributes:
+                        properties:
+                          details:
+                            description: Details of the current status, if available
+                            type:
+                            - string
+                            - 'null'
+                          status:
+                            description: Current status of the search job
+                            example: FINISHED
+                            type: string
+                        type: object
+                      id:
+                        description: Query execution ID
+                        example: 12345678-1234-987654321
+                        type: string
+                      type:
+                        description: Type of response. Always equal to 'journalsSearchStatus'
+                        example: journalsSearchStatus
+                        type: string
+                    type: object
+                type: object
+          description: Successful response
+        '400':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-filter-parameters-not-filterable:
+                  description: 'Error raised when filtering on valid attributes that cannot be filtered on, such as attributes that are containers for nested objects.
+
+                    '
+                  value:
+                    errors:
+                    - detail: Attribute 'lines' cannot be filtered on for internalServiceDeliveries.
+                      status: 400
+                      title: Bad Request
+                invalid-filter-parameters-not-found:
+                  description: Error raised when filtering on non-existent attributes.
+                  value:
+                    errors:
+                    - detail: Attribute 'foo' does not exist on internalServiceProviders.
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-bad-value:
+                  description: 'Error raised when providing pagination parameters outside the allowed range or in an invalid datatype/format.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''size'' must be a positive integer between 1 and 1000 (got: '''').'
+                      status: 400
+                      title: Bad Request
+                invalid-pagination-parameters-not-found:
+                  description: Error raised when providing non-existent pagination parameters.
+                  value:
+                    errors:
+                    - detail: 'Invalid pagination parameter: ''num'' does not exist.'
+                      status: 400
+                      title: Bad Request
+                invalid-query-parameters:
+                  description: 'Error raised when using invalid query parameters, such as malformed filter parameters on valid attributes.
+
+                    '
+                  value:
+                    errors:
+                    - detail: 'Invalid parameter: ''filter[id''.'
+                      status: 400
+                      title: Bad Request
+                unsupported-parameters:
+                  description: Error raised when attempting to use query parameters that an endpoint does not support.
+                  value:
+                    errors:
+                    - detail: 'The following query parameters are not supported/recongized for this endpoint: include, page.'
+                      status: 400
+                      title: Bad Request
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: A bad request.
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Invalid or expired OAuth token.
+                  status: 401
+                  title: Unauthorized
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid or expired OAuth token.
+        '403':
+          content:
+            application/vnd.api+json:
+              examples:
+                invalid-company-access:
+                  description: Error raised when your application has misconfigured company access.
+                  value:
+                    errors:
+                    - detail: Your application has no allowed companies set. Contact the Finance API team (finance-apis@doit.wisc.edu) to resolve this.
+                      status: 403
+                      title: Forbidden
+                no-company-access:
+                  description: Error raised when attempting to query data belonging to companies you not have access to.
+                  value:
+                    errors:
+                    - detail: You don't have access to company 'XYZ'.
+                      status: 403
+                      title: Forbidden
+                no-permission:
+                  description: Error raised when your application does not have permission to use an endpoint.
+                  value:
+                    errors:
+                    - detail: You don't have access to this endpoint.
+                      status: 403
+                      title: Forbidden
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: You requested information for which you don't have the proper authorization.
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Requested record could not be found.
+                  status: 404
+                  title: Not Found
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Requested record could not be found.
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Expected media type 'application/vnd.api+json'.
+                  status: 415
+                  title: Unsupported Media Type
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Invalid media type in contentType header.
+        '429':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Quota exceeded.
+                  status: 429
+                  title: Too Many Requests
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Quota exceeded.
+        '503':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                - detail: Dependent service unavailable.
+                  status: 503
+                  title: Service Unavailable
+              schema:
+                properties:
+                  errors:
+                    items:
+                      description: An error
+                      properties:
+                        detail:
+                          type: string
+                        status:
+                          type: number
+                        title:
+                          type: string
+                    type: array
+                type: object
+          description: Finance API is unavailable.
+      tags:
+      - Journals
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://api.wisc.edu/oauth/token
+      type: oauth2

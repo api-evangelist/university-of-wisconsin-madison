@@ -1,0 +1,616 @@
+openapi: 3.2.0
+info:
+  title: Locations API
+  contact:
+    name: DoIT Enterprise Business Systems (EBS) Integrated Business Solutions (IBS) API Team
+    email: locations-api@doit.wisc.edu
+  description: "An API for accessing UW location data.\n\nAdditional information on the Locations API, including how we source our data,\nhow to request access, the structure of names and IDs, and more,\ncan be found on [our website](https://locationsapi.wisc.edu/).\n\n## CSV Output\n\nBy default, the API will return results in JSON (`application/json`).\nHowever, if you need a flat file, you can set the `Accept` header to `text/csv`.\n\nDue to limits on response sizes from our API gateway, unpaginated data like CSVs cannot be returned directly.\nInstead, we compile the results, serialize them into a CSV, upload it to AWS S3,\nand return a 302 redirect to it with a JSON response body\n([CSVRedirectResponse](/docs/locations-api/1/types/CSVRedirectResponse)).\nThis process is synchronous, so requesting CSVs will always take longer than JSON responses.\nIf an error occurs (4xx/5xx HTTP responses), the errors also will be JSON.\n\nThe URL we redirect to and provide in the response body is valid for 15 minutes.\nIf you do not start downloading it within 15 minutes, it will expire and you will need to re-send your request.\n\nSince CSVs are flat data structures, we flatten locations via duplication when necessary\nto avoid the need to return multiple files.\nThat is, if a location has two addresses, you will see two rows for that location,\nwith each row having identical data in the non-address fields.\n\nThe header row in the CSV reflects the attribute names in the API,\nwith nested attributes using the same names you would use to query them\n(that is, in much the same way you would filter on `addresses.postalCode`,\nthe CSV column for that attribute would be named `addresses.postalCode`).\nIf your application uses libraries that cannot handle headers with this format,\nyou will need to modify the header before processing the file.\n\nIf no results were returned for your query, the CSV will have two rows:\none for the header, and one with empty values.\n\n## Data Updates\n\nData in the Locations API is reloaded every morning beginning at 08:00 UTC (02:00 CST/03:00 CDT)\nand should be complete by 09:00 UTC (03:00 CST/04:00 CDT).\nDuring this time, the Locations API will remain available,\nthough some data will intermittently disappear while it is being reprocessed.\nAs such, we cannot guarantee the correctness of data during this window.\n\nAlthough all locations data gets re-ingested daily, this data is provided to the Locations API once per weekday,\nso data changes are not expected on weekends.\n\n## Filter Query Parameter\n\nThe filter query parameter can be used to filter the results of your query.\nIt uses the syntax `filter[attributeName(:specialOperator)]=value`.\n\nTo use it for basic, case-insensitive equality matches, no special operator is required.\nFor example, this query will find all locations that are `active` and have `addresses.line1` equal to\n\"100 Main St\" or \"200 Main St\":\n\n```\n/locations?filter[addresses.line1]=100 main st\n&filter[addresses.line1]=200 main st\n&filter[active]=true\n```\n\nThe following special operators are supported:\n\n- `greaterThan` - Finds a date or numerical value greater than the specified value.\n- `greaterThanOrEqual` - Finds a date or numerical value greater than or equal to the specified value.\n- `lessThan` - Finds a date or numerical value less than the specified value.\n- `lessThanOrEqual` - Finds a date or numerical value less than or equal to the specified value.\n- `between` - Given two values separated by commas, finds a date or numerical value between the two values,\n   matched inclusively.\n\nEach special operator can be used up to one time per supported attribute.\nAttempting to use a special operator on an attribute multiple times will result in 400 Bad Request being returned.\n\nThe order of evaluation is as follows:\n\n- All filters for the same attribute across all operators (whether basic equality or a special operator)\n  will be combined with a logical OR operator.\n- All groups of filters for different attributes will combined with a logical AND operator.\n  - For all filters on the same sub-resource (i.e. `addresses`),\n    those filters will be combined with a nested logical AND operator.\n\n<details><summary>Here are some examples (click to expand):</summary>\n\n- ```\n  filter[workdayCreatedOn:between]=2020-01-01,2021-01-01\n  &filter[workdayCreatedOn:lessThanOrEqual]=2018-01-01\n  ```\n  - Finds locations matching all of the following conditions:\n    - `(workdayCreatedOn <= 2018-01-01) OR (2020-01-01 <= workdayCreatedOn <= 2021-01-01)`\n- ```\n  filter[workdayCreatedOn:greaterThan]=2020-01-01\n  &filter[workdayCreatedOn:lessThanOrEqual]=2018-01-01\n  ```\n  - Finds locations matching all of the following conditions:\n    - `(workdayCreatedOn <= 2018-01-01) OR (workdayCreatedOn > 2020-01-01)`\n- ```\n  filter[workdayCreatedOn:lessThanOrEqual]=2020-01-01\n  &filter[workdayCreatedOn:greaterThan]=2018-01-01\n  ```\n  - Finds locations matching all of the following conditions:\n    - `(workdayCreatedOn <= 2020-01-01) OR (workdayCreatedOn > 2018-01-01)`\n  - Because this creates an infinite range, it simplifies to:\n    - `(start of the universe <= workdayCreatedOn <= end of the universe)`\n  - And is ultimately equivalent to:\n    - `workdayCreatedOn != null`\n- ```\n  filter[workdayCreatedOn:between]=2020-01-01,2021-01-01\n  &filter[workdayCreatedOn]=2018-01-01\n  ```\n  - Finds locations matching all of the following conditions:\n    - `(workdayCreatedOn == 2020-01-01) OR (2018-01-01 <= workdayCreatedOn <= 2021-01-01)`\n- ```\n  filter[workdayCreatedOn:between]=2020-01-01,2021-01-01\n  &filter[workdayCreatedOn]=2018-01-01&filter[type]=Room\n  ```\n  - Finds locations matching all of the following conditions:\n    - `lowercase(type) == lowercase(\"Room\")`\n    - `(workdayCreatedOn == 2018-01-01) OR (2020-01-01 <= workdayCreatedOn <= 2021-01-01)`\n- ```\n  filter[workdayCreatedOn:between]=2020-01-01,2021-01-01\n  &filter[workdayCreatedOn]=2018-01-01\n  &filter[type]=Room\n  &search=library\n  ```\n  - Finds locations matching all of the following conditions:\n    - Has at least 1 string field containing \"library\".\n    - `lowercase(type) == lowercase(\"Room\")`\n    - `(workdayCreatedOn == 2018-01-01) OR (2020-01-01 <= workdayCreatedOn <= 2021-01-01)`\n- ```\n  filter[workdayCreatedOn:between]=2020-01-01,2021-01-01\n  &filter[workdayCreatedOn]=2018-01-01\n  &filter[workdayLastModifiedOn:between]=2022-01-01,2023-01-01\n  &filter[workdayLastModifiedOn:greaterThan]=2024-01-01\n  &filter[addresses.line1]=100 Main St\n  &filter[addresses.line1]=200 main st\n  &filter[addresses.municipality]=madison\n  &filter[type]=Room\n  &search=library\n  ```\n  - Finds locations matching all of the following conditions:\n    - Has at least 1 string field containing \"library\".\n    - Has at least 1 address in the `addresses` resource matching all of the following conditions:\n      - `(lowercase(line1) == lowercase('100 Main St')) OR (lowercase(line1) == lowercase('200 main st'))`\n      - `(lowercase(municipality) == lowercase('madison'))`\n    - `lowercase(type) == lowercase(\"Room\")`\n    - `(workdayCreatedOn == 2018-01-01) OR (2020-01-01 <= workdayCreatedOn <= 2021-01-01)`\n    - `(2022-01-01 <= workdayLastModifiedOn <= 2023-01-01) OR (workdayLastModifiedOn > 2024-01-01)`\n</details>\n\n## Search Query Parameter\n\nThe `search` parameter can be used to search across every string field at once.\nFor example, this query will find any location with \"library\" in any of its fields:\n\n```\n/locations?search=library\n```\n\nIt also provides minor tolerance for formatting differences.\nFor example, this query would match a document with an `addresses.line1` of \"100 Main St.\" or \"100 Main St\":\n\n```\n/locations?search=100 main st\n```\n\nWhen multiple words (separated by spaces) are provided,\nthe `search` parameter searches for them individually, meaning these queries are equivalent:\n\n```\n/locations?search=100 main st\n/locations?search=100&search=main&search=st\n```\n\nIn this case, you could expect to see locations with an `addresses.line1` of \"100 Main St\" or \"100 Main St. Unit 3\" returned,\nbut you could also see \"200 Other St\" (due to both addresses containing \"st\"), \"100 Some Ave\" (both contain \"100\"),\nor a location with a `buildingNumber` of \"100\".\n\nWhile this may be undesirable for some use cases, it is helpful for abbreviations and typo tolerance.\nFor instance, if you need to find locations at \"300 Fort Havens Landing Court Extension\"\nand use the `search` parameter like so:\n\n```\n/locations?search=300 fort haven landin corut xtension\n```\n\nDespite the typos and potential mismatch with postal abbreviations, it would match locations at:\n\n- 300 Fort Havens Landing Court Extension\n- 300 Frt Hvn Lndg Ct Ext\n- 300 Ft Haven Lndng Ct Extn\n- 300 Fort Haven Landing Crt Extnsn\n\nIn addition, any of the above combinations of postal abbreviations would also return the desired location.\n\nIf you wish to only find locations that contain the entire value in at least 1 string field,\nyou can enclose them in quotation marks like so:\n\n```\n/locations?search=\"100 main st\"\n```\n\nIn this case, you could expect to see locations with an `addresses.line1` of \"100 Main St\", \"100 Main St. Unit 3\", etc.\nand a location with a `buildingName` of \"100 Main Street Temporary Offices\",\nbut not \"200 Other St\", \"100 Some Ave\", or a location with a `buildingNumber` of \"100\".\n\nThe order of evaluation is as follows:\n\n- All `search` parameters will be combined with a logical OR operator.\n- If used in conjunction with the `filter` query parameter,\n  the `search` parameters will be combined with the `filter` parameters with a logical AND operator.\n"
+  version: 1.0.0
+servers:
+- url: https://api.wisc.edu
+  description: Production server
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Locations
+paths:
+  /locations:
+    get:
+      summary: Get a list of locations
+      description: Retrieve a paginated list of UW locations with optional filters and search.
+      parameters:
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/PageNumber'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/GenericFilter'
+      - name: filter[active]
+        in: query
+        description: Get locations with exact matches in the `active` attribute
+        schema:
+          type: boolean
+      - name: filter[addresses.isPrimary]
+        in: query
+        description: Get locations with exact matches in the `addresses.isPrimary` attribute
+        schema:
+          type: boolean
+      - name: filter[addresses.country]
+        in: query
+        description: Get locations with exact matches in the `addresses.country` attribute
+        schema:
+          type: string
+      - name: filter[addresses.line1]
+        in: query
+        description: Get locations with exact matches in the `addresses.line1` attribute
+        schema:
+          type: string
+      - name: filter[addresses.municipality]
+        in: query
+        description: Get locations with exact matches in the `addresses.municipality` attribute
+        schema:
+          type: string
+      - name: filter[addresses.postalCode]
+        in: query
+        description: Get locations with exact matches in the `addresses.postalCode` attribute
+        schema:
+          type: string
+      - name: filter[addresses.region]
+        in: query
+        description: Get locations with exact matches in the `addresses.region` attribute
+        schema:
+          type: string
+      - name: filter[addresses.regionDescriptor]
+        in: query
+        description: Get locations with exact matches in the `addresses.regionDescriptor` attribute
+        schema:
+          type: string
+      - name: filter[addresses.regionSubdivision]
+        in: query
+        description: Get locations with exact matches in the `addresses.regionSubdivision` attribute
+        schema:
+          type: string
+      - name: filter[addresses.regionSubdivisionDescriptor]
+        in: query
+        description: Get locations with exact matches in the `addresses.regionSubdivisionDescriptor` attribute
+        schema:
+          type: string
+      - name: filter[addresses.usages]
+        in: query
+        description: Get locations with exact matches in the `addresses.usages` attribute
+        schema:
+          type: string
+      - name: filter[buildingName]
+        in: query
+        description: Get locations with exact matches in the `buildingName` attribute
+        schema:
+          type: string
+      - name: filter[buildingNumber]
+        in: query
+        description: Get locations with exact matches in the `buildingNumber` attribute
+        schema:
+          type: string
+      - name: filter[workdayCreatedOn]
+        in: query
+        description: Get locations with exact matches in the `workdayCreatedOn` attribute
+        schema:
+          type: string
+      - name: filter[workdayDateOfLastChange]
+        in: query
+        description: Get locations with exact matches in the `workdayDateOfLastChange` attribute
+        schema:
+          type: string
+      - name: filter[fullName]
+        in: query
+        description: Get locations with exact matches in the `fullName` attribute
+        schema:
+          type: string
+      - name: filter[hierarchyId]
+        in: query
+        description: Get locations with exact matches in the `hierarchyId` attribute
+        schema:
+          type: string
+      - name: filter[inactiveDate]
+        in: query
+        description: Get locations with exact matches in the `inactiveDate` attribute
+        schema:
+          type: string
+      - name: filter[referenceId]
+        in: query
+        description: Get locations with exact matches in the `referenceId` attribute
+        schema:
+          type: string
+      - name: filter[roomName]
+        in: query
+        description: Get locations with exact matches in the `roomName` attribute
+        schema:
+          type: string
+      - name: filter[roomNumber]
+        in: query
+        description: Get locations with exact matches in the `roomNumber` attribute
+        schema:
+          type: string
+      - name: filter[superiorBranchCampusId]
+        in: query
+        description: Get locations with exact matches in the `superiorBranchCampusId` attribute
+        schema:
+          type: string
+      - name: filter[superiorBuildingId]
+        in: query
+        description: Get locations with exact matches in the `superiorBuildingId` attribute
+        schema:
+          type: string
+      - name: filter[superiorCampusId]
+        in: query
+        description: Get locations with exact matches in the `superiorCampusId` attribute
+        schema:
+          type: string
+      - name: filter[superiorFloorId]
+        in: query
+        description: Get locations with exact matches in the `superiorFloorId` attribute schema
+        schema:
+          type: string
+      - name: filter[superiorLocationId]
+        in: query
+        description: Get locations with exact matches in the `superiorLocationId` attribute
+        schema:
+          type: string
+      - name: filter[type]
+        in: query
+        description: Get locations of a given `type`. See the [Types documentation](https://locationsapi.wisc.edu/documentation/endpoints/types/) for a list of values.
+        schema:
+          type: string
+      - name: search
+        in: query
+        description: Text search across string location fields. See the Search Query Parameter documentation in the [Overview](/docs/locations-api/1/overview) for more information.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Location'
+                  links:
+                    $ref: '#/components/schemas/Links'
+                  meta:
+                    $ref: '#/components/schemas/Meta'
+        '302':
+          $ref: '#/components/responses/CSVRedirect'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      tags:
+      - Locations
+  /locations/usages:
+    get:
+      summary: Get a list of location usages
+      description: Retrieve a list of all possible location usages.
+      parameters:
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/PageNumber'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/GenericFilter'
+      - name: filter[name]
+        in: query
+        description: Get usages with exact matches in the `name` attribute. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for a list of values.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Usage'
+                  links:
+                    $ref: '#/components/schemas/Links'
+                  meta:
+                    $ref: '#/components/schemas/Meta'
+        '302':
+          $ref: '#/components/responses/CSVRedirect'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      tags:
+      - Locations
+  /locations/types:
+    get:
+      summary: Get a list of location types
+      description: Retrieve a list of all possible location types.
+      parameters:
+      - $ref: '#/components/parameters/Accept'
+      - $ref: '#/components/parameters/PageNumber'
+      - $ref: '#/components/parameters/PageSize'
+      - $ref: '#/components/parameters/GenericFilter'
+      - name: filter[name]
+        in: query
+        description: Get types with exact matches in the `name` attribute. See the [Types documentation](https://locationsapi.wisc.edu/documentation/endpoints/types/) for a list of values.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Type'
+                  links:
+                    $ref: '#/components/schemas/Links'
+                  meta:
+                    $ref: '#/components/schemas/Meta'
+        '302':
+          $ref: '#/components/responses/CSVRedirect'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+      tags:
+      - Locations
+components:
+  parameters:
+    GenericFilter:
+      name: filter
+      in: query
+      description: Filter query results on the specified attribute. See the Filter Query Parameter documentation in the [Overview](/docs/locations-api/1/overview) for more information.
+      required: false
+      style: deepObject
+      explode: true
+      examples:
+        basicEquality:
+          description: Filtering a field using basic equality.
+          value: filter[addresses.line1]=100 Main St
+        specialOperatorBetween:
+          description: Filtering a field using the "between" operator.
+          value: filter[workdayCreatedOn:between]=2020-01-01,2022-01-01
+        specialOperatorGreaterThan:
+          description: Filtering a field using the "greaterThan" operator.
+          value: filter[workdayDateOfLastChange:greaterThan]=2020-01-01
+      schema:
+        type: object
+        additionalProperties: false
+        properties:
+          attributeAndOperator:
+            description: The name of the attribute and (if needed) the special operator being used on it. If a special operator is in use, it is separated from the attribute name with a `:`.
+            type: string
+            example: addresses.line1
+            pattern: ^(?<attributeName>[^:]+)(?::(?<specialOperator>.+))?$
+    PageNumber:
+      name: page[number]
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        default: 1
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of records per page
+      schema:
+        type: integer
+        default: 100
+    Accept:
+      name: Accept
+      in: header
+      description: 'The response format. For `application/json`, nothing changes, as the API defaults to JSON responses. For `text/csv`, the response will be serialized as a CSV and uploaded to AWS S3. See the CSV Output documentation in the [Overview](/docs/locations-api/1/overview) for more information.
+
+        '
+      required: false
+      schema:
+        type: string
+        default: application/json
+        enum:
+        - application/json
+        - text/csv
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Invalid parameter or request.
+              status:
+                type: integer
+                example: 400
+    TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Rate limit exceeded. Try again later.
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Authentication failed. Invalid or missing API key.
+    CSVRedirect:
+      description: 'Redirect to a URL to download a CSV response. Triggered by setting the `Accept` header to `text/csv`.
+
+        '
+      headers:
+        Location:
+          description: The URL to download a CSV with the query results.
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CSVRedirectResponse'
+  schemas:
+    Address:
+      type: object
+      properties:
+        isPrimary:
+          description: Whether the address is the primary address of the location. If a location has multiple addresses, this should only be true for one of them.
+          type: boolean
+          example: true
+        country:
+          type: string
+          example: USA
+        line1:
+          description: Line 1 of the address.
+          type: string
+          example: 879 Faux Circle
+        municipality:
+          type: string
+          example: Stateville
+        postalCode:
+          type: string
+          example: 54401-5362
+        region:
+          description: The region within the country. This is usually the state's postal abbreviation.
+          type: string
+          example: WI
+        regionDescriptor:
+          description: The descriptive name of the region within the country. This is usually the state's unabbreviated name.
+          type: string
+          example: Wisconsin
+        regionSubdivision:
+          description: The subdivision within the region. This is usually a county name, but can be null if it splits multiple subdivisions (i.e. the boundaries extend into multiple counties).
+          type: string
+          example: Dane
+        regionSubdivisionDescriptor:
+          description: The type of the subdivision within the region. This is usually just "County", or null if it splits multiple subdivisions.
+          type: string
+          example: County
+        usages:
+          description: 'How the address is intended to be used. Note that usages are not guaranteed to be unique among a location''s addresses, e.g. a location could have multiple shipping and street addresses.
+
+            '
+          type: array
+          example:
+          - SHIPPING
+          - BUSINESS
+          items:
+            $ref: '#/components/schemas/Usage'
+    Type:
+      description: 'The type of a location. See the [Types documentation](https://locationsapi.wisc.edu/documentation/endpoints/types/) for more information.
+
+        '
+      type: object
+      properties:
+        name:
+          type: string
+          example: Building
+    Meta:
+      description: Information about the response's pagination.
+      type: object
+      properties:
+        totalCount:
+          description: The total number of items in the result set.
+          type: integer
+          example: 1000
+        page:
+          type: object
+          properties:
+            number:
+              description: The requested page number.
+              type: integer
+              example: 1
+            size:
+              description: The requested page size.
+              type: integer
+              example: 100
+    Location:
+      type: object
+      properties:
+        active:
+          type: boolean
+          example: true
+        addresses:
+          description: The addresses associated with the location.
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+        buildingName:
+          type:
+          - string
+          - 'null'
+          example: Blue Gym
+        buildingNumber:
+          type:
+          - string
+          - 'null'
+          example: '2345'
+        workdayCreatedOn:
+          type: string
+          format: date
+          example: 2025-05-26
+        workdayLastModifiedOn:
+          type: string
+          format: date
+          example: 2025-08-01
+        hierarchyId:
+          type: string
+          example: LH_UWTST
+        inactiveDate:
+          type:
+          - string
+          - 'null'
+          format: date
+          example: 2025-08-01
+        referenceId:
+          type: string
+          example: LCTST_2345_01_5555
+        fullName:
+          description: The name assigned to the location with IDs appended.
+          type: string
+          example: Blue Gym-2345-01-5555
+        roomName:
+          type:
+          - string
+          - 'null'
+          example: Wingra Training Room
+        roomNumber:
+          type:
+          - string
+          - 'null'
+          example: '5555'
+        superiorBranchCampusId:
+          type:
+          - string
+          - 'null'
+          example: LCTST_BRN
+        superiorBuildingId:
+          type:
+          - string
+          - 'null'
+          example: LCTST_2345
+        superiorCampusId:
+          type:
+          - string
+          - 'null'
+          example: LCTST
+        superiorFloorId:
+          type:
+          - string
+          - 'null'
+          example: '01'
+        superiorLocationId:
+          type:
+          - string
+          - 'null'
+          example: LCTST_2345_01
+        type:
+          description: 'The type of the location. See the [Types documentation](https://locationsapi.wisc.edu/documentation/endpoints/types/) for more information.
+
+            '
+          type: string
+          example: Room
+        usages:
+          description: 'How the space is intended to be used. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for more information.
+
+            '
+          type: array
+          example:
+          - WORK SPACE
+          - BUSINESS ASSET
+          items:
+            $ref: '#/components/schemas/Usage'
+    Links:
+      description: Pagination links.
+      type: object
+      properties:
+        nextPage:
+          description: The next page of data.
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://api.wic.edu/locations?page[number]=3&page[size]=100
+        prevPage:
+          description: The previous page of data.
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
+        firstPage:
+          description: The first page of data.
+          type: string
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
+        lastPage:
+          description: The last page of data.
+          type: string
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1892&page[size]=100
+    Usage:
+      description: 'How a space is intended to be used. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for more information.
+
+        '
+      type: object
+      properties:
+        name:
+          type: string
+          example: BUSINESS SITE
+    CSVRedirectResponse:
+      description: 'Information on the CSV response. Triggered by setting the `Accept` header to `text/csv`.
+
+        '
+      type: object
+      properties:
+        message:
+          description: Human-readable information about the response.
+          type: string
+          example: Your file is available from the following download link.
+        status:
+          description: The HTTP code of the response.
+          type: integer
+          example: 302
+        url:
+          description: 'The URL the CSV can be downloaded from. Note that this URL is only valid for 15 minutes, and attempting to access it after it expires will return an error.
+
+            '
+          type: string
+          format: uri
+          example: https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456
+      example:
+        message: Your file is available from the following download link.
+        status: 302
+        url: https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456
+  securitySchemes:
+    OAuth2ClientCredentials:
+      flows:
+        clientCredentials:
+          scopes: {}
+          tokenUrl: https://api.wisc.edu/oauth/token
+      type: oauth2

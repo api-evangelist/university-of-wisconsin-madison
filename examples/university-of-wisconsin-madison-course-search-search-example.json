@@ -1,0 +1,281 @@
+{
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "probed",
+    "x-operator": "institution",
+    "note": "Captured verbatim from a live unauthenticated request on 2026-08-19. Not a UW-Madison publication; response bodies only.",
+    "source": "https://public.enroll.wisc.edu/api/search/v1",
+    "http_status": 200
+  },
+  "request": "POST https://public.enroll.wisc.edu/api/search/v1  {\"selectedTerm\":\"1266\",\"queryString\":\"computer science\",\"filters\":[],\"page\":1,\"pageSize\":2,\"sortOrder\":\"SCORE\"}",
+  "response": {
+    "found": 226,
+    "hits": [
+      {
+        "termCode": "1266",
+        "courseId": "022577.45",
+        "subject": {
+          "termCode": "1266",
+          "subjectCode": "185",
+          "description": "ASIAN LANGUAGES AND CULTURES",
+          "shortDescription": "ASIAN",
+          "formalDescription": "ASIAN LANGUAGES AND CULTURES",
+          "undergraduateCatalogURI": "http://guide.wisc.edu/undergraduate/letters-science/asian-languages-cultures/",
+          "graduateCatalogURI": "http://guide.wisc.edu/graduate/asian-languages-cultures/",
+          "departmentURI": "http://alc.wisc.edu/",
+          "schoolCollege": {
+            "academicOrgCode": "L",
+            "academicGroupCode": "L&S",
+            "shortDescription": "Letters and Science",
+            "formalDescription": "Letters and Science, College of",
+            "schoolCollegeURI": "http://www.ls.wisc.edu/"
+          },
+          "footnotes": [
+            "For more information about courses, majors, and certificates offered by the Department of Asian Languages and Cultures, see alc.wisc.edu\n\nFor concerns that cannot be answered by the course instructor, please contact the department's Student Services Coordinator: Rachel Weiss, rweiss@wisc.edu."
+          ],
+          "departmentOwnerAcademicOrgCode": "L0800"
+        },
+        "catalogNumber": "301",
+        "approvedForTopics": true,
+        "topics": [
+          {
+            "shortDescription": "History of Asian Games",
+            "longDescription": "History of Asian Games",
+            "id": 41,
+            "topicLastTaught": " "
+          }
+        ],
+        "minimumCredits": 3,
+        "maximumCredits": 3,
+        "creditRange": "3",
+        "firstTaught": null,
+        "lastTaught": " ",
+        "typicallyOffered": "Fall, Spring",
+        "coreGeneralEducation": null,
+        "generalEd": null,
+        "ethnicStudies": null,
+        "breadths": [
+          {
+            "code": "S",
+            "description": "Social Science"
+          }
+        ],
+        "lettersAndScienceCredits": {
+          "code": "C",
+          "description": "L&S Liberal Arts and Science"
+        },
+        "workplaceExperience": null,
+        "foreignLanguage": null,
+        "honors": null,
+        "levels": [
+          {
+            "code": "I",
+            "description": "Intermediate"
+          }
+        ],
+        "openToFirstYear": false,
+        "advisoryPrerequisites": null,
+        "enrollmentPrerequisites": "Sophomore standing",
+        "allCrossListedSubjects": [],
+        "title": "Buddhism & Science in Dialogue",
+        "description": "Interdisciplinary approaches to specific social sciences topics in Asian studies. Topics may include comparative analysis of a theme across the countries in Asia or focus on a theme within a single country.",
+        "catalogPrintFlag": true,
+        "academicGroupCode": null,
+        "currentlyTaught": true,
+        "gradingBasis": {
+          "code": "OPT",
+          "description": "Student Option"
+        },
+        "repeatable": "Y",
+        "gradCourseWork": null,
+        "sustainability": null,
+        "instructorProvidedContent": {
+          "classUniqueId": {
+            "termCode": "1266",
+            "classNumber": 88367
+          },
+          "instructorDescription": "This course examines the complexity and depth of the relationship between Buddhism and science, particularly the extent to which they can be considered compatible. This inquiry will be approached through the perspectives of Buddhist philosophy, Buddhist modernism, and the philosophy of science. The meaning of \"Buddhism and science  itself depends on how one defines each term and what it means to put them side-by-side with the conjunction \"and.  Nevertheless, for more than a century, scholars and practitioners have brought Buddhism and science together in the varied contexts of quantum mechanics, neuroscience, cognitive science, and psychology. In doing so, they have generally assumed some form of kinship or compatibility, despite the diverse traditions encompassed by Buddhism and the varied domains encompassed by science. Interpretations of this compatibility have spanned a wide spectrum: some argue that the core teachings of Buddhism, despite tensions with certain other doctrines, are not contradicted by modern scientific findings, while others claim that Buddhism can not only be corroborated by scientific discoveries but can also anticipate key future findings and reveal truths inaccessible to scientific methods alone.\nSeeking to foster a dynamic dialogue between Buddhism and science, the course will guide students in addressing several key questions: What do we mean by \"Buddhism  and \"science,  separately and together? How does Buddhism, often described as a science of the inner world, relate to the development of modern science? In the late modern period, Is Buddhism now obliged to be the most \"scientific religion ? Is Buddhism's perceived compatibility with science an essential and inevitable aspect of its mystique? And finally, why is it important for us to reflect on the tensions and convergences between Buddhism and science?\nTo guide students to think through these questions, the course will cover a range of topics including Buddhist epistemology and quantum mechanics, neuroscience and cognitive science in relation to mindfulness, technology and AI in Buddhist studies.",
+          "typicalTopicsAndOrSchedule": "W1 -- Setting the Stage, Challenges for Buddhism and Science, Buddhism and Science in Dialog\nW2 -- Buddhist Epistemology and Scientific Inquiry: What Counts as Good Evidence, What is Empirical Inference, Matter, atoms and quantum mechanics I&II \nW3 -- Buddhist Cosmology and Modern Cosmology: Time and space, Mind and Consciousness, Neuroscience of Meditation, Mindfulness\nW4 -- Technology and AI, Historical and Cultural Dimensions, Critical Reflections: Limits of Compatibility",
+          "format": "Online Lecture and Discussion",
+          "learningOutcome": null,
+          "keywords": [
+            "Buddhist Epistemology",
+            "Scientific Knowledge and Evidence",
+            "Consciousness and Mind Science",
+            "Quantum Physics and Cosmology",
+            "Buddhist Modernity and Critique"
+          ],
+          "labeledURIs": [],
+          "lastUpdated": 1767483350000
+        },
+        "courseRequirements": {
+          "003698=": [
+            88293,
+            88367
+          ]
+        },
+        "courseDesignation": "ASIAN 301",
+        "courseDesignationRaw": "ASIAN 301",
+        "fullCourseDesignation": "ASIAN LANGUAGES AND CULTURES 301",
+        "fullCourseDesignationRaw": "ASIAN LANGUAGES AND CULTURES 301",
+        "lastUpdated": 1777360415783,
+        "catalogSort": "00301",
+        "subjectAggregate": "ASIAN LANGUAGES AND CULTURES 185",
+        "titleSuggest": {
+          "input": [
+            "Buddhism & Science in Dialogue"
+          ],
+          "payload": {
+            "courseId": "022577.45"
+          }
+        },
+        "matched_queries": [
+          "IPC Keywords",
+          "Description",
+          "IPC Topics and Schedule",
+          "Title",
+          "IPC"
+        ]
+      },
+      {
+        "termCode": "1266",
+        "courseId": "026013",
+        "subject": {
+          "termCode": "1266",
+          "subjectCode": "266",
+          "description": "COMPUTER SCIENCES",
+          "shortDescription": "COMP SCI",
+          "formalDescription": "COMPUTER SCIENCES",
+          "undergraduateCatalogURI": "http://guide.wisc.edu/undergraduate/letters-science/computer-sciences/",
+          "graduateCatalogURI": "http://guide.wisc.edu/graduate/computer-sciences/",
+          "departmentURI": "http://www.cs.wisc.edu/",
+          "schoolCollege": {
+            "academicOrgCode": "L",
+            "academicGroupCode": "L&S",
+            "shortDescription": "Letters and Science",
+            "formalDescription": "Letters and Science, College of",
+            "schoolCollegeURI": "http://www.ls.wisc.edu/"
+          },
+          "footnotes": [
+            "Courses taught and managed by the Computer Sciences department often have enrollment restrictions that give students in UW-Madison Computer Sciences programs priority access during initial enrollment periods. Those restrictions are removed after the conclusion of sophomore enrollment.\n\nSome CS courses add seats gradually during enrollment. Once all seats have been released, a wait list will be added. Visit this Comp Sci webpage for specific CS course enrollment information:  https://www.cs.wisc.edu/courses-2/ \n\nEvening exams are likely for most of our undergraduate courses."
+          ],
+          "departmentOwnerAcademicOrgCode": "L0780"
+        },
+        "catalogNumber": "403",
+        "approvedForTopics": false,
+        "topics": [],
+        "minimumCredits": 1,
+        "maximumCredits": 1,
+        "creditRange": "1",
+        "firstTaught": "1216",
+        "lastTaught": "1266",
+        "typicallyOffered": "Not Applicable",
+        "coreGeneralEducation": null,
+        "generalEd": null,
+        "ethnicStudies": null,
+        "breadths": [],
+        "lettersAndScienceCredits": {
+          "code": "C",
+          "description": "L&S Liberal Arts and Science"
+        },
+        "workplaceExperience": null,
+        "foreignLanguage": null,
+        "honors": null,
+        "levels": [
+          {
+            "code": "I",
+            "description": "Intermediate"
+          }
+        ],
+        "openToFirstYear": false,
+        "advisoryPrerequisites": null,
+        "enrollmentPrerequisites": "Consent of instructor",
+        "allCrossListedSubjects": [
+          {
+            "termCode": "1266",
+            "subjectCode": "266",
+            "description": "COMPUTER SCIENCES",
+            "shortDescription": "COMP SCI",
+            "formalDescription": "COMPUTER SCIENCES",
+            "undergraduateCatalogURI": "http://guide.wisc.edu/undergraduate/letters-science/computer-sciences/",
+            "graduateCatalogURI": "http://guide.wisc.edu/graduate/computer-sciences/",
+            "departmentURI": "http://www.cs.wisc.edu/",
+            "schoolCollege": {
+              "academicOrgCode": "L",
+              "academicGroupCode": "L&S",
+              "shortDescription": "Letters and Science",
+              "formalDescription": "Letters and Science, College of",
+              "schoolCollegeURI": "http://www.ls.wisc.edu/"
+            },
+            "footnotes": [
+              "Courses taught and managed by the Computer Sciences department often have enrollment restrictions that give students in UW-Madison Computer Sciences programs priority access during initial enrollment periods. Those restrictions are removed after the conclusion of sophomore enrollment.\n\nSome CS courses add seats gradually during enrollment. Once all seats have been released, a wait list will be added. Visit this Comp Sci webpage for specific CS course enrollment information:  https://www.cs.wisc.edu/courses-2/ \n\nEvening exams are likely for most of our undergraduate courses."
+            ],
+            "departmentOwnerAcademicOrgCode": "L0780"
+          },
+          {
+            "termCode": "1266",
+            "subjectCode": "932",
+            "description": "STATISTICS",
+            "shortDescription": "STAT",
+            "formalDescription": "STATISTICS",
+            "undergraduateCatalogURI": "http://guide.wisc.edu/undergraduate/letters-science/statistics/",
+            "graduateCatalogURI": "http://guide.wisc.edu/graduate/statistics/",
+            "departmentURI": "http://www.stat.wisc.edu/",
+            "schoolCollege": {
+              "academicOrgCode": "L",
+              "academicGroupCode": "L&S",
+              "shortDescription": "Letters and Science",
+              "formalDescription": "Letters and Science, College of",
+              "schoolCollegeURI": "http://www.ls.wisc.edu/"
+            },
+            "footnotes": [
+              "Courses taught and managed by the Statistics department often have enrollment restrictions that give students in UW-Madison Statistics programs and select other programs priority access during initial enrollment periods. Those restrictions are visible in the class notes and will be removed at a set date. Some Stat courses add seats gradually during enrollment and throughout the summer.\n\nHave an enrollment question? \nVisit https://stat.wisc.edu/courses-and-enrollment/ or email courses@stat.wisc.edu."
+            ],
+            "departmentOwnerAcademicOrgCode": "L1195"
+          }
+        ],
+        "title": "Internship Course in Comp Sci and Data Science",
+        "description": "Enables students with outside internships to earn academic credit connected to their work experience related to the Computer Sciences or Data Science programs. ",
+        "catalogPrintFlag": true,
+        "academicGroupCode": null,
+        "currentlyTaught": true,
+        "gradingBasis": {
+          "code": "OPT",
+          "description": "Student Option"
+        },
+        "repeatable": "Y",
+        "gradCourseWork": null,
+        "sustainability": null,
+        "instructorProvidedContent": null,
+        "courseRequirements": {
+          "013696=": [
+            87373
+          ]
+        },
+        "courseDesignation": "COMP SCI 403",
+        "courseDesignationRaw": "COMP SCI 403",
+        "fullCourseDesignation": "COMPUTER SCIENCES 403",
+        "fullCourseDesignationRaw": "COMPUTER SCIENCES 403",
+        "lastUpdated": 1787125692942,
+        "catalogSort": "00403",
+        "subjectAggregate": "COMPUTER SCIENCES 266",
+        "titleSuggest": {
+          "input": [
+            "Internship Course in Comp Sci and Data Science"
+          ],
+          "payload": {
+            "courseId": "026013"
+          }
+        },
+        "matched_queries": [
+          "Description",
+          "Title",
+          "Subject Description",
+          "Subject Formal Description"
+        ]
+      }
+    ],
+    "message": null,
+    "success": true
+  }
+}

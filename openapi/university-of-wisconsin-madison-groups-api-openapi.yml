@@ -1,0 +1,1112 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Groups API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+  description: 'Operations tagged groups across 2 of this provider''s published API definitions: university-of-wisconsin-madison-manifest-api-openapi.yml, university-of-wisconsin-madison-mock-manifest-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.wisc.edu/manifest
+- url: https://mock.api.wisc.edu/manifest
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: groups
+paths:
+  /groups:
+    get:
+      description: Get manifest groups. This endpoint is currently only available in the Mock Manifest API.
+      summary: Get groups.
+      operationId: get_groups
+      tags:
+      - groups
+      responses:
+        '200':
+          description: A collection of groups
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of groups
+                    type: array
+                    items:
+                      description: Manifest group.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - links
+                      properties:
+                        type:
+                          type: string
+                          example: groups
+                        id:
+                          type: string
+                          description: ID of the Manifest group.
+                        attributes:
+                          type: object
+                          required:
+                          - path
+                          properties:
+                            path:
+                              description: Group name.
+                              type: string
+                              example: uw:org:my:group:name
+                            description:
+                              description: Group description.
+                              type: string
+                              example: A sample group
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-groups:
+                  value:
+                    data:
+                    - attributes:
+                        path: uw:org:my:group
+                        description: A sample group
+                      id: 167c51b3-20a1-4f15-8f59-c674eeeda5b2
+                      links:
+                        self: https://api.wisc.edu/manifest/groups/167c51b3-20a1-4f15-8f59-c674eeeda5b2
+                      type: groups
+                    links:
+                      self: https://api.wisc.edu/manifest/groups
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Bad request.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                too-many-requests-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                internal-server-error-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/manifest
+  /groups/{id}:
+    get:
+      description: Get a group by ID.
+      summary: Get a group.
+      operationId: get_group
+      tags:
+      - groups
+      parameters:
+      - name: id
+        description: ID of a group.
+        in: path
+        example: 1dd752e7-e5cb-4f5e-8c4b-e32b40308d33
+        required: true
+        schema:
+          type: string
+          description: ID of the Manifest group.
+      responses:
+        '200':
+          description: A single group
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: Manifest group.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - attributes
+                    - links
+                    properties:
+                      type:
+                        type: string
+                        example: groups
+                      id:
+                        type: string
+                        description: ID of the Manifest group.
+                      attributes:
+                        type: object
+                        required:
+                        - path
+                        properties:
+                          path:
+                            description: Group name.
+                            type: string
+                            example: uw:org:my:group:name
+                          description:
+                            description: Group description.
+                            type: string
+                            example: A sample group
+                      links:
+                        description: The link to access a resource itself
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-group:
+                  value:
+                    data:
+                      attributes:
+                        path: uw:org:my:group
+                        description: A sample group
+                      id: 167c51b3-20a1-4f15-8f59-c674eeeda5b2
+                      links:
+                        self: https://api.wisc.edu/manifest/groups/167c51b3-20a1-4f15-8f59-c674eeeda5b2
+                      type: groups
+                    links:
+                      self: https://api.wisc.edu/manifest/groups/167c51b3-20a1-4f15-8f59-c674eeeda5b2
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Bad request.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint.
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                too-many-requests-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                internal-server-error-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/manifest
+  /groups/{id}/members:
+    get:
+      description: Get members of a group. Supports pagination via page[number] and page[size] query parameters.
+      summary: Get group members.
+      operationId: get_group_members
+      tags:
+      - groups
+      parameters:
+      - name: id
+        description: ID of a group.
+        in: path
+        example: 1dd752e7-e5cb-4f5e-8c4b-e32b40308d33
+        required: true
+        schema:
+          type: string
+          description: ID of the Manifest group.
+      - name: page[number]
+        description: The page number to retrieve. Defaults to 1.
+        in: query
+        required: false
+        example: 1
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+      - name: page[size]
+        description: The number of results per page. Defaults to the maximum page size. Must not exceed the configured maximum (default 100).
+        in: query
+        required: false
+        example: 10
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 100
+      responses:
+        '200':
+          description: A paginated collection of group members
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of members
+                    type: array
+                    items:
+                      description: Manifest group member.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - links
+                      properties:
+                        type:
+                          type: string
+                          example: members
+                        id:
+                          type: string
+                          description: Manifest ID for the person/member.
+                        attributes:
+                          type: object
+                          required:
+                          - name
+                          properties:
+                            name:
+                              description: Name of the group member.
+                              type: string
+                              example: John Doe
+                            netId:
+                              description: Net ID of the group member.
+                              type: string
+                              example: jdoe
+                            emailAddress:
+                              description: Email address of the group member.
+                              type: string
+                              example: jdoe@wisc.edu
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
+                  links:
+                    description: Pagination links for a paginated collection.
+                    type: object
+                    required:
+                    - self
+                    properties:
+                      self:
+                        type: string
+                        description: Link to the current page.
+                        example: https://api.wisc.edu/manifest/groups/uw:org:my:group/members?page%5Bnumber%5D=2&page%5Bsize%5D=10
+                      next:
+                        type: string
+                        description: Link to the next page. Only present when there are more results.
+                        example: https://api.wisc.edu/manifest/groups/uw:org:my:group/members?page%5Bnumber%5D=3&page%5Bsize%5D=10
+                      prev:
+                        type: string
+                        description: Link to the previous page. Only present when the current page is greater than 1.
+                        example: https://api.wisc.edu/manifest/groups/uw:org:my:group/members?page%5Bnumber%5D=1&page%5Bsize%5D=10
+              examples:
+                example-group-members:
+                  value:
+                    data:
+                    - attributes:
+                        name: John Doe
+                        netId: jdoe
+                        emailAddress: jdoe@wisc.edu
+                      id: 26b8827a-f050-4558-baea-0fffa88fcde0
+                      links:
+                        self: https://api.wisc.edu/manifest/members/26b8827a-f050-4558-baea-0fffa88fcde0
+                      type: members
+                    links:
+                      self: https://api.wisc.edu/manifest/groups/uw:org:my:group/members?page%5Bnumber%5D=1&page%5Bsize%5D=10
+                      next: https://api.wisc.edu/manifest/groups/uw:org:my:group/members?page%5Bnumber%5D=2&page%5Bsize%5D=10
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Bad request.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                too-many-requests-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                internal-server-error-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/manifest
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-manifest-api-openapi.yml
+- university-of-wisconsin-madison-mock-manifest-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

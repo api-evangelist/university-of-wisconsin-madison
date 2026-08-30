@@ -1,0 +1,130 @@
+{
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "probed",
+    "x-operator": "institution",
+    "source": "https://public.enroll.wisc.edu/api/search/v1/aggregate",
+    "http_status": 200,
+    "note": "Captured verbatim from a live unauthenticated GET on 2026-08-19 (200, 127,065 bytes). Every collection recursively truncated to its first 3 members to keep the artifact readable; full member counts preserved under full_response_counts."
+  },
+  "request": "GET https://public.enroll.wisc.edu/api/search/v1/aggregate",
+  "response_truncated": {
+    "terms": [
+      {
+        "academicYear": "2025-26",
+        "beginDate": 1778475600000,
+        "endDate": 1787547599999
+      },
+      {
+        "academicYear": "2026-27",
+        "beginDate": 1787547600000,
+        "endDate": 1797832799999
+      }
+    ],
+    "subjects": {
+      "0000": [
+        {
+          "formalDescription": "MICROBIOLOGY",
+          "subjectCode": "192",
+          "termCode": "0000"
+        },
+        {
+          "formalDescription": "COMMUNICATION SCIENCES AND DISORDERS",
+          "subjectCode": "252",
+          "termCode": "0000"
+        },
+        {
+          "formalDescription": "ASTRONOMY",
+          "subjectCode": "188",
+          "termCode": "0000"
+        }
+      ],
+      "1266": [
+        {
+          "formalDescription": "FARM & INDUSTRY SHORT COURSE",
+          "subjectCode": "375",
+          "termCode": "1266"
+        },
+        {
+          "formalDescription": "AGRONOMY",
+          "subjectCode": "132",
+          "termCode": "1266"
+        },
+        {
+          "formalDescription": "HORTICULTURE",
+          "subjectCode": "476",
+          "termCode": "1266"
+        }
+      ],
+      "1272": [
+        {
+          "formalDescription": "AGRONOMY",
+          "subjectCode": "132",
+          "termCode": "1272"
+        },
+        {
+          "formalDescription": "HORTICULTURE",
+          "subjectCode": "476",
+          "termCode": "1272"
+        },
+        {
+          "formalDescription": "FARM & INDUSTRY SHORT COURSE",
+          "subjectCode": "375",
+          "termCode": "1272"
+        }
+      ]
+    },
+    "sessions": [
+      {
+        "sessions": [
+          {
+            "addDate": 1775278799999,
+            "beginDate": 1774846800000,
+            "dropDate": 1781585999999
+          },
+          {
+            "addDate": 1778734799999,
+            "beginDate": 1778475600000,
+            "dropDate": 1778907599999
+          },
+          {
+            "addDate": 1778734799999,
+            "beginDate": 1778475600000,
+            "dropDate": 1779339599999
+          }
+        ],
+        "termCode": "1266"
+      },
+      {
+        "sessions": [
+          {
+            "addDate": 1789189199999,
+            "beginDate": 1788325200000,
+            "dropDate": 1795499999999
+          },
+          {
+            "addDate": 1783400399999,
+            "beginDate": 1783314000000,
+            "dropDate": 1783573199999
+          },
+          {
+            "addDate": 1783400399999,
+            "beginDate": 1783314000000,
+            "dropDate": 1783573199999
+          }
+        ],
+        "termCode": "1272"
+      }
+    ]
+  },
+  "full_response_counts": {
+    "terms": 2,
+    "subjects": {
+      "0000": 190,
+      "1266": 190,
+      "1272": 190
+    },
+    "sessions": 2,
+    "specialGroups": 2
+  }
+}

@@ -1,0 +1,30 @@
+generated: '2026-08-19'
+method: derived
+source: openapi/ (12 contracts)
+x-operator: institution
+summary:
+  scopes_declared: 0
+  detail: >-
+    UW-Madison declares ZERO OAuth scopes. Every one of the 10 contracts carrying
+    OAuth2ClientCredentials declares `scopes: {}` — an empty scope object — and no operation
+    attaches a scope requirement. This is a real, measurable gap, not missing data on our side:
+    authorization is decided outside the contract, by which Apigee API products a client
+    application has been manually approved for. The contracts therefore cannot tell a consumer
+    or an agent what a token will actually permit.
+  consequence: >-
+    Least-privilege is not expressible. A token is scoped by product grant, and the product
+    grant is not machine-readable from anything UW-Madison publishes.
+scopes: []
+authorization_model:
+  mechanism: apigee-api-product
+  products_observed:
+  - name: api-team-manifest-api
+    display: Manifest API
+    approval: manual
+  - name: eces-api-enterprise-billing
+    display: Enterprise Billing API
+    approval: manual
+  detail: >-
+    Read from the developer portal's own catalog endpoint
+    (/portals/api/sites/{siteId}/liveportal/apis). Every listed API product uses
+    approvalType "manual".

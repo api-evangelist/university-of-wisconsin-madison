@@ -1,0 +1,1374 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Organization Structures API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+    url: https://go.wisc.edu/k701y6
+  description: 'Operations tagged organizationStructures across 2 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://mock.api.wisc.edu
+- url: https://api.wisc.edu
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: organizationStructures
+paths:
+  /people/{id}/organizationStructures:
+    get:
+      description: 'Get the UW Organization Structures for a person. Refer to this page for more information on UW Organization Structure: [https://secure.atp.wisconsin.edu/uw-organization-structure](https://secure.atp.wisconsin.edu/uw-organization-structure)'
+      summary: Get Organization Structures.
+      operationId: get_person_organization_structures
+      tags:
+      - organizationStructures
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+      - name: fields
+        in: query
+        description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              example: people
+      - name: advancedFilter
+        in: query
+        description: Filter results of query using the [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            attribute:
+              type: string
+              example: and(equals(firstName, "John"), equals(lastName, "Doe"))
+      - name: filter[institutionId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `institutionId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[institutionName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `institutionName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[executiveOfficeId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `executiveOfficeId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[executiveOfficeName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `executiveOfficeName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[subExecutiveOfficeId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `subExecutiveOfficeId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[subExecutiveOfficeName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `subExecutiveOfficeName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[collegeDivisionId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `collegeDivisionId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[collegeDivisionName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `collegeDivisionName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[subDivisionId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `subDivisionId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[subDivisionName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `subDivisionName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[departmentId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `departmentId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[departmentName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `departmentName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[subDepartmentId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `subDepartmentId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[subDepartmentName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `subDepartmentName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[supervisoryOrganizationId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `supervisoryOrganizationId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[supervisoryOrganizationName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `supervisoryOrganizationName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[costCenterId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `costCenterId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[costCenterName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `organizationStructures` resources by `costCenterName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: A collection of organizationStructures for a Person.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of organization structures
+                    type: array
+                    items:
+                      description: Details about an Organization Structure associated with a person or job.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          example: organizationStructures
+                        id:
+                          type: string
+                          example: 96896977-87dc-46e3-ad2e-6dddaa99890e
+                        attributes:
+                          type: object
+                          required:
+                          - institutionId
+                          - institutionName
+                          - executiveOfficeId
+                          - executiveOfficeName
+                          - subExecutiveOfficeId
+                          - subExecutiveOfficeName
+                          - collegeDivisionId
+                          - collegeDivisionName
+                          - subDivisionId
+                          - subDivisionName
+                          - departmentId
+                          - departmentName
+                          - subDepartmentId
+                          - subDepartmentName
+                          - supervisoryOrganizationId
+                          - supervisoryOrganizationName
+                          - costCenterId
+                          - costCenterName
+                          properties:
+                            institutionId:
+                              description: The ID of the institution.
+                              type:
+                              - string
+                              - 'null'
+                              example: CCH000002
+                            institutionName:
+                              description: The 13 universities and the Universities of Wisconsin Administration (UWSA).
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | CCHL2 | University of Wisconsin Madison Cost Centers
+                            executiveOfficeId:
+                              description: The ID of the executive office.
+                              type:
+                              - string
+                              - 'null'
+                              example: CCH000018
+                            executiveOfficeName:
+                              description: Units reporting directly to the Chancellor or the top university leadership, such as offices led by a Vice Chancellor, Provost, or Senior Vice President.
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | CCHL3 | Provost and Vice Chancellor for Academic Affairs
+                            subExecutiveOfficeId:
+                              description: The ID of the sub-executive office.
+                              type:
+                              - string
+                              - 'null'
+                              example: CCH000029
+                            subExecutiveOfficeName:
+                              description: Optional level for units reporting to a Vice Chancellor or Provost, often used to distinguish large sub-units.
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | CCHL4 | Divisions and Units
+                            collegeDivisionId:
+                              description: The ID of the college or division.
+                              type:
+                              - string
+                              - 'null'
+                              example: CCH000054
+                            collegeDivisionName:
+                              description: Highest academic or operational units within a division.
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | CCHL5 | DoIT | Division of Information Technology
+                            subDivisionId:
+                              description: The ID of the sub-division.
+                              type:
+                              - string
+                              - 'null'
+                              example: CCH000141
+                            subDivisionName:
+                              description: Optional level for additional grouping.
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | CCHL6 | DoIT | Core Services
+                            departmentId:
+                              description: The ID of the department.
+                              type:
+                              - string
+                              - 'null'
+                              example: CCH000447
+                            departmentName:
+                              description: Academic or administrative departments.
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | CCHL7 | DoIT | Application Infrastructure Services
+                            subDepartmentId:
+                              description: The ID of the sub-department.
+                              type:
+                              - string
+                              - 'null'
+                              example: CCH001249
+                            subDepartmentName:
+                              description: Optional level for further grouping of units below the college or department level.
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | CCHL8 | DoIT | Application Infrastructure Services
+                            supervisoryOrganizationId:
+                              type:
+                              - string
+                              - 'null'
+                              example: SO00001234
+                              description: The ID of the supervisory organization.
+                            supervisoryOrganizationName:
+                              type:
+                              - string
+                              - 'null'
+                              example: AIS Enterprise Integration (EI)
+                              description: The name of the supervisory organization.
+                            costCenterId:
+                              type:
+                              - string
+                              - 'null'
+                              example: CC001234
+                              description: The ID of the cost center.
+                            costCenterName:
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | DOIT | Application Infrastructure Services
+                              description: The name of the cost center.
+                        relationships:
+                          type: object
+                          properties:
+                            person:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type:
+                                  - object
+                                  - 'null'
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                            jobs:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type:
+                                  - object
+                                  - 'null'
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-organization-structures:
+                  value:
+                    data:
+                    - id: 91314182-3a7a-4690-83b2-a0050437c512
+                      type: organizationStructures
+                      attributes:
+                        institutionId: CCH000002
+                        institutionName: UWMSN | CCHL2 | University of Wisconsin Madison Cost Centers
+                        executiveOfficeId: CCH000018
+                        executiveOfficeName: UWMSN | CCHL3 | Provost and Vice Chancellor for Academic Affairs
+                        subExecutiveOfficeId: CCH000029
+                        subExecutiveOfficeName: UWMSN | CCHL4 | Divisions and Units
+                        collegeDivisionId: CCH000054
+                        collegeDivisionName: UWMSN | CCHL5 | DoIT | Division of Information Technology
+                        subDivisionId: CCH000141
+                        subDivisionName: UWMSN | CCHL6 | DoIT | Core Services
+                        departmentId: CCH000447
+                        departmentName: UWMSN | CCHL7 | DoIT | Application Infrastructure Services
+                        subDepartmentId: CCH001249
+                        subDepartmentName: UWMSN | CCHL8 | DoIT | Application Infrastructure Services
+                        supervisoryOrganizationId: SO00001234
+                        supervisoryOrganizationName: AIS Enterprise Integration (EI)
+                        costCenterId: CC001234
+                        costCenterName: Application Infrastructure Services
+                      relationships:
+                        jobs:
+                          data: null
+                        person:
+                          data:
+                            id: e1ebbf76-7df7-4a43-947e-aa3741693db4
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e1ebbf76-7df7-4a43-947e-aa3741693db4
+                    links:
+                      self: https://api.wisc.edu/people/e1ebbf76-7df7-4a43-947e-aa3741693db4/organizationStructures
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+  /people/{id}/jobs/{jobId}/organizationStructure:
+    get:
+      description: 'Get the UW Organization Structure for a job. The organization structure of a job comes from the Cost Center of the default Supervisory Organization of the job. Refer to this page for more information on UW Organization Structure: [https://secure.atp.wisconsin.edu/uw-organization-structure](https://secure.atp.wisconsin.edu/uw-organization-structure)'
+      summary: Get Job Organization Structure.
+      operationId: get_person_job_organization_structures
+      tags:
+      - organizationStructures
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+      - name: jobId
+        description: ID of a job. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
+        in: path
+        example: 8dfe342c-5d6b-4e64-9291-31cb643ae39a
+        required: true
+        schema:
+          type: string
+          description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+      - name: fields
+        in: query
+        description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              example: people
+      - name: advancedFilter
+        in: query
+        description: Filter results of query using the [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            attribute:
+              type: string
+              example: and(equals(firstName, "John"), equals(lastName, "Doe"))
+      responses:
+        '200':
+          description: An organizationStructure for a Job.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: Details about an Organization Structure associated with a person or job.
+                    type: object
+                    required:
+                    - type
+                    - id
+                    - attributes
+                    - relationships
+                    properties:
+                      type:
+                        type: string
+                        example: organizationStructures
+                      id:
+                        type: string
+                        example: 96896977-87dc-46e3-ad2e-6dddaa99890e
+                      attributes:
+                        type: object
+                        required:
+                        - institutionId
+                        - institutionName
+                        - executiveOfficeId
+                        - executiveOfficeName
+                        - subExecutiveOfficeId
+                        - subExecutiveOfficeName
+                        - collegeDivisionId
+                        - collegeDivisionName
+                        - subDivisionId
+                        - subDivisionName
+                        - departmentId
+                        - departmentName
+                        - subDepartmentId
+                        - subDepartmentName
+                        - supervisoryOrganizationId
+                        - supervisoryOrganizationName
+                        - costCenterId
+                        - costCenterName
+                        properties:
+                          institutionId:
+                            description: The ID of the institution.
+                            type:
+                            - string
+                            - 'null'
+                            example: CCH000002
+                          institutionName:
+                            description: The 13 universities and the Universities of Wisconsin Administration (UWSA).
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | CCHL2 | University of Wisconsin Madison Cost Centers
+                          executiveOfficeId:
+                            description: The ID of the executive office.
+                            type:
+                            - string
+                            - 'null'
+                            example: CCH000018
+                          executiveOfficeName:
+                            description: Units reporting directly to the Chancellor or the top university leadership, such as offices led by a Vice Chancellor, Provost, or Senior Vice President.
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | CCHL3 | Provost and Vice Chancellor for Academic Affairs
+                          subExecutiveOfficeId:
+                            description: The ID of the sub-executive office.
+                            type:
+                            - string
+                            - 'null'
+                            example: CCH000029
+                          subExecutiveOfficeName:
+                            description: Optional level for units reporting to a Vice Chancellor or Provost, often used to distinguish large sub-units.
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | CCHL4 | Divisions and Units
+                          collegeDivisionId:
+                            description: The ID of the college or division.
+                            type:
+                            - string
+                            - 'null'
+                            example: CCH000054
+                          collegeDivisionName:
+                            description: Highest academic or operational units within a division.
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | CCHL5 | DoIT | Division of Information Technology
+                          subDivisionId:
+                            description: The ID of the sub-division.
+                            type:
+                            - string
+                            - 'null'
+                            example: CCH000141
+                          subDivisionName:
+                            description: Optional level for additional grouping.
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | CCHL6 | DoIT | Core Services
+                          departmentId:
+                            description: The ID of the department.
+                            type:
+                            - string
+                            - 'null'
+                            example: CCH000447
+                          departmentName:
+                            description: Academic or administrative departments.
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | CCHL7 | DoIT | Application Infrastructure Services
+                          subDepartmentId:
+                            description: The ID of the sub-department.
+                            type:
+                            - string
+                            - 'null'
+                            example: CCH001249
+                          subDepartmentName:
+                            description: Optional level for further grouping of units below the college or department level.
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | CCHL8 | DoIT | Application Infrastructure Services
+                          supervisoryOrganizationId:
+                            type:
+                            - string
+                            - 'null'
+                            example: SO00001234
+                            description: The ID of the supervisory organization.
+                          supervisoryOrganizationName:
+                            type:
+                            - string
+                            - 'null'
+                            example: AIS Enterprise Integration (EI)
+                            description: The name of the supervisory organization.
+                          costCenterId:
+                            type:
+                            - string
+                            - 'null'
+                            example: CC001234
+                            description: The ID of the cost center.
+                          costCenterName:
+                            type:
+                            - string
+                            - 'null'
+                            example: UWMSN | DOIT | Application Infrastructure Services
+                            description: The name of the cost center.
+                      relationships:
+                        type: object
+                        properties:
+                          person:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type:
+                                - object
+                                - 'null'
+                                properties:
+                                  type:
+                                    type: string
+                                    example: sampleType
+                                  id:
+                                    type: string
+                                    example: sampleId
+                          jobs:
+                            description: A generic relationship object
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    example: https://api.wisc.edu/link/to/related/object
+                              data:
+                                type:
+                                - object
+                                - 'null'
+                                properties:
+                                  type:
+                                    type: string
+                                    example: sampleType
+                                  id:
+                                    type: string
+                                    example: sampleId
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-organization-structures:
+                  value:
+                    data:
+                      id: 91314182-3a7a-4690-83b2-a0050437c512
+                      type: organizationStructures
+                      attributes:
+                        institutionId: CCH000002
+                        institutionName: UWMSN | CCHL2 | University of Wisconsin Madison Cost Centers
+                        executiveOfficeId: CCH000018
+                        executiveOfficeName: UWMSN | CCHL3 | Provost and Vice Chancellor for Academic Affairs
+                        subExecutiveOfficeId: CCH000029
+                        subExecutiveOfficeName: UWMSN | CCHL4 | Divisions and Units
+                        collegeDivisionId: CCH000054
+                        collegeDivisionName: UWMSN | CCHL5 | DoIT | Division of Information Technology
+                        subDivisionId: CCH000141
+                        subDivisionName: UWMSN | CCHL6 | DoIT | Core Services
+                        departmentId: CCH000447
+                        departmentName: UWMSN | CCHL7 | DoIT | Application Infrastructure Services
+                        subDepartmentId: CCH001249
+                        subDepartmentName: UWMSN | CCHL8 | DoIT | Application Infrastructure Services
+                        supervisoryOrganizationId: SO00001234
+                        supervisoryOrganizationName: AIS Enterprise Integration (EI)
+                        costCenterId: CC001234
+                        costCenterName: Application Infrastructure Services
+                      relationships:
+                        jobs:
+                          data:
+                            id: 885cf67e-1dc6-45fe-ac66-36cd6fd298c7
+                            type: jobs
+                          links:
+                            related: https://api.wisc.edu/people/e1ebbf76-7df7-4a43-947e-aa3741693db4/jobs/45b40464-8462-4bef-8bc9-cbd651a7395b
+                        person:
+                          data: null
+                    links:
+                      self: https://api.wisc.edu/people/e1ebbf76-7df7-4a43-947e-aa3741693db4/jobs/45b40464-8462-4bef-8bc9-cbd651a7395b/organizationStructure
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-mock-person-api-openapi.yml
+- university-of-wisconsin-madison-person-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

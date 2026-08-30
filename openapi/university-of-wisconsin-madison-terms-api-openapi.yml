@@ -1,0 +1,70 @@
+openapi: 3.2.0
+info:
+  title: UW-Madison Public Course Search Terms API
+  version: '1'
+  description: 'The JSON API behind UW-Madison''s public course and section search at https://public.enroll.wisc.edu/search. It is operated by the University of Wisconsin-Madison Office of the Registrar / DoIT on the institution''s own enroll.wisc.edu host, requires no authentication, and is the institution''s only openly callable course-catalog surface.
+
+
+    This document is PROBED, not published. UW-Madison does not publish an OpenAPI for this API; every path, parameter and response field below was observed in a live request made on 2026-08-19 and is recorded only to the extent it was actually verified. Fields the probe did not exercise are deliberately absent rather than guessed.'
+  contact:
+    name: UW-Madison Office of the Registrar
+    url: https://registrar.wisc.edu/
+servers:
+- url: https://public.enroll.wisc.edu/api/search/v1
+  description: Public production course search (no authentication)
+tags:
+- name: Terms
+paths:
+  /terms:
+    get:
+      summary: List available terms
+      description: Verified live — returns the term codes the search accepts.
+      operationId: listTerms
+      responses:
+        '200':
+          description: Term list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Term'
+      tags:
+      - Terms
+components:
+  schemas:
+    Term:
+      type: object
+      properties:
+        termCode:
+          type: string
+          example: '1266'
+        shortDescription:
+          type: string
+          example: 2026 Summr
+        longDescription:
+          type: string
+          example: Summer 2026
+        beginDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        instructionBeginDate:
+          type: integer
+          format: int64
+        instructionEndDate:
+          type: integer
+          format: int64
+        academicYear:
+          type: string
+          example: 2025-26
+        pastTerm:
+          type: boolean
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

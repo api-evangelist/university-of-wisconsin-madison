@@ -1,0 +1,775 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Academic Units API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+  description: 'Operations tagged Academic Units across 2 of this provider''s published API definitions: university-of-wisconsin-madison-hr-api-openapi.yml, university-of-wisconsin-madison-mock-hr-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.wisc.edu/hr
+- url: https://mock.api.wisc.edu/hr
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: Academic Units
+paths:
+  /academicUnits:
+    get:
+      description: Get a list of academic units.
+      summary: Get a list of academic units.
+      operationId: get_academic_units
+      tags:
+      - Academic Units
+      parameters:
+      - name: page
+        in: query
+        description: 'Define options for pagination of responses. For example, `page[number]` parameter (example: `page[number]=4`). The `page[number]` determines the page to display. The size of the page is a constant of 100.'
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          properties:
+            number:
+              type: integer
+              example: 5
+              default: 1
+              description: The page number to display.
+      - name: include
+        in: query
+        description: '[include related resources](https://jsonapi.org/format/#fetching-includes). The resources to include need to be direct relationships. For example, `include=allSubordinateOrganizations`.'
+        schema:
+          type: string
+      - name: filter
+        in: query
+        description: Filter results of query using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [HR API Documentation](https://kb.wisc.edu/uw-apis/158637) for more information about the `filter` query param.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            attribute:
+              type: string
+              example: name
+      responses:
+        '200':
+          description: A collection of academic units.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                - meta
+                properties:
+                  data:
+                    description: A collection of academic units.
+                    type: array
+                    items:
+                      description: An academic unit.
+                      type: object
+                      properties:
+                        type:
+                          type: string
+                          example: academicUnits
+                        id:
+                          type: string
+                          description: The academic unit ID.
+                          example: AU000111
+                        attributes:
+                          type: object
+                          properties:
+                            name:
+                              type: string
+                              example: UWMSN | SoBS | School of Bucky Studies
+                              description: The academic unit name.
+                        relationships:
+                          type: object
+                          properties:
+                            supervisoryOrganization:
+                              description: The supervisory organization of this academic unit, if one exists. Around 10% of all academic units lack an associated supervisory organization.
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      description: Link to the supervisory organization.
+                                      example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                                data:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: supervisoryOrganizations
+                                    id:
+                                      type: string
+                                      description: ID of the supervisory organization.
+                                      example: SO0000123
+                        links:
+                          description: The link to the supervisory organization.
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                  relationships:
+                    description: Relationships to other resources.
+                    type: object
+                    properties:
+                      supervisoryOrganization:
+                        description: The supervisory organization of this academic unit, if one exists. Around 10% of all academic units lack an associated supervisory organization.
+                        type: object
+                        properties:
+                          links:
+                            type: object
+                            properties:
+                              related:
+                                type: string
+                                description: Link to the supervisory organization.
+                                example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                          data:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                example: supervisoryOrganizations
+                              id:
+                                type: string
+                                description: ID of the supervisory organization.
+                                example: SO0000123
+                  links:
+                    description: Self and pagination links.
+                    allOf:
+                    - description: The links associated with a paginated collection
+                      type: object
+                      properties:
+                        self:
+                          description: The current page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=3
+                        prev:
+                          description: The previous page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=2
+                        next:
+                          description: The next page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=4
+                        first:
+                          description: The first page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=1
+                        last:
+                          description: The last page of data
+                          type: string
+                          format: uri-reference
+                          example: https://api.wisc.edu/hr/supervisoryOrganizations?page[number]=6
+                  meta:
+                    type: object
+                    properties:
+                      paging:
+                        type: object
+                        properties:
+                          pageNumber:
+                            type: integer
+                            example: 5
+                            description: The page number to display
+                          pageSize:
+                            type: integer
+                            example: 10
+                            description: The number of items per page
+                          totalCount:
+                            type: integer
+                            example: 100
+                            description: The total number of items available for the collection
+                          totalPages:
+                            type: integer
+                            example: 10
+                            description: The total number of pages available for the collection
+                        example: 100
+                        description: The total number of items in the collection
+              examples:
+                academic-units:
+                  value:
+                    data:
+                    - id: AU000111
+                      type: academicUnits
+                      attributes:
+                        name: UWMSN | SoBS | School of Bucky Studies
+                      relationships:
+                        supervisoryOrganization:
+                          data:
+                            id: SO0000123
+                            type: supervisoryOrganizations
+                          links:
+                            related: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                      links:
+                        self: https://api.wisc.edu/hr/academicUnits/AU000111
+                    - id: AU000222
+                      type: academicUnits
+                      attributes:
+                        name: UWMSN | SoBS | Bucky Studies - General
+                      relationships:
+                        supervisoryOrganization:
+                          data:
+                            id: SO0000456
+                            type: supervisoryOrganizations
+                          links:
+                            related: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000456
+                      links:
+                        self: https://api.wisc.edu/hr/academicUnits/AU000222
+                    - id: AU000333
+                      type: academicUnits
+                      attributes:
+                        name: UWMSN | SoBS | Bucky Costuming
+                      relationships:
+                        supervisoryOrganization:
+                          data:
+                            id: SO0000789
+                            type: supervisoryOrganizations
+                          links:
+                            related: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000789
+                      links:
+                        self: https://api.wisc.edu/hr/academicUnits/AU000333
+                    - id: AU000444
+                      type: academicUnits
+                      attributes:
+                        name: UWMSN | SoBS | Badger Society and Community Studies
+                      relationships:
+                        supervisoryOrganization:
+                          data: null
+                      links:
+                        self: https://api.wisc.edu/hr/academicUnits/AU000444
+                    meta:
+                      paging:
+                        pageNumber: 5
+                        pageSize: 10
+                        totalCount: 100
+                        totalPages: 10
+                    links:
+                      self: https://api.wisc.edu/hr/academicUnits
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'jobs' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/hr
+  /academicUnits/{academicUnitId}:
+    get:
+      description: Get an academic unit.
+      summary: Get an academic unit.
+      operationId: get_academic_unit
+      tags:
+      - Academic Units
+      parameters:
+      - name: academicUnitId
+        description: Academic Unit ID.
+        in: path
+        example: AU000111
+        required: true
+        schema:
+          type: string
+      - name: include
+        in: query
+        description: '[include related resources](https://jsonapi.org/format/#fetching-includes). The resources to include need to be direct relationships. For example, `include=allSubordinateOrganizations`.'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: An academic unit.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: An academic unit.
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: academicUnits
+                      id:
+                        type: string
+                        description: The academic unit ID.
+                        example: AU000111
+                      attributes:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            example: UWMSN | SoBS | School of Bucky Studies
+                            description: The academic unit name.
+                      relationships:
+                        type: object
+                        properties:
+                          supervisoryOrganization:
+                            description: The supervisory organization of this academic unit, if one exists. Around 10% of all academic units lack an associated supervisory organization.
+                            type: object
+                            properties:
+                              links:
+                                type: object
+                                properties:
+                                  related:
+                                    type: string
+                                    description: Link to the supervisory organization.
+                                    example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                              data:
+                                type: object
+                                properties:
+                                  type:
+                                    type: string
+                                    example: supervisoryOrganizations
+                                  id:
+                                    type: string
+                                    description: ID of the supervisory organization.
+                                    example: SO0000123
+                      links:
+                        description: The link to the supervisory organization.
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                  links:
+                    description: The link to the supervisory organization.
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+              examples:
+                academic-unit:
+                  value:
+                    data:
+                      id: AU000111
+                      type: academicUnits
+                      attributes:
+                        name: UWMSN | SoBS | School of Bucky Studies
+                      relationships:
+                        supervisoryOrganization:
+                          data:
+                            id: SO0000123
+                            type: supervisoryOrganizations
+                          links:
+                            related: https://api.wisc.edu/hr/supervisoryOrganizations/SO0000123
+                      links:
+                        self: https://api.wisc.edu/hr/academicUnits/AU000111
+                    links:
+                      self: https://api.wisc.edu/hr/academicUnits/AU000111
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'jobs' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://api.wisc.edu/hr
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-hr-api-openapi.yml
+- university-of-wisconsin-madison-mock-hr-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

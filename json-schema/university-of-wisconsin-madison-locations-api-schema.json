@@ -1,0 +1,288 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/main/json-schema/university-of-wisconsin-madison-locations-api-schema.json",
+  "title": "Locations API data model",
+  "description": "Component schemas extracted verbatim from openapi/university-of-wisconsin-madison-locations-api-openapi.yml, a contract published by the University of Wisconsin-Madison. Refs are rewritten from #/$defs/ to #/$defs/; no schema was authored or altered here.",
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "derived",
+    "source": "openapi/university-of-wisconsin-madison-locations-api-openapi.yml",
+    "x-operator": "institution"
+  },
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "isPrimary": {
+          "description": "Whether the address is the primary address of the location. If a location has multiple addresses, this should only be true for one of them.",
+          "type": "boolean",
+          "example": true
+        },
+        "country": {
+          "type": "string",
+          "example": "USA"
+        },
+        "line1": {
+          "description": "Line 1 of the address.",
+          "type": "string",
+          "example": "879 Faux Circle"
+        },
+        "municipality": {
+          "type": "string",
+          "example": "Stateville"
+        },
+        "postalCode": {
+          "type": "string",
+          "example": "54401-5362"
+        },
+        "region": {
+          "description": "The region within the country. This is usually the state's postal abbreviation.",
+          "type": "string",
+          "example": "WI"
+        },
+        "regionDescriptor": {
+          "description": "The descriptive name of the region within the country. This is usually the state's unabbreviated name.",
+          "type": "string",
+          "example": "Wisconsin"
+        },
+        "regionSubdivision": {
+          "description": "The subdivision within the region. This is usually a county name, but can be null if it splits multiple subdivisions (i.e. the boundaries extend into multiple counties).",
+          "type": "string",
+          "example": "Dane"
+        },
+        "regionSubdivisionDescriptor": {
+          "description": "The type of the subdivision within the region. This is usually just \"County\", or null if it splits multiple subdivisions.",
+          "type": "string",
+          "example": "County"
+        },
+        "usages": {
+          "description": "How the address is intended to be used. Note that usages are not guaranteed to be unique among a location's addresses, e.g. a location could have multiple shipping and street addresses.\n",
+          "type": "array",
+          "example": [
+            "SHIPPING",
+            "BUSINESS"
+          ],
+          "items": {
+            "$ref": "#/$defs/Usage"
+          }
+        }
+      }
+    },
+    "CSVRedirectResponse": {
+      "description": "Information on the CSV response. Triggered by setting the `Accept` header to `text/csv`.\n",
+      "type": "object",
+      "properties": {
+        "message": {
+          "description": "Human-readable information about the response.",
+          "type": "string",
+          "example": "Your file is available from the following download link."
+        },
+        "status": {
+          "description": "The HTTP code of the response.",
+          "type": "integer",
+          "example": 302
+        },
+        "url": {
+          "description": "The URL the CSV can be downloaded from. Note that this URL is only valid for 15 minutes, and attempting to access it after it expires will return an error.\n",
+          "type": "string",
+          "format": "uri",
+          "example": "https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456"
+        }
+      },
+      "example": {
+        "message": "Your file is available from the following download link.",
+        "status": 302,
+        "url": "https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456"
+      }
+    },
+    "Links": {
+      "description": "Pagination links.",
+      "type": "object",
+      "properties": {
+        "nextPage": {
+          "description": "The next page of data.",
+          "nullable": true,
+          "type": "string",
+          "format": "uri",
+          "example": "https://api.wic.edu/locations?page[number]=3&page[size]=100"
+        },
+        "prevPage": {
+          "description": "The previous page of data.",
+          "nullable": true,
+          "type": "string",
+          "format": "uri",
+          "example": "https://api.wisc.edu/locations?page[number]=1&page[size]=100"
+        },
+        "firstPage": {
+          "description": "The first page of data.",
+          "nullable": false,
+          "type": "string",
+          "format": "uri",
+          "example": "https://api.wisc.edu/locations?page[number]=1&page[size]=100"
+        },
+        "lastPage": {
+          "description": "The last page of data.",
+          "nullable": false,
+          "type": "string",
+          "format": "uri",
+          "example": "https://api.wisc.edu/locations?page[number]=1892&page[size]=100"
+        }
+      }
+    },
+    "Location": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "boolean",
+          "example": true
+        },
+        "addresses": {
+          "description": "The addresses associated with the location.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Address"
+          }
+        },
+        "buildingName": {
+          "type": "string",
+          "example": "Blue Gym",
+          "nullable": true
+        },
+        "buildingNumber": {
+          "type": "string",
+          "example": "2345",
+          "nullable": true
+        },
+        "workdayCreatedOn": {
+          "type": "string",
+          "format": "date",
+          "example": "2025-05-26"
+        },
+        "workdayLastModifiedOn": {
+          "type": "string",
+          "format": "date",
+          "example": "2025-08-01"
+        },
+        "hierarchyId": {
+          "type": "string",
+          "example": "LH_UWTST"
+        },
+        "inactiveDate": {
+          "type": "string",
+          "format": "date",
+          "example": "2025-08-01",
+          "nullable": true
+        },
+        "referenceId": {
+          "type": "string",
+          "example": "LCTST_2345_01_5555"
+        },
+        "fullName": {
+          "description": "The name assigned to the location with IDs appended.",
+          "type": "string",
+          "example": "Blue Gym-2345-01-5555"
+        },
+        "roomName": {
+          "type": "string",
+          "example": "Wingra Training Room",
+          "nullable": true
+        },
+        "roomNumber": {
+          "type": "string",
+          "example": "5555",
+          "nullable": true
+        },
+        "superiorBranchCampusId": {
+          "type": "string",
+          "nullable": true,
+          "example": "LCTST_BRN"
+        },
+        "superiorBuildingId": {
+          "type": "string",
+          "example": "LCTST_2345",
+          "nullable": true
+        },
+        "superiorCampusId": {
+          "type": "string",
+          "example": "LCTST",
+          "nullable": true
+        },
+        "superiorFloorId": {
+          "type": "string",
+          "example": "01",
+          "nullable": true
+        },
+        "superiorLocationId": {
+          "type": "string",
+          "example": "LCTST_2345_01",
+          "nullable": true
+        },
+        "type": {
+          "description": "The type of the location. See the [Types documentation](https://locationsapi.wisc.edu/documentation/endpoints/types/) for more information.\n",
+          "type": "string",
+          "example": "Room"
+        },
+        "usages": {
+          "description": "How the space is intended to be used. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for more information.\n",
+          "type": "array",
+          "example": [
+            "WORK SPACE",
+            "BUSINESS ASSET"
+          ],
+          "items": {
+            "$ref": "#/$defs/Usage"
+          }
+        }
+      }
+    },
+    "Meta": {
+      "description": "Information about the response's pagination.",
+      "type": "object",
+      "properties": {
+        "totalCount": {
+          "description": "The total number of items in the result set.",
+          "nullable": false,
+          "type": "integer",
+          "example": 1000
+        },
+        "page": {
+          "type": "object",
+          "properties": {
+            "number": {
+              "description": "The requested page number.",
+              "nullable": false,
+              "type": "integer",
+              "example": 1
+            },
+            "size": {
+              "description": "The requested page size.",
+              "nullable": false,
+              "type": "integer",
+              "example": 100
+            }
+          }
+        }
+      }
+    },
+    "Usage": {
+      "description": "How a space is intended to be used. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for more information.\n",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "BUSINESS SITE"
+        }
+      }
+    },
+    "Type": {
+      "description": "The type of a location. See the [Types documentation](https://locationsapi.wisc.edu/documentation/endpoints/types/) for more information.\n",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Building"
+        }
+      }
+    }
+  }
+}

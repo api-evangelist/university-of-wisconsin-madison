@@ -1,0 +1,717 @@
+openapi: 3.2.0
+info:
+  title: University Of Wisconsin Madison Academic Appointments API
+  version: 1.0.0
+  contact:
+    name: DoIT Enterprise Integration API Team
+    email: api@doit.wisc.edu
+    url: https://go.wisc.edu/k701y6
+  description: 'Operations tagged academicAppointments across 2 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://mock.api.wisc.edu
+- url: https://api.wisc.edu
+security:
+- OAuth2ClientCredentials: []
+tags:
+- name: academicAppointments
+paths:
+  /people/{id}/academicAppointments:
+    get:
+      description: "<main>\n    <section>\n        <p>\n            Get academic appointments for a person.\n            Different appointment types have unique attributes mentioned below.\n        </p>\n        <p>\n            Tenure appointments will contain data for the following attributes:\n        </p>\n        <ul>\n            <li><code>tenureStatus</code></li>\n            <li><code>tenureHomeAcademicUnitId</code></li>\n            <li><code>tenureHomeAcademicUnitName</code></li>\n        </ul>\n    </section>\n</main>"
+      summary: Get academic appointments.
+      operationId: get_person_academic_appointments
+      tags:
+      - academicAppointments
+      parameters:
+      - name: id
+        description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
+        in: path
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
+        required: true
+        schema:
+          type: string
+          description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
+      - name: fields
+        in: query
+        description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            type:
+              type: string
+              example: people
+      - name: advancedFilter
+        in: query
+        description: Filter results of query using the [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            attribute:
+              type: string
+              example: and(equals(firstName, "John"), equals(lastName, "Doe"))
+      - name: filter[appointmentType]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `appointmentType`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[academicUnitId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `academicUnitId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[academicUnitName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `academicUnitName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[startDate]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `startDate`.
+        schema:
+          type: string
+          format: date
+          pattern: ^[1-9][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+      - name: filter[endDate]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `endDate`.
+        schema:
+          type: string
+          format: date
+          pattern: ^[1-9][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+      - name: filter[tenureStatus]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `tenureStatus`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[tenureHomeAcademicUnitId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `tenureHomeAcademicUnitId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[tenureHomeAcademicUnitName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `tenureHomeAcademicUnitName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[institution]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `academicAppointments` resources by `institution`.
+        schema:
+          type:
+          - string
+          - 'null'
+      responses:
+        '200':
+          description: A collection of academic appointments.
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                required:
+                - data
+                - links
+                properties:
+                  data:
+                    description: A collection of academic appointments
+                    type: array
+                    items:
+                      description: Details about an academic appointment associated with a person.
+                      type: object
+                      required:
+                      - type
+                      - id
+                      - attributes
+                      - relationships
+                      properties:
+                        type:
+                          type: string
+                          example: academicAppointments
+                        id:
+                          type: string
+                          description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
+                        attributes:
+                          type: object
+                          required:
+                          - appointmentType
+                          - academicUnitId
+                          - academicUnitName
+                          - startDate
+                          - endDate
+                          - tenureStatus
+                          - tenureHomeAcademicUnitId
+                          - tenureHomeAcademicUnitName
+                          - tenureFullTimeEquivalency
+                          properties:
+                            appointmentType:
+                              description: The type of academic appointment
+                              type: string
+                              enum:
+                              - Affiliation - Governance
+                              - Joint Department - Governance
+                              - Joint Executive - Governance
+                              - Professorship - Primary
+                              - Tenure - Joint
+                              - Tenure - Primary
+                              example: Tenure - Primary
+                            academicUnitId:
+                              description: The unique identifier of the academic unit for the academic appointment
+                              type:
+                              - string
+                              - 'null'
+                              example: AU000407
+                            academicUnitName:
+                              description: The name of the academic unit for the academic appointment
+                              type:
+                              - string
+                              - 'null'
+                              example: UWMSN | COE | Electrical and Computer Engineering
+                            startDate:
+                              description: The start date of this academic appointment.
+                              type: string
+                              format: date
+                              example: '2018-01-01'
+                            endDate:
+                              description: The end date of this academic appointment.
+                              type: string
+                              format: date
+                              example: '2018-01-01'
+                            tenureStatus:
+                              description: The status of a tenure appointment. Only available for tenure appointments.
+                              type:
+                              - string
+                              - 'null'
+                              enum:
+                              - null
+                              - Tenured
+                              - Tenure Track (probation)
+                              example: Tenured
+                            tenureHomeAcademicUnitId:
+                              description: The unique identifier of the tenure academic unit for the academic appointment.
+                              type:
+                              - string
+                              - 'null'
+                            tenureHomeAcademicUnitName:
+                              description: The name of the tenure academic unit for the academic appointment.
+                              type:
+                              - string
+                              - 'null'
+                            tenureFullTimeEquivalency:
+                              description: The full time equivalency of the tenure appointment, represented as a percentage. Only available for tenure appointments. See [FTE (Faculty Department Tenure) Glossary](https://search.data.wisc.edu/glossary/289538) for more information.
+                              type:
+                              - number
+                              - 'null'
+                              example: 0.5
+                            institution:
+                              description: The institution associated with the resource.
+                              type: string
+                              example: UW-Madison
+                              enum:
+                              - Shared
+                              - UW-Eau Claire
+                              - UW-Green Bay
+                              - UW-La Crosse
+                              - UW-Madison
+                              - UW-Milwaukee
+                              - UW Oshkosh
+                              - UW-Parkside
+                              - UW-Platteville
+                              - UW-River Falls
+                              - UW-Stevens Point
+                              - UW-Stout
+                              - UW-Superior
+                              - UW-Whitewater
+                              - UW-Extension
+                              - UW System
+                        relationships:
+                          type: object
+                          required:
+                          - person
+                          properties:
+                            person:
+                              description: A generic relationship object
+                              type: object
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/link/to/related/object
+                                data:
+                                  type:
+                                  - object
+                                  - 'null'
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: sampleType
+                                    id:
+                                      type: string
+                                      example: sampleId
+                  links:
+                    description: The link to access a resource itself
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: https://api.wisc.edu/link/to/self
+              examples:
+                example-academic-appointments:
+                  value:
+                    data:
+                    - attributes:
+                        appointmentType: Tenure - Primary
+                        academicUnitId: AU000407
+                        academicUnitName: UWMSN | COE | Electrical and Computer Engineering
+                        startDate: '2022-01-01'
+                        endDate: '2033-12-31'
+                        tenureStatus: Tenured
+                        tenureHomeAcademicUnitId: AU000407
+                        tenureHomeAcademicUnitName: UWMSN | COE | Electrical and Computer Engineering
+                        tenureFullTimeEquivalency: 0.5
+                        institution: UW-Madison
+                      id: 04f729fd-d16c-497e-98dd-3cffc898a7e3
+                      relationships:
+                        person:
+                          data:
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
+                      type: academicAppointments
+                    - attributes:
+                        appointmentType: Tenure - Primary
+                        academicUnitId: AU000344
+                        academicUnitName: UWSUP | Mathematics and Computer Science
+                        startDate: '2022-01-01'
+                        endDate: '2033-12-31'
+                        tenureStatus: Tenure Track (probation)
+                        tenureHomeAcademicUnitId: AU000344
+                        tenureHomeAcademicUnitName: UWSUP | Mathematics and Computer Science
+                        tenureFullTimeEquivalency: 0.5
+                        institution: UW-Madison
+                      id: 2c4d44c1-0e2f-478a-9dfd-9f4af5de1e61
+                      relationships:
+                        person:
+                          data:
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
+                      type: academicAppointments
+                    - attributes:
+                        appointmentType: Tenure - Joint
+                        academicUnitId: AU000149
+                        academicUnitName: UWMIL | L&S | Mathematical Sciences
+                        startDate: '2022-01-01'
+                        endDate: '2033-12-31'
+                        tenureStatus: Tenured
+                        tenureHomeAcademicUnitId: AU000149
+                        tenureHomeAcademicUnitName: UWMIL | L&S | Mathematical Sciences
+                        tenureFullTimeEquivalency: 0.5
+                        institution: UW-Madison
+                      id: 3aa1d3c4-ecb1-4aac-85f0-7ec100245ef0
+                      relationships:
+                        person:
+                          data:
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
+                      type: academicAppointments
+                    - attributes:
+                        appointmentType: Joint Department - Governance
+                        academicUnitId: AU000407
+                        academicUnitName: UWMSN | COE | Electrical and Computer Engineering
+                        startDate: '2022-01-01'
+                        endDate: '2033-12-31'
+                        tenureStatus: null
+                        tenureHomeAcademicUnitId: null
+                        tenureHomeAcademicUnitName: null
+                        tenureFullTimeEquivalency: 0.5
+                        institution: UW-Madison
+                      id: 407bd1c5-448c-45fc-89b0-a258266d2a90
+                      relationships:
+                        person:
+                          data:
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
+                      type: academicAppointments
+                    - attributes:
+                        appointmentType: Professorship - Primary
+                        academicUnitId: AU000407
+                        academicUnitName: UWMSN | COE | Electrical and Computer Engineering
+                        startDate: '2022-01-01'
+                        endDate: '2033-12-31'
+                        tenureStatus: null
+                        tenureHomeAcademicUnitId: null
+                        tenureHomeAcademicUnitName: null
+                        tenureFullTimeEquivalency: 0.5
+                        institution: UW-Madison
+                      id: 5761c57c-a8a4-49ec-ada4-0b57b9b7136c
+                      relationships:
+                        person:
+                          data:
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
+                      type: academicAppointments
+                    links:
+                      self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/academicAppointments
+        '400':
+          description: A bad request.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                unauthorized-response:
+                  value:
+                    errors:
+                    - status: 401
+                      title: Unauthorized
+                      detail: Invalid OAuth authentication - InvalidAccessToken
+        '403':
+          description: The API call is authenticated but the client isn't allowed to perform the requested operation. This can occur when trying to update a resource when granted read-only access.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                name-update-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Client is not allowed to create, update, or delete a person's name.
+                no-access-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
+        '404':
+          description: Unable to find the specified record
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 404
+                      title: Not Found
+                      detail: Requested resource not found.
+        '406':
+          description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-acceptable-example:
+                  value:
+                    errors:
+                    - status: 406
+                      title: Not Acceptable
+                      detail: Request's Accept header contained the JSON:API media type and all instances of that media type were modified with media type parameters.
+        '429':
+          description: The API quota has been exceeded.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 429
+                      title: Too Many Requests
+                      detail: The quota has been exceeded.
+        '500':
+          description: An unexpected error.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                not-found-example:
+                  value:
+                    errors:
+                    - status: 500
+                      title: Internal Server Error
+                      detail: Something went wrong in the server-side.
+    servers:
+    - url: https://mock.api.wisc.edu
+components:
+  securitySchemes:
+    OAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.wisc.edu/oauth/token
+          scopes: {}
+externalDocs:
+  description: Read more about JSON:API here
+  url: https://jsonapi.org/
+x-refined-from:
+- university-of-wisconsin-madison-mock-person-api-openapi.yml
+- university-of-wisconsin-madison-person-api-openapi.yml
+x-operator: institution
+x-provenance:
+  generated: '2026-08-19'
+  method: probed
+  source: https://public.enroll.wisc.edu/api/search/v1
+  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

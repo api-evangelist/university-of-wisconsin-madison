@@ -1,0 +1,127 @@
+generated: '2026-08-19'
+method: probed
+source: >-
+  openapi/ (12 contracts), https://login.wisc.edu/idp/shibboleth,
+  https://login.wisc.edu/.well-known/openid-configuration,
+  https://minds.wisc.edu/server/oai/request
+docs: https://git.doit.wisc.edu/interop/external-docs/api-publisher-documentation
+x-operator: institution
+note: >-
+  Conformance is scored against the Kin Score `education` regime standards[]. Every entry below
+  is either read out of a contract UW-Madison publishes or out of a live endpoint response —
+  never out of a prose claim. Standards in the regime that UW-Madison does NOT demonstrate are
+  recorded as conforms:false with the negative evidence, so the absence is a measurement rather
+  than a silence. REWARD-ONLY: nothing here was invented to fill a slot.
+standards:
+- id: oai-pmh
+  conforms: true
+  evidence: >-
+    MINDS@UW, UW-Madison's institutional repository, exposes a live OAI-PMH 2.0 endpoint at
+    https://minds.wisc.edu/server/oai/request. Confirmed with ?verb=Identify (200,
+    application/xml): repositoryName 'MINDS@UW', protocolVersion 2.0, adminEmail
+    dspace-help@library.wisc.edu, earliestDatestamp 1985-01-01, granularity
+    YYYY-MM-DDThh:mm:ssZ, deletedRecord transient. ?verb=ListMetadataFormats (200) returns 13
+    metadata prefixes: oai_dc, qdc, dim, xoai, mods, mets, didl, ore, rdf, marc, etdms, rioxx,
+    uketd_dc. The baseURL the endpoint reports for itself is on wisc.edu — the institution's own
+    registrable domain — and the admin contact is library.wisc.edu, so this is institution-
+    operated even though the underlying software is DSpace.
+- id: shibboleth
+  conforms: true
+  evidence: >-
+    UW-Madison runs its own Shibboleth Identity Provider. https://login.wisc.edu/idp/shibboleth
+    returns 200 application/xml — a SAML 2.0 EntityDescriptor with
+    entityID="https://login.wisc.edu/idp/shibboleth", an IDPSSODescriptor advertising
+    protocolSupportEnumeration urn:oasis:names:tc:SAML:2.0:protocol, a shibmd:Scope of
+    "wisc.edu", and signing/encryption KeyDescriptors. The /idp/ path layout and the shibmd
+    extension namespace are Shibboleth-specific.
+- id: saml
+  conforms: true
+  evidence: >-
+    The same metadata document is valid SAML 2.0 metadata
+    (urn:oasis:names:tc:SAML:2.0:metadata) describing an IdP with SSO endpoints. Independently
+    corroborated at the service layer: https://canvas.wisc.edu/ 302-redirects unauthenticated
+    users to https://login.wisc.edu/idp/profile/SAML2/Redirect/SSO, a live SAML 2.0 HTTP-Redirect
+    SSO binding in production use.
+- id: scim
+  conforms: false
+  evidence: >-
+    No SCIM surface found. The identity/provisioning contracts UW-Madison publishes — Person API
+    (47 operations) and Manifest API (5 operations, Grouper-backed groups) — use JSON:API
+    resource envelopes and UW-local schemas, not urn:ietf:params:scim:schemas:core:2.0. No
+    /scim/v2 path exists in any of the 12 contracts, and no ServiceProviderConfig,
+    ResourceTypes or Schemas endpoint was found. This is the closest near-miss in the profile:
+    the Person and Manifest APIs cover the same ground SCIM standardizes.
+- id: lti
+  conforms: false
+  evidence: >-
+    No LTI surface in any UW-Madison-operated contract. (A case-insensitive scan of all 12
+    specs matches only substrings — "multiple", "fullTimeEquivalent", "ultimately" — and no
+    LTI 1.3 / LTI Advantage endpoint, claim or launch URL.) LTI at UW-Madison lives inside the
+    Canvas tenant, where the contract is Instructure's, not the institution's.
+- id: oneroster
+  conforms: false
+  evidence: >-
+    No OneRoster endpoints or /ims/oneroster paths in any contract. Roster data is exposed
+    through the UW-local HR API and Manifest API instead.
+- id: ed-fi
+  conforms: false
+  evidence: No Ed-Fi ODS/API surface found; Ed-Fi is a K-12 standard and is not expected here.
+- id: caliper
+  conforms: false
+  evidence: No Caliper Analytics sensor or event endpoint found on any wisc.edu host.
+- id: qti
+  conforms: false
+  evidence: No QTI assessment interchange surface found; assessment lives inside the Canvas tenant.
+- id: orcid
+  conforms: false
+  evidence: >-
+    No ORCID iD field appears in any published contract. The Person API's identifier set is
+    UW-local. MINDS@UW's OAI-PMH ListMetadataFormats does not offer an ORCID-bearing prefix.
+- id: datacite
+  conforms: false
+  evidence: >-
+    MINDS@UW's OAI-PMH advertises 13 metadata prefixes and none of them is DataCite; no
+    DataCite DOI-minting or metadata surface was found on a UW-Madison host.
+- id: crossref
+  conforms: false
+  evidence: No Crossref deposit or query surface operated by UW-Madison was found.
+contract_standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: >-
+    All 11 published contracts are OpenAPI 3.0.x (3.0.0, 3.0.2, 3.0.4), served as YAML/JSON by
+    the UW-Madison Developer Portal itself at
+    /portals/api/sites/{siteId}/liveportal/apis/{apiId}/download_spec. 245 operations and 113
+    component schemas in total.
+- id: json-api
+  conforms: partial
+  evidence: >-
+    The Person, Mock Person, Mock Person Certificates, HR, Mock HR, Manifest and Mock Manifest
+    contracts (7 of 12) use JSON:API response envelopes — data/attributes/relationships with
+    jsonapi versioning — matching the UW-Madison API Standards. The Finance, Locations,
+    Enterprise Billing and OAuth contracts do not; they return plain JSON. Partial because the
+    house standard is applied to the Enterprise Integration team's APIs but not the EBS/IBS ones.
+- id: oauth2-client-credentials
+  conforms: true
+  evidence: >-
+    10 of 12 contracts declare securitySchemes.OAuth2ClientCredentials with
+    tokenUrl https://api.wisc.edu/oauth/token. The OAuth contract itself documents the token
+    endpoint and uses HTTP Basic to present the client credentials.
+- id: openid-connect
+  conforms: true
+  evidence: >-
+    https://login.wisc.edu/.well-known/openid-configuration returns 200 application/json — a
+    valid OIDC discovery document (issuer https://login.wisc.edu, authorization/token/userinfo/
+    introspection endpoints under /idp/profile/oidc/, jwks_uri, end_session_endpoint,
+    response_types code + id_token + hybrid, grant_types authorization_code + refresh_token,
+    RS/HS/ES signing algorithms). This is campus SSO, NOT the API gateway: the API gateway has
+    no discovery document (https://api.wisc.edu/.well-known/openid-configuration is 404) and
+    authenticates with OAuth 2.0 client credentials only.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    https://www.wisc.edu/.well-known/security.txt 404. developer.wisc.edu returns HTTP 200 for
+    the path but serves the 2,138-byte Angular shell — a soft-404, not a security.txt.
+- id: llms-txt
+  conforms: false
+  evidence: https://www.wisc.edu/llms.txt returns 404.

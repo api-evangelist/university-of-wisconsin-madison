@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/university-of-wisconsin-madison/main/json-schema/university-of-wisconsin-madison-course-search-api-schema.json",
+  "title": "UW-Madison Public Course Search API data model",
+  "description": "Component schemas extracted verbatim from openapi/university-of-wisconsin-madison-course-search-api-openapi.yml, a contract published by the University of Wisconsin-Madison. Refs are rewritten from #/$defs/ to #/$defs/; no schema was authored or altered here.",
+  "x-provenance": {
+    "generated": "2026-08-19",
+    "method": "derived",
+    "source": "openapi/university-of-wisconsin-madison-course-search-api-openapi.yml",
+    "x-operator": "institution"
+  },
+  "$defs": {
+    "CourseSearchRequest": {
+      "type": "object",
+      "required": [
+        "selectedTerm"
+      ],
+      "properties": {
+        "selectedTerm": {
+          "type": "string",
+          "description": "Term code from GET /terms.",
+          "example": "1266"
+        },
+        "queryString": {
+          "type": "string",
+          "example": "computer science"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "page": {
+          "type": "integer",
+          "example": 1
+        },
+        "pageSize": {
+          "type": "integer",
+          "example": 2
+        },
+        "sortOrder": {
+          "type": "string",
+          "example": "SCORE"
+        }
+      }
+    },
+    "CourseSearchResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "type": "string",
+          "nullable": true
+        },
+        "found": {
+          "type": "integer",
+          "description": "Total matching courses.",
+          "example": 226
+        },
+        "hits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CourseHit"
+          }
+        }
+      }
+    },
+    "CourseHit": {
+      "type": "object",
+      "description": "Field set observed in live responses. Types are inferred from observed values; only field names are directly verified.",
+      "properties": {
+        "termCode": {
+          "type": "string"
+        },
+        "courseId": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "object"
+        },
+        "catalogNumber": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "minimumCredits": {
+          "type": "number"
+        },
+        "maximumCredits": {
+          "type": "number"
+        },
+        "creditRange": {
+          "type": "string"
+        },
+        "firstTaught": {
+          "type": "string"
+        },
+        "lastTaught": {
+          "type": "string"
+        },
+        "typicallyOffered": {
+          "type": "string"
+        },
+        "currentlyTaught": {
+          "type": "boolean"
+        },
+        "gradingBasis": {
+          "type": "string"
+        },
+        "repeatable": {
+          "type": "string"
+        },
+        "honors": {
+          "type": "string"
+        },
+        "levels": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "breadths": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "generalEd": {
+          "type": "object",
+          "nullable": true
+        },
+        "coreGeneralEducation": {
+          "type": "object",
+          "nullable": true
+        },
+        "ethnicStudies": {
+          "type": "object",
+          "nullable": true
+        },
+        "foreignLanguage": {
+          "type": "object",
+          "nullable": true
+        },
+        "sustainability": {
+          "type": "object",
+          "nullable": true
+        },
+        "workplaceExperience": {
+          "type": "object",
+          "nullable": true
+        },
+        "lettersAndScienceCredits": {
+          "type": "object",
+          "nullable": true
+        },
+        "openToFirstYear": {
+          "type": "boolean"
+        },
+        "gradCourseWork": {
+          "type": "boolean"
+        },
+        "approvedForTopics": {
+          "type": "boolean"
+        },
+        "topics": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "advisoryPrerequisites": {
+          "type": "string",
+          "nullable": true
+        },
+        "enrollmentPrerequisites": {
+          "type": "string",
+          "nullable": true
+        },
+        "courseRequirements": {
+          "type": "object",
+          "nullable": true
+        },
+        "courseDesignation": {
+          "type": "string"
+        },
+        "courseDesignationRaw": {
+          "type": "string"
+        },
+        "fullCourseDesignation": {
+          "type": "string"
+        },
+        "fullCourseDesignationRaw": {
+          "type": "string"
+        },
+        "allCrossListedSubjects": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "academicGroupCode": {
+          "type": "string"
+        },
+        "catalogPrintFlag": {
+          "type": "boolean"
+        },
+        "instructorProvidedContent": {
+          "type": "string",
+          "nullable": true
+        },
+        "lastUpdated": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "catalogSort": {
+          "type": "string"
+        },
+        "subjectAggregate": {
+          "type": "string"
+        }
+      }
+    },
+    "Term": {
+      "type": "object",
+      "properties": {
+        "termCode": {
+          "type": "string",
+          "example": "1266"
+        },
+        "shortDescription": {
+          "type": "string",
+          "example": "2026 Summr"
+        },
+        "longDescription": {
+          "type": "string",
+          "example": "Summer 2026"
+        },
+        "beginDate": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "endDate": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "instructionBeginDate": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "instructionEndDate": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "academicYear": {
+          "type": "string",
+          "example": "2025-26"
+        },
+        "pastTerm": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Aggregate": {
+      "type": "object",
+      "properties": {
+        "terms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Term"
+          }
+        },
+        "subjects": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "sessions": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "specialGroups": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}
