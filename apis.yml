@@ -269,7 +269,8 @@ apis:
     The academicAppointments API from University of Wisconsin-Madison — 1 operation(s) for academicappointments.
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
-  tags:
+  tags: []
+  tags_raw:
   - academicAppointments
   properties:
   - type: OpenAPI
@@ -306,6 +307,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Addresses
+  tags_raw:
   - addresses
   properties:
   - type: OpenAPI
@@ -343,6 +346,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Affiliations
+  tags_raw:
   - affiliations
   properties:
   - type: OpenAPI
@@ -680,6 +685,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Certificates
+  tags_raw:
   - certificates
   properties:
   - type: OpenAPI
@@ -716,6 +723,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Degrees
+  tags_raw:
   - degrees
   properties:
   - type: OpenAPI
@@ -753,6 +762,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Email Addresses
+  tags_raw:
   - emailAddresses
   properties:
   - type: OpenAPI
@@ -789,6 +800,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Export
+  tags_raw:
   - exports
   properties:
   - type: OpenAPI
@@ -825,6 +838,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Group
+  tags_raw:
   - groups
   properties:
   - type: OpenAPI
@@ -862,6 +877,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Identifiers
+  tags_raw:
   - identifiers
   properties:
   - type: OpenAPI
@@ -898,6 +915,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Job
+  tags_raw:
   - jobs
   properties:
   - type: OpenAPI
@@ -970,6 +989,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Members
+  tags_raw:
   - members
   properties:
   - type: OpenAPI
@@ -1006,6 +1027,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Name
+  tags_raw:
   - names
   properties:
   - type: OpenAPI
@@ -1043,7 +1066,8 @@ apis:
     The organizationStructures API from University of Wisconsin-Madison — 2 operation(s) for organizationstructures.
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
-  tags:
+  tags: []
+  tags_raw:
   - organizationStructures
   properties:
   - type: OpenAPI
@@ -1079,7 +1103,8 @@ apis:
   description: The Other API from University of Wisconsin-Madison — 32 operation(s) for other.
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
-  tags:
+  tags: []
+  tags_raw:
   - Other
   properties:
   - type: OpenAPI
@@ -1116,6 +1141,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - People
+  tags_raw:
   - people
   properties:
   - type: OpenAPI
@@ -1153,6 +1180,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Phone Numbers
+  tags_raw:
   - phoneNumbers
   properties:
   - type: OpenAPI
@@ -1263,7 +1292,8 @@ apis:
     The socialSecurityNumbers API from University of Wisconsin-Madison — 1 operation(s) for socialsecuritynumbers.
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
-  tags:
+  tags: []
+  tags_raw:
   - socialSecurityNumbers
   properties:
   - type: OpenAPI
@@ -1490,6 +1520,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Webhook
+  tags_raw:
   - webhooks
   properties:
   - type: OpenAPI

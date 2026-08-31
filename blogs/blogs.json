@@ -2,11 +2,11 @@
   "repo": "university-of-wisconsin-madison",
   "feeds": [
     {
-      "source": "https://it.wisc.edu/news/",
+      "source": "https://it.wisc.edu/news/feed/",
       "feed_url": "https://it.wisc.edu/news/feed/",
       "title": "",
       "saved": 0,
-      "method": "discovered"
+      "method": "feed"
     },
     {
       "source": "https://kb.wisc.edu/",
@@ -17,5 +17,5 @@
     }
   ],
   "post_count": 0,
-  "fetched": "2026-08-22T20:20:02Z"
+  "fetched": "2026-08-30T22:33:40Z"
 }
