@@ -755,45 +755,6 @@ apis:
     url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
   - type: Examples
     url: examples/university-of-wisconsin-madison-course-search-search-example.json
-- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-emailaddresses-api
-  name: University of Wisconsin-Madison Email Addresses API
-  description: >-
-    The emailAddresses API from University of Wisconsin-Madison — 1 operation(s) for emailaddresses.
-  humanURL: https://developer.wisc.edu/person-api
-  baseURL: https://api.wisc.edu
-  tags:
-  - Email Addresses
-  tags_raw:
-  - emailAddresses
-  properties:
-  - type: OpenAPI
-    url: openapi/university-of-wisconsin-madison-emailaddresses-api-openapi.yml
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
-  - type: Signup
-    url: https://developer.wisc.edu/person-api/getting-access
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
-  - type: ChangeLog
-    url: https://developer.wisc.edu/hr-api/release-notes
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
-  - type: Authentication
-    url: authentication/university-of-wisconsin-madison-authentication.yml
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
-  - type: Examples
-    url: examples/university-of-wisconsin-madison-course-search-search-example.json
 - aid: university-of-wisconsin-madison:university-of-wisconsin-madison-exports-api
   name: University of Wisconsin-Madison Exports API
   description: The exports API from University of Wisconsin-Madison — 2 operation(s) for exports.
@@ -1147,45 +1108,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/university-of-wisconsin-madison-people-api-openapi.yml
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
-  - type: Signup
-    url: https://developer.wisc.edu/person-api/getting-access
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
-  - type: ChangeLog
-    url: https://developer.wisc.edu/hr-api/release-notes
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
-  - type: Authentication
-    url: authentication/university-of-wisconsin-madison-authentication.yml
-  - type: JSONSchema
-    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
-  - type: Examples
-    url: examples/university-of-wisconsin-madison-course-search-search-example.json
-- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-phonenumbers-api
-  name: University of Wisconsin-Madison Phone Numbers API
-  description: >-
-    The phoneNumbers API from University of Wisconsin-Madison — 1 operation(s) for phonenumbers.
-  humanURL: https://developer.wisc.edu/person-api
-  baseURL: https://api.wisc.edu
-  tags:
-  - Phone Numbers
-  tags_raw:
-  - phoneNumbers
-  properties:
-  - type: OpenAPI
-    url: openapi/university-of-wisconsin-madison-phonenumbers-api-openapi.yml
   - type: JSONSchema
     url: json-schema/university-of-wisconsin-madison-person-api-schema.json
   - type: Signup
@@ -1598,6 +1520,80 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/university-of-wisconsin-madison-worktags-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-email-addresses-api
+  name: University of Wisconsin-Madison Email Addresses API
+  description: >-
+    The Email Addresses API from University of Wisconsin-Madison — 1 operation(s) for email addresses.
+  humanURL: https://login.wisc.edu/
+  baseURL: https://api.wisc.edu
+  tags:
+  - Email Addresses
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-email-addresses-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-person-api-schema.json
+  - type: Signup
+    url: https://developer.wisc.edu/person-api/getting-access
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-person-api-certificates-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-hr-api-schema.json
+  - type: ChangeLog
+    url: https://developer.wisc.edu/hr-api/release-notes
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-hr-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-mock-manifest-api-schema.json
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-enterprise-billing-api-schema.json
+  - type: Authentication
+    url: authentication/university-of-wisconsin-madison-authentication.yml
+  - type: JSONSchema
+    url: json-schema/university-of-wisconsin-madison-course-search-api-schema.json
+  - type: Examples
+    url: examples/university-of-wisconsin-madison-course-search-search-example.json
+- aid: university-of-wisconsin-madison:university-of-wisconsin-madison-phone-numbers-api
+  name: University of Wisconsin-Madison Phone Numbers API
+  description: >-
+    The Phone Numbers API from University of Wisconsin-Madison — 1 operation(s) for phone numbers.
+  humanURL: https://login.wisc.edu/
+  baseURL: https://api.wisc.edu
+  tags:
+  - Phone Numbers
+  properties:
+  - type: OpenAPI
+    url: openapi/university-of-wisconsin-madison-phone-numbers-api-openapi.yml
   - type: JSONSchema
     url: json-schema/university-of-wisconsin-madison-person-api-schema.json
   - type: Signup
