@@ -130,6 +130,11 @@ apis:
     by the DoIT EBS/IBS API team (locations-api@doit.wisc.edu).
   baseURL: https://api.wisc.edu
   tags:
+  - Location
+  - Buildings
+  - Campus
+  - Reference Data
+  tags_raw:
   - Locations
   - Buildings
   - Campus
@@ -152,6 +157,12 @@ apis:
   humanURL: https://login.wisc.edu/
   baseURL: https://login.wisc.edu
   tags:
+  - Identity Federation
+  - SAML
+  - Shibboleth
+  - OpenID Connect
+  - SSO
+  tags_raw:
   - Identity Federation
   - SAML
   - Shibboleth
@@ -218,6 +229,12 @@ apis:
   humanURL: https://canvas.wisc.edu/
   baseURL: https://canvas.wisc.edu/api/v1
   tags:
+  - Learning Management
+  - Canvas
+  - Instructure
+  - Tenants
+  - LTI
+  tags_raw:
   - Learning Management
   - Canvas
   - Instructure
@@ -1366,6 +1383,8 @@ apis:
   humanURL: https://developer.wisc.edu/person-api
   baseURL: https://api.wisc.edu
   tags:
+  - Tokens
+  tags_raw:
   - Token
   properties:
   - type: OpenAPI
