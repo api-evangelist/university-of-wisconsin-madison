@@ -1,0 +1,97 @@
+slug: university-of-wisconsin-madison
+provider: University of Wisconsin-Madison
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Education
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 8
+edges:
+- tag: Journals
+  spec_file: university-of-wisconsin-madison-journals-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.85
+  evidence: POST /journalEntryLines/search, POST /journals/search on "An API for accessing and validating
+    UW financial data"
+  reason: Journals and journal entry lines are general ledger artefacts; the API exposes accounting journal
+    data, which is General Ledger Management.
+- tag: Salary Structures
+  spec_file: university-of-wisconsin-madison-salary-structures-api-openapi.yml
+  capability_id: BC-300.30
+  capability_id_l1: BC-300
+  capability_name: Compensation & Benefits Management
+  confidence: 0.85
+  evidence: GET /salaryStructures "Get a list of salary structures." from university-of-wisconsin-madison-hr-api-openapi.yml
+  reason: Salary structures published from the institution's HR API are pay structure data — Compensation
+    & Benefits Management within Human Capital Management.
+- tag: UW Madison Public Course Search API
+  spec_file: university-of-wisconsin-madison-uw-madison-public-course-search-api-api-openapi.yml
+  capability_id: BC-4700.40
+  capability_id_l1: BC-4700
+  capability_name: Programme Catalogue Management
+  confidence: 0.8
+  evidence: '"The JSON API behind UW-Madison''s public course and section search"; POST / searchCourses
+    "Search courses for a term"'
+  reason: The single operation searches the institution's published course/section catalogue for a term,
+    which is the consumer-facing surface of programme/course catalogue publication rather than enrolment
+    or teaching delivery.
+- tag: Other
+  spec_file: university-of-wisconsin-madison-other-api-openapi.yml
+  capability_id: BC-200
+  capability_id_l1: BC-200
+  capability_name: Financial Management
+  confidence: 0.75
+  evidence: GET /assets, GET /budgetLines, GET /customerInvoices, GET /expenseReports, GET /externalCustomers
+    on "An API for accessing and validating UW financial data"
+  reason: A catch-all finance data surface spanning assets, invoices, expense reports and budget lines
+    — clearly financial accounting data, but too heterogeneous to name a single L2 sub-capability.
+- tag: Standard Job Descriptions
+  spec_file: university-of-wisconsin-madison-standard-job-descriptions-api-openapi.yml
+  capability_id: BC-300
+  capability_id_l1: BC-300
+  capability_name: Human Capital Management
+  confidence: 0.75
+  evidence: GET /standardJobDescriptions "Get a list of standard job descriptions."; GET /standardJobDescriptions/{jobCode}/salaryStructures
+  reason: Job architecture reference data (job codes, standard descriptions, linked salary structures)
+    from the HR API — human capital management, but it straddles compensation design and HR operations
+    so no L2 is asserted.
+  recovered_from: sweep-20260829T005356Z-edges.json
+- tag: Research
+  spec_file: university-of-wisconsin-madison-research-api-openapi.yml
+  capability_id: BC-4780.20
+  capability_id_l1: BC-4780
+  capability_name: Research Grant Management
+  confidence: 0.7
+  evidence: GET /awards, GET /awardTasks, GET /billingSchedules within the UW Finance API
+  reason: Awards, award tasks and billing schedules in a university finance context are sponsored-research
+    grant/award administration (post-award financial management). Confidence moderated because the operations
+    carry no descriptions and the data is served through the finance system.
+- tag: Supervisory Organizations
+  spec_file: university-of-wisconsin-madison-supervisory-organizations-api-openapi.yml
+  capability_id: BC-300
+  capability_id_l1: BC-300
+  capability_name: Human Capital Management
+  confidence: 0.7
+  evidence: GET /supervisoryOrganizations "Get a list of supervisory organizations." from the HR API definitions
+  reason: Supervisory organisation hierarchy is core HR organisational structure data; L1 only as it could
+    sit under HR operations or workforce planning.
+  recovered_from: sweep-20260829T005356Z-edges.json
+- tag: jobs
+  spec_file: university-of-wisconsin-madison-jobs-api-openapi.yml
+  capability_id: BC-300.70
+  capability_id_l1: BC-300
+  capability_name: HR Operations Management
+  confidence: 0.7
+  evidence: GET /people/{id}/jobs  get_person_jobs  "Get jobs."; GET /people/{id}/jobs/{jobId}/costAllocations  "Get
+    cost allocations."
+  reason: '''Jobs'' here are employment positions held by a person, with funding cost allocations and
+    worktags — employee job/position record data, i.e. HR operations records rather than batch processing
+    jobs.'
