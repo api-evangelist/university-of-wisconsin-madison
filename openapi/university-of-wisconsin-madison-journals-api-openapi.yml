@@ -3,19 +3,7 @@ info:
   contact:
     email: finance-apis@doit.wisc.edu
     name: DoIT Enterprise Business Systems (EBS) Integrated Business Solutions (IBS) API Team
-  description: 'An API for accessing and validating UW financial data.
-
-    ## Getting Started
-
-    For information on how to create an application on the portal and request access to the API, please visit the [Getting Started page](https://financeapis.wisc.edu/getting-started/) on our website.
-
-    ## Endpoints, Filtering, Inclusions, and Sourcing
-
-    Information on how to use the filter query parameter and include related resources, individual endpoints, and how we source our data can be found on the [Documentation page](https://financeapis.wisc.edu/documentation/) of our website.
-
-    ## Help/Support
-
-    If you need assistance in using the Finance API, have questions about the data, need to report a bug, or would like to suggest features/improvements, please fill out the form on the [Contact Us page](https://financeapis.wisc.edu/contact-us/) of our website or email us at [finance-apis@doit.wisc.edu](mailto:finance-apis@doit.wisc.edu).'
+  description: An API for accessing and validating UW financial data.
   title: Finance Journals API
   version: 2026-02-18
 servers:
@@ -389,6 +377,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Journals
+      summary: Create journal entry lines search
+      x-summary-source: derived
+      operationId: postJournalEntryLinesSearch
+      x-operation-id-source: derived
   /journalEntryLines/search/status/{id}:
     get:
       description: Retrieves the status of a previously requested search of journal entry line records.
@@ -663,6 +655,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Journals
+      summary: Get journal entry lines search status by id
+      x-summary-source: derived
+      operationId: getJournalEntryLinesSearchStatusById
+      x-operation-id-source: derived
   /journals/search:
     post:
       description: Retrieves a set of journals according to the specified filters.
@@ -1023,6 +1019,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Journals
+      summary: Create journals search
+      x-summary-source: derived
+      operationId: postJournalsSearch
+      x-operation-id-source: derived
   /journals/search/status/{id}:
     get:
       description: Retrieves the status of a previously requested search of journal records.
@@ -1297,6 +1297,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Journals
+      summary: Get journals search status by id
+      x-summary-source: derived
+      operationId: getJournalsSearchStatusById
+      x-operation-id-source: derived
 components:
   securitySchemes:
     OAuth2ClientCredentials:

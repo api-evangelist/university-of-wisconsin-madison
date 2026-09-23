@@ -1,37 +1,35 @@
 openapi: 3.2.0
 info:
-  title: University Of Wisconsin Madison Names API
+  title: Mock Person Names API
   version: 1.0.0
   contact:
     name: DoIT Enterprise Integration API Team
     email: api@doit.wisc.edu
     url: https://go.wisc.edu/k701y6
-  description: 'Operations tagged names across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: A mock implementation of the Person API.
 servers:
 - url: https://mock.api.wisc.edu
-- url: https://api.wisc.edu
 security:
 - OAuth2ClientCredentials: []
 tags:
-- name: names
+- name: Names
 paths:
   /people/{id}/names:
     get:
-      description: Get a person's names, split into separate resource objects depending on the type of name. Refer to the [Names Documentation](/person-api/names) for more information.
-      summary: Get names.
+      description: Get a person's names, split into separate resource objects depending on the type of name. Refer to the Names Documentation for more information.
+      summary: Get names
       operationId: get_person_names
       tags:
-      - names
+      - Names
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
         in: path
-        example: '700'
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
         required: true
         schema:
           type: string
           description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: '12345'
       - name: fields
         in: query
         description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
@@ -45,6 +43,89 @@ paths:
             type:
               type: string
               example: people
+      - name: advancedFilter
+        in: query
+        description: Filter results of query using the [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            attribute:
+              type: string
+              example: and(equals(firstName, "John"), equals(lastName, "Doe"))
+      - name: filter[firstName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `firstName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[middleName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `middleName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[lastName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `lastName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[prefix]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `prefix`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[suffix]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `suffix`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[nameType]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `nameType`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[source]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `source`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[active]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `active`.
+        schema:
+          type: boolean
+      - name: filter[institution]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `names` resources by `institution`.
+        schema:
+          type:
+          - string
+          - 'null'
       responses:
         '200':
           description: A collection of names.
@@ -74,7 +155,6 @@ paths:
                           example: names
                         id:
                           type: string
-                          example: '12345'
                           description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
                         attributes:
                           type: object
@@ -91,35 +171,32 @@ paths:
                             firstName:
                               description: A first name for this person.
                               type: string
-                              minLength: 1
-                              maxLength: 255
                               example: Amy
+                              minLength: 1
                             middleName:
                               description: A middle name for this person.
                               type:
                               - string
                               - 'null'
-                              minLength: 1
-                              maxLength: 255
                               example: Marie
                             lastName:
                               description: A last name for this person.
-                              type: string
-                              minLength: 1
-                              maxLength: 255
+                              type:
+                              - string
+                              - 'null'
                               example: Smith
                             prefix:
                               description: A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.
-                              type: string
-                              minLength: 1
-                              maxLength: 30
+                              type:
+                              - string
+                              - 'null'
                               pattern: ^[A-Za-z '.-]*$
                               example: Dr
                             suffix:
                               description: A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.
-                              type: string
-                              minLength: 1
-                              maxLength: 30
+                              type:
+                              - string
+                              - 'null'
                               pattern: ^[A-Za-z '.-]*$
                               example: II
                             nameType:
@@ -129,16 +206,21 @@ paths:
                               - nameInUse
                               - primary
                               - preferred
+                              - formattedPrimary
                               example: nameInUse
                             source:
-                              description: The source of the name.
+                              description: The source of a name resource.
                               type: string
                               enum:
                               - profile
                               - IAM
-                              - HRS
+                              - SIS
                               - Workday
                               example: profile
+                            active:
+                              description: If false, no further changes are being made to the name. This field is only visible if the requesting application has access to the Inactive Population.
+                              type: boolean
+                              example: true
                             institution:
                               description: The institution associated with the resource.
                               type: string
@@ -181,7 +263,9 @@ paths:
                                       type: string
                                       example: https://api.wisc.edu/link/to/related/object
                                 data:
-                                  type: object
+                                  type:
+                                  - object
+                                  - 'null'
                                   properties:
                                     type:
                                       type: string
@@ -209,24 +293,89 @@ paths:
                         nameType: nameInUse
                         source: profile
                         institution: UW-Madison
-                      id: '100'
+                        active: true
+                      id: 1cf9cd91-3c90-48c4-b0b6-0aeb446edf81
                       relationships:
                         person:
                           data:
-                            id: '100'
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
                             type: people
                           links:
-                            related: https://api.wisc.edu/people/100
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
                       type: names
                       links:
-                        self: https://api.wisc.edu/people/100/names/200
+                        self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/1cf9cd91-3c90-48c4-b0b6-0aeb446edf81
+                    - attributes:
+                        firstName: Amy
+                        middleName: Marie
+                        lastName: Smith
+                        prefix: null
+                        suffix: null
+                        nameType: preferred
+                        source: Workday
+                        institution: UW-Madison
+                        active: true
+                      id: a00ef82f-96a8-4f33-b35c-78cbd50d99c4
+                      relationships:
+                        person:
+                          data:
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
+                      type: names
+                      links:
+                        self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/a00ef82f-96a8-4f33-b35c-78cbd50d99c4
+                    - attributes:
+                        firstName: Aimee
+                        middleName: Marie
+                        lastName: Smith
+                        prefix: Ms.
+                        suffix: Sr.
+                        nameType: primary
+                        source: Workday
+                        institution: UW-Madison
+                        active: true
+                      id: b72aecdd-6c2d-45ef-8b54-fba71acaa6c6
+                      relationships:
+                        person:
+                          data:
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
+                      type: names
+                      links:
+                        self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/b72aecdd-6c2d-45ef-8b54-fba71acaa6c6
+                    - attributes:
+                        firstName: AIME'E
+                        middleName: MARIE
+                        lastName: SMITH
+                        prefix: null
+                        suffix: null
+                        nameType: primary
+                        source: SIS
+                        institution: UW-Madison
+                        active: true
+                      id: d04b0e1d-0363-451e-a557-f801f25d3e9b
+                      relationships:
+                        person:
+                          data:
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
+                            type: people
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
+                      type: names
+                      links:
+                        self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/d04b0e1d-0363-451e-a557-f801f25d3e9b
                     links:
-                      self: https://api.wisc.edu/people/100/names
+                      self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names
         '400':
           description: A bad request.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -235,6 +384,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -254,7 +408,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -266,6 +420,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -274,6 +429,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -301,6 +461,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -309,6 +470,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -337,11 +503,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -350,6 +523,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -377,6 +555,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -385,6 +564,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -412,6 +596,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -420,6 +605,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -447,6 +637,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -455,6 +646,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -478,11 +674,11 @@ paths:
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
     post:
-      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Create a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be created. Client-generated IDs are not supported. Refer to the [Names Documentation](/person-api/names) for more information.
-      summary: Create a name.
+      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Create a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be created. Client-generated IDs are not supported. Refer to the Names Documentation for more information.
+      summary: Create a name
       operationId: create_person_name
       tags:
-      - names
+      - Names
       requestBody:
         description: A name request body.
         required: true
@@ -490,8 +686,11 @@ paths:
           application/vnd.api+json:
             schema:
               type: object
+              required:
+              - data
               properties:
                 data:
+                  description: The data object for name create request bodies.
                   type: object
                   required:
                   - type
@@ -499,85 +698,61 @@ paths:
                   properties:
                     type:
                       type: string
-                      example: names
                       enum:
                       - names
                     attributes:
-                      type: object
-                      required:
-                      - firstName
-                      - middleName
-                      - lastName
-                      - nameType
-                      - source
-                      - institution
-                      properties:
-                        firstName:
-                          description: A first name for this person.
-                          type: string
-                          minLength: 1
-                          maxLength: 255
-                          example: Amy
-                        middleName:
-                          description: A middle name for this person.
-                          type:
-                          - string
-                          - 'null'
-                          minLength: 1
-                          maxLength: 255
-                          example: Marie
-                        lastName:
-                          description: A last name for this person.
-                          type: string
-                          minLength: 1
-                          maxLength: 255
-                          example: Smith
-                        nameType:
-                          description: The type of name for the person.
-                          type: string
-                          enum:
-                          - nameInUse
-                          - primary
-                          example: nameInUse
-                        source:
-                          description: The source of the name.
-                          type: string
-                          enum:
-                          - profile
-                          - IAM
-                          - HRS
-                          example: profile
-                        institution:
-                          description: The institution associated with the resource.
-                          type: string
-                          example: UW-Madison
-                          enum:
-                          - Shared
-                          - UW-Eau Claire
-                          - UW-Green Bay
-                          - UW-La Crosse
-                          - UW-Madison
-                          - UW-Milwaukee
-                          - UW Oshkosh
-                          - UW-Parkside
-                          - UW-Platteville
-                          - UW-River Falls
-                          - UW-Stevens Point
-                          - UW-Stout
-                          - UW-Superior
-                          - UW-Whitewater
-                          - UW-Extension
-                          - UW System
+                      allOf:
+                      - type: object
+                        properties:
+                          firstName:
+                            description: A first name for this person.
+                            type: string
+                            minLength: 1
+                            maxLength: 255
+                            example: Amy
+                          middleName:
+                            description: A middle name for this person.
+                            type:
+                            - string
+                            - 'null'
+                            minLength: 1
+                            maxLength: 255
+                            example: Marie
+                          lastName:
+                            description: A last name for this person.
+                            type:
+                            - string
+                            - 'null'
+                            minLength: 1
+                            maxLength: 255
+                            example: Smith
+                          nameType:
+                            description: The type of name for the person.
+                            type: string
+                            enum:
+                            - nameInUse
+                            - primary
+                            - formattedPrimary
+                            example: nameInUse
+                          source:
+                            description: The source of a name resource. Must be "profile".
+                            type: string
+                            enum:
+                            - profile
+                            example: profile
+                      - required:
+                        - firstName
+                        - source
+                        - nameType
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
         in: path
-        example: '700'
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
         required: true
         schema:
           type: string
           description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: '12345'
       responses:
         '201':
           description: A single name.
@@ -604,7 +779,6 @@ paths:
                         example: names
                       id:
                         type: string
-                        example: '12345'
                         description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
                       attributes:
                         type: object
@@ -621,35 +795,32 @@ paths:
                           firstName:
                             description: A first name for this person.
                             type: string
-                            minLength: 1
-                            maxLength: 255
                             example: Amy
+                            minLength: 1
                           middleName:
                             description: A middle name for this person.
                             type:
                             - string
                             - 'null'
-                            minLength: 1
-                            maxLength: 255
                             example: Marie
                           lastName:
                             description: A last name for this person.
-                            type: string
-                            minLength: 1
-                            maxLength: 255
+                            type:
+                            - string
+                            - 'null'
                             example: Smith
                           prefix:
                             description: A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.
-                            type: string
-                            minLength: 1
-                            maxLength: 30
+                            type:
+                            - string
+                            - 'null'
                             pattern: ^[A-Za-z '.-]*$
                             example: Dr
                           suffix:
                             description: A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.
-                            type: string
-                            minLength: 1
-                            maxLength: 30
+                            type:
+                            - string
+                            - 'null'
                             pattern: ^[A-Za-z '.-]*$
                             example: II
                           nameType:
@@ -659,16 +830,21 @@ paths:
                             - nameInUse
                             - primary
                             - preferred
+                            - formattedPrimary
                             example: nameInUse
                           source:
-                            description: The source of the name.
+                            description: The source of a name resource.
                             type: string
                             enum:
                             - profile
                             - IAM
-                            - HRS
+                            - SIS
                             - Workday
                             example: profile
+                          active:
+                            description: If false, no further changes are being made to the name. This field is only visible if the requesting application has access to the Inactive Population.
+                            type: boolean
+                            example: true
                           institution:
                             description: The institution associated with the resource.
                             type: string
@@ -711,7 +887,9 @@ paths:
                                     type: string
                                     example: https://api.wisc.edu/link/to/related/object
                               data:
-                                type: object
+                                type:
+                                - object
+                                - 'null'
                                 properties:
                                   type:
                                     type: string
@@ -739,19 +917,36 @@ paths:
                         nameType: nameInUse
                         source: profile
                         institution: UW-Madison
-                      id: '100'
+                        active: true
+                      id: 60fdb515-611f-4b7d-9119-b1f7b0368f55
                       relationships:
                         person:
                           data:
-                            id: '100'
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
                             type: people
                           links:
-                            related: https://api.wisc.edu/people/100
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
                       type: names
                       links:
-                        self: https://api.wisc.edu/people/100/names/200
+                        self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/60fdb515-611f-4b7d-9119-b1f7b0368f55
                     links:
-                      self: https://api.wisc.edu/people/100/names/100
+                      self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/60fdb515-611f-4b7d-9119-b1f7b0368f55
+          links:
+            GetNameById:
+              operationId: get_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
+            UpdateNameById:
+              operationId: update_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
+            DeleteNameById:
+              operationId: delete_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
         '202':
           description: Name created, but additional processing is needed for it to show in the API.
         '400':
@@ -759,6 +954,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -767,6 +963,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -786,7 +987,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -798,6 +999,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -806,6 +1008,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -833,6 +1040,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -841,6 +1049,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -869,11 +1082,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -882,6 +1102,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -909,6 +1134,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -917,6 +1143,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -944,6 +1175,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -952,6 +1184,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -979,6 +1216,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -987,6 +1225,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1009,33 +1252,29 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
   /people/{id}/names/{nameId}:
     get:
-      description: Get a name by ID. Refer to the [Names Documentation](/person-api/names) for more information.
-      summary: Get a name.
+      description: Get a name by ID. Refer to the Names Documentation for more information.
+      summary: Get a name
       operationId: get_person_name
       tags:
-      - names
+      - Names
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
         in: path
-        example: '700'
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
         required: true
         schema:
           type: string
           description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: '12345'
       - name: nameId
         description: ID of a name. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
         in: path
-        example: '710'
+        example: 671f4ac9-bef0-47b0-aba9-33acab9f2e90
         required: true
         schema:
           type: string
-          example: '12345'
           description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
       responses:
         '200':
@@ -1063,7 +1302,6 @@ paths:
                         example: names
                       id:
                         type: string
-                        example: '12345'
                         description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
                       attributes:
                         type: object
@@ -1080,35 +1318,32 @@ paths:
                           firstName:
                             description: A first name for this person.
                             type: string
-                            minLength: 1
-                            maxLength: 255
                             example: Amy
+                            minLength: 1
                           middleName:
                             description: A middle name for this person.
                             type:
                             - string
                             - 'null'
-                            minLength: 1
-                            maxLength: 255
                             example: Marie
                           lastName:
                             description: A last name for this person.
-                            type: string
-                            minLength: 1
-                            maxLength: 255
+                            type:
+                            - string
+                            - 'null'
                             example: Smith
                           prefix:
                             description: A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.
-                            type: string
-                            minLength: 1
-                            maxLength: 30
+                            type:
+                            - string
+                            - 'null'
                             pattern: ^[A-Za-z '.-]*$
                             example: Dr
                           suffix:
                             description: A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.
-                            type: string
-                            minLength: 1
-                            maxLength: 30
+                            type:
+                            - string
+                            - 'null'
                             pattern: ^[A-Za-z '.-]*$
                             example: II
                           nameType:
@@ -1118,16 +1353,21 @@ paths:
                             - nameInUse
                             - primary
                             - preferred
+                            - formattedPrimary
                             example: nameInUse
                           source:
-                            description: The source of the name.
+                            description: The source of a name resource.
                             type: string
                             enum:
                             - profile
                             - IAM
-                            - HRS
+                            - SIS
                             - Workday
                             example: profile
+                          active:
+                            description: If false, no further changes are being made to the name. This field is only visible if the requesting application has access to the Inactive Population.
+                            type: boolean
+                            example: true
                           institution:
                             description: The institution associated with the resource.
                             type: string
@@ -1170,7 +1410,9 @@ paths:
                                     type: string
                                     example: https://api.wisc.edu/link/to/related/object
                               data:
-                                type: object
+                                type:
+                                - object
+                                - 'null'
                                 properties:
                                   type:
                                     type: string
@@ -1198,24 +1440,42 @@ paths:
                         nameType: nameInUse
                         source: profile
                         institution: UW-Madison
-                      id: '100'
+                        active: true
+                      id: 60fdb515-611f-4b7d-9119-b1f7b0368f55
                       relationships:
                         person:
                           data:
-                            id: '100'
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
                             type: people
                           links:
-                            related: https://api.wisc.edu/people/100
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
                       type: names
                       links:
-                        self: https://api.wisc.edu/people/100/names/200
+                        self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/60fdb515-611f-4b7d-9119-b1f7b0368f55
                     links:
-                      self: https://api.wisc.edu/people/100/names/100
+                      self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/60fdb515-611f-4b7d-9119-b1f7b0368f55
+          links:
+            GetNameById:
+              operationId: get_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
+            UpdateNameById:
+              operationId: update_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
+            DeleteNameById:
+              operationId: delete_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
         '400':
           description: A bad request.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1224,6 +1484,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1243,7 +1508,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -1255,6 +1520,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1263,6 +1529,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1290,6 +1561,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1298,6 +1570,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1326,11 +1603,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1339,6 +1623,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1366,6 +1655,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1374,6 +1664,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1401,6 +1696,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1409,6 +1705,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1436,6 +1737,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1444,6 +1746,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1467,11 +1774,11 @@ paths:
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
     patch:
-      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Update a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be updated. Updating the ID is not allowed. Refer to the [Names Documentation](/person-api/names) for more information.
-      summary: Update a name.
+      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Update a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be updated. Updating the ID is not allowed. Refer to the Names Documentation for more information.
+      summary: Update a name
       operationId: update_person_name
       tags:
-      - names
+      - Names
       requestBody:
         description: A name request body.
         required: true
@@ -1479,107 +1786,84 @@ paths:
           application/vnd.api+json:
             schema:
               type: object
+              required:
+              - data
               properties:
                 data:
-                  type: object
-                  required:
-                  - type
-                  - id
-                  - attributes
-                  properties:
-                    type:
-                      type: string
-                      example: names
-                      enum:
-                      - names
-                    id:
-                      type: string
-                      example: '12345'
-                      description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
-                    attributes:
-                      type: object
-                      required:
-                      - firstName
-                      - middleName
-                      - lastName
-                      - nameType
-                      - source
-                      - institution
-                      properties:
-                        firstName:
-                          description: A first name for this person.
-                          type: string
-                          minLength: 1
-                          maxLength: 255
-                          example: Amy
-                        middleName:
-                          description: A middle name for this person.
-                          type:
-                          - string
-                          - 'null'
-                          minLength: 1
-                          maxLength: 255
-                          example: Marie
-                        lastName:
-                          description: A last name for this person.
-                          type: string
-                          minLength: 1
-                          maxLength: 255
-                          example: Smith
-                        nameType:
-                          description: The type of name for the person.
-                          type: string
-                          enum:
-                          - nameInUse
-                          - primary
-                          example: nameInUse
-                        source:
-                          description: The source of the name.
-                          type: string
-                          enum:
-                          - profile
-                          - IAM
-                          - HRS
-                          example: profile
-                        institution:
-                          description: The institution associated with the resource.
-                          type: string
-                          example: UW-Madison
-                          enum:
-                          - Shared
-                          - UW-Eau Claire
-                          - UW-Green Bay
-                          - UW-La Crosse
-                          - UW-Madison
-                          - UW-Milwaukee
-                          - UW Oshkosh
-                          - UW-Parkside
-                          - UW-Platteville
-                          - UW-River Falls
-                          - UW-Stevens Point
-                          - UW-Stout
-                          - UW-Superior
-                          - UW-Whitewater
-                          - UW-Extension
-                          - UW System
+                  allOf:
+                  - description: The data object for name update request bodies.
+                    type: object
+                    required:
+                    - type
+                    - attributes
+                    properties:
+                      type:
+                        type: string
+                        enum:
+                        - names
+                      attributes:
+                        type: object
+                        properties:
+                          firstName:
+                            description: A first name for this person.
+                            type: string
+                            minLength: 1
+                            maxLength: 255
+                            example: Amy
+                          middleName:
+                            description: A middle name for this person.
+                            type:
+                            - string
+                            - 'null'
+                            minLength: 1
+                            maxLength: 255
+                            example: Marie
+                          lastName:
+                            description: A last name for this person.
+                            type:
+                            - string
+                            - 'null'
+                            minLength: 1
+                            maxLength: 255
+                            example: Smith
+                          nameType:
+                            description: The type of name for the person.
+                            type: string
+                            enum:
+                            - nameInUse
+                            - primary
+                            - formattedPrimary
+                            example: nameInUse
+                          source:
+                            description: The source of a name resource. Must be "profile".
+                            type: string
+                            enum:
+                            - profile
+                            example: profile
+                  - required:
+                    - type
+                    - id
+                    - attributes
+                    properties:
+                      id:
+                        type: string
+                        description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
         in: path
-        example: '700'
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
         required: true
         schema:
           type: string
           description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: '12345'
       - name: nameId
         description: ID of a name. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
         in: path
-        example: '710'
+        example: 671f4ac9-bef0-47b0-aba9-33acab9f2e90
         required: true
         schema:
           type: string
-          example: '12345'
           description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
       responses:
         '200':
@@ -1607,7 +1891,6 @@ paths:
                         example: names
                       id:
                         type: string
-                        example: '12345'
                         description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
                       attributes:
                         type: object
@@ -1624,35 +1907,32 @@ paths:
                           firstName:
                             description: A first name for this person.
                             type: string
-                            minLength: 1
-                            maxLength: 255
                             example: Amy
+                            minLength: 1
                           middleName:
                             description: A middle name for this person.
                             type:
                             - string
                             - 'null'
-                            minLength: 1
-                            maxLength: 255
                             example: Marie
                           lastName:
                             description: A last name for this person.
-                            type: string
-                            minLength: 1
-                            maxLength: 255
+                            type:
+                            - string
+                            - 'null'
                             example: Smith
                           prefix:
                             description: A prefix for this person.  Cannot be set for `nameType` of `nameInUse`.
-                            type: string
-                            minLength: 1
-                            maxLength: 30
+                            type:
+                            - string
+                            - 'null'
                             pattern: ^[A-Za-z '.-]*$
                             example: Dr
                           suffix:
                             description: A suffix for this person.  Cannot be set for `nameType` of `nameInUse`.
-                            type: string
-                            minLength: 1
-                            maxLength: 30
+                            type:
+                            - string
+                            - 'null'
                             pattern: ^[A-Za-z '.-]*$
                             example: II
                           nameType:
@@ -1662,16 +1942,21 @@ paths:
                             - nameInUse
                             - primary
                             - preferred
+                            - formattedPrimary
                             example: nameInUse
                           source:
-                            description: The source of the name.
+                            description: The source of a name resource.
                             type: string
                             enum:
                             - profile
                             - IAM
-                            - HRS
+                            - SIS
                             - Workday
                             example: profile
+                          active:
+                            description: If false, no further changes are being made to the name. This field is only visible if the requesting application has access to the Inactive Population.
+                            type: boolean
+                            example: true
                           institution:
                             description: The institution associated with the resource.
                             type: string
@@ -1714,7 +1999,9 @@ paths:
                                     type: string
                                     example: https://api.wisc.edu/link/to/related/object
                               data:
-                                type: object
+                                type:
+                                - object
+                                - 'null'
                                 properties:
                                   type:
                                     type: string
@@ -1742,19 +2029,36 @@ paths:
                         nameType: nameInUse
                         source: profile
                         institution: UW-Madison
-                      id: '100'
+                        active: true
+                      id: 60fdb515-611f-4b7d-9119-b1f7b0368f55
                       relationships:
                         person:
                           data:
-                            id: '100'
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
                             type: people
                           links:
-                            related: https://api.wisc.edu/people/100
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
                       type: names
                       links:
-                        self: https://api.wisc.edu/people/100/names/200
+                        self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/60fdb515-611f-4b7d-9119-b1f7b0368f55
                     links:
-                      self: https://api.wisc.edu/people/100/names/100
+                      self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/names/60fdb515-611f-4b7d-9119-b1f7b0368f55
+          links:
+            GetNameById:
+              operationId: get_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
+            UpdateNameById:
+              operationId: update_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
+            DeleteNameById:
+              operationId: delete_person_name
+              parameters:
+                id: $response.body#/data/relationships/person/data/id
+                nameId: $response.body#/data/id
         '202':
           description: Name updated, but additional processing is needed for the updates to show in the API.
         '400':
@@ -1762,6 +2066,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1770,6 +2075,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1789,7 +2099,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -1801,6 +2111,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1809,6 +2120,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1836,6 +2152,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1844,6 +2161,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1872,11 +2194,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1885,6 +2214,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1912,6 +2246,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1920,6 +2255,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1947,6 +2287,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1955,6 +2296,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1982,6 +2328,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1990,6 +2337,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -2013,11 +2365,11 @@ paths:
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
     delete:
-      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Delete a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be deleted. Refer to the [Names Documentation](/person-api/names) for more information.
-      summary: Delete a name.
+      description: Please contact api@doit.wisc.edu if you need access to this endpoint. Delete a name for a person. Only names with `nameType` of `nameInUse` and `source` of `profile` can be deleted. Refer to the Names Documentation for more information.
+      summary: Delete a name
       operationId: delete_person_name
       tags:
-      - names
+      - Names
       requestBody:
         description: A request body to mark a name as inappropriate when deleting a name in use.
         required: false
@@ -2034,20 +2386,18 @@ paths:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
         in: path
-        example: '700'
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
         required: true
         schema:
           type: string
           description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: '12345'
       - name: nameId
         description: ID of a name. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
         in: path
-        example: '710'
+        example: 671f4ac9-bef0-47b0-aba9-33acab9f2e90
         required: true
         schema:
           type: string
-          example: '12345'
           description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
       responses:
         '202':
@@ -2059,6 +2409,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -2067,6 +2418,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -2086,7 +2442,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -2098,6 +2454,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -2106,6 +2463,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -2133,6 +2495,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -2141,6 +2504,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -2169,11 +2537,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -2182,6 +2557,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -2209,6 +2589,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -2217,6 +2598,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -2244,6 +2630,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -2252,6 +2639,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -2279,6 +2671,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -2287,6 +2680,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -2309,8 +2707,6 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
 components:
   securitySchemes:
     OAuth2ClientCredentials:
@@ -2322,13 +2718,3 @@ components:
 externalDocs:
   description: Read more about JSON:API here
   url: https://jsonapi.org/
-x-refined-from:
-- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
-- university-of-wisconsin-madison-mock-person-api-openapi.yml
-- university-of-wisconsin-madison-person-api-openapi.yml
-x-operator: institution
-x-provenance:
-  generated: '2026-08-19'
-  method: probed
-  source: https://public.enroll.wisc.edu/api/search/v1
-  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

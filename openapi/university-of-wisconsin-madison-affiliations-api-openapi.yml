@@ -1,37 +1,35 @@
 openapi: 3.2.0
 info:
-  title: University Of Wisconsin Madison Affiliations API
+  title: Mock Person Affiliations API
   version: 1.0.0
   contact:
     name: DoIT Enterprise Integration API Team
     email: api@doit.wisc.edu
     url: https://go.wisc.edu/k701y6
-  description: 'Operations tagged affiliations across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: A mock implementation of the Person API.
 servers:
 - url: https://mock.api.wisc.edu
-- url: https://api.wisc.edu
 security:
 - OAuth2ClientCredentials: []
 tags:
-- name: affiliations
+- name: Affiliations
 paths:
   /people/{id}/affiliations:
     get:
       description: Get a person's affiliations with their institution.
-      summary: Get affiliations.
+      summary: Get affiliations
       operationId: get_person_affiliations
       tags:
-      - affiliations
+      - Affiliations
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
         in: path
-        example: '700'
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
         required: true
         schema:
           type: string
           description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: '12345'
       - name: fields
         in: query
         description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
@@ -45,9 +43,9 @@ paths:
             type:
               type: string
               example: people
-      - name: filter
+      - name: advancedFilter
         in: query
-        description: Filter results of query using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](/person-api/filter-query-parameter) for more information about the `filter` query param.
+        description: Filter results of query using the [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
         required: false
         style: deepObject
         explode: true
@@ -57,7 +55,23 @@ paths:
           properties:
             attribute:
               type: string
-              example: firstName
+              example: and(equals(firstName, "John"), equals(lastName, "Doe"))
+      - name: filter[affiliation]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `affiliations` resources by `affiliation`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[institution]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `affiliations` resources by `institution`.
+        schema:
+          type:
+          - string
+          - 'null'
       responses:
         '200':
           description: A collection of affiliations.
@@ -79,7 +93,6 @@ paths:
                       - type
                       - id
                       - attributes
-                      - links
                       - relationships
                       properties:
                         type:
@@ -87,7 +100,6 @@ paths:
                           example: affiliations
                         id:
                           type: string
-                          example: '12345'
                           description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
                         attributes:
                           type: object
@@ -96,11 +108,30 @@ paths:
                           - institution
                           properties:
                             affiliation:
-                              description: An affiliation someone has with the institution.
+                              description: An affiliation someone has with the institution. For more information, see [Person API Populations](https://kb.wisc.edu/uw-apis/158469).
                               type: string
                               enum:
-                              - Emeritus
                               - Retiree
+                              - Emeritus
+                              - Employees - Active Paid
+                              - Employees - Active Student
+                              - Employees - Active Unpaid
+                              - Employees - Future Paid
+                              - Employees - Future Student
+                              - Employees - Future Unpaid
+                              - Employees - Former
+                              - Students - Applied for Admissions
+                              - Students - Early
+                              - Students - Enrolled
+                              - Students - Former
+                              - Contingent Worker CW001 - Timesheet Approver
+                              - Contingent Worker CW002 - Consultant
+                              - Contingent Worker CW004 - Auditor
+                              - Contingent Worker CW008 - Unpaid Intern/Practicum
+                              - Contingent Workers (CW) - All
+                              - Health Care Component
+                              - Lifelong Learner
+                              - Inactive
                               example: Emeritus
                             institution:
                               description: The institution associated with the resource.
@@ -123,15 +154,10 @@ paths:
                               - UW-Whitewater
                               - UW-Extension
                               - UW System
-                        links:
-                          description: The link to access a resource itself
-                          type: object
-                          properties:
-                            self:
-                              type: string
-                              example: https://api.wisc.edu/link/to/self
                         relationships:
                           type: object
+                          required:
+                          - person
                           properties:
                             person:
                               description: A generic relationship object
@@ -144,7 +170,9 @@ paths:
                                       type: string
                                       example: https://api.wisc.edu/link/to/related/object
                                 data:
-                                  type: object
+                                  type:
+                                  - object
+                                  - 'null'
                                   properties:
                                     type:
                                       type: string
@@ -166,22 +194,23 @@ paths:
                     - attributes:
                         affiliation: Emeritus
                         institution: UW-Madison
-                      id: '100'
+                      id: 6fd3c09c-e67a-44f3-a593-30fa18452913
                       relationships:
                         person:
                           data:
-                            id: '100'
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
                             type: people
                           links:
-                            related: https://api.wisc.edu/people/100
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
                       type: affiliations
                     links:
-                      self: https://api.wisc.edu/people/100/affiliations
+                      self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/affiliations
         '400':
           description: A bad request.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -190,6 +219,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -209,7 +243,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -221,6 +255,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -229,6 +264,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -256,6 +296,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -264,6 +305,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -292,11 +338,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -305,6 +358,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -332,6 +390,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -340,6 +399,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -367,6 +431,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -375,6 +440,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -402,6 +472,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -410,6 +481,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -432,8 +508,6 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
 components:
   securitySchemes:
     OAuth2ClientCredentials:
@@ -445,13 +519,3 @@ components:
 externalDocs:
   description: Read more about JSON:API here
   url: https://jsonapi.org/
-x-refined-from:
-- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
-- university-of-wisconsin-madison-mock-person-api-openapi.yml
-- university-of-wisconsin-madison-person-api-openapi.yml
-x-operator: institution
-x-provenance:
-  generated: '2026-08-19'
-  method: probed
-  source: https://public.enroll.wisc.edu/api/search/v1
-  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

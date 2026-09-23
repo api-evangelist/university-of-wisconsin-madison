@@ -1,0 +1,26 @@
+generated: '2026-08-19'
+method: derived
+source: openapi/ (12 contracts)
+x-operator: institution
+summary:
+  problem_details_rfc9457: false
+  house_style: json-api-errors
+  detail: >-
+    The seven JSON:API contracts (Person, Mock Person, Mock Person Certificates, HR, Mock HR,
+    Manifest, Mock Manifest) return the JSON:API `errors` array rather than RFC 9457
+    application/problem+json. The Finance, Locations, Enterprise Billing and OAuth contracts use
+    plain JSON error bodies. No contract emits application/problem+json.
+  consistency: >-
+    Partial. Error shape follows the team that built the API, not one institution-wide
+    convention — the same split that shows up in the JSON:API conformance finding.
+status_codes_documented:
+  '400': Malformed request or invalid query parameter.
+  '401': Missing or expired OAuth 2.0 client-credentials access token.
+  '403': Token valid but the client application is not approved for that API product.
+  '404': Resource not found.
+  '500': Server error.
+notes: >-
+  The public course search API (public.enroll.wisc.edu) is the outlier: an invalid term code
+  returns HTTP 200 with {"found":null,"hits":null,"success":true} rather than a 4xx. Verified
+  live on 2026-08-19 with selectedTerm 1262. Consumers cannot distinguish "no results" from
+  "bad term" by status code.

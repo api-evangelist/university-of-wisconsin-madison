@@ -3,19 +3,7 @@ info:
   contact:
     email: finance-apis@doit.wisc.edu
     name: DoIT Enterprise Business Systems (EBS) Integrated Business Solutions (IBS) API Team
-  description: 'An API for accessing and validating UW financial data.
-
-    ## Getting Started
-
-    For information on how to create an application on the portal and request access to the API, please visit the [Getting Started page](https://financeapis.wisc.edu/getting-started/) on our website.
-
-    ## Endpoints, Filtering, Inclusions, and Sourcing
-
-    Information on how to use the filter query parameter and include related resources, individual endpoints, and how we source our data can be found on the [Documentation page](https://financeapis.wisc.edu/documentation/) of our website.
-
-    ## Help/Support
-
-    If you need assistance in using the Finance API, have questions about the data, need to report a bug, or would like to suggest features/improvements, please fill out the form on the [Contact Us page](https://financeapis.wisc.edu/contact-us/) of our website or email us at [finance-apis@doit.wisc.edu](mailto:finance-apis@doit.wisc.edu).'
+  description: An API for accessing and validating UW financial data.
   title: Finance Other API
   version: 2026-02-18
 servers:
@@ -1159,6 +1147,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get assets
+      x-summary-source: derived
+      operationId: getAssets
+      x-operation-id-source: derived
   /assets/{id}:
     get:
       description: Retrieves a asset by its ID.
@@ -1974,6 +1966,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get assets by id
+      x-summary-source: derived
+      operationId: getAssetsById
+      x-operation-id-source: derived
   /budgetLines:
     get:
       description: Retrieves a paginated listing of all budget lines.
@@ -2415,6 +2411,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get budget lines
+      x-summary-source: derived
+      operationId: getBudgetLines
+      x-operation-id-source: derived
   /budgetLines/{id}:
     get:
       description: Retrieves a single budget line by its ID.
@@ -2756,6 +2756,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get budget lines by id
+      x-summary-source: derived
+      operationId: getBudgetLinesById
+      x-operation-id-source: derived
   /catalogItems:
     get:
       description: Retrieves a paginated listing of all catalog items.
@@ -3202,6 +3206,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get catalog items
+      x-summary-source: derived
+      operationId: getCatalogItems
+      x-operation-id-source: derived
   /catalogItems/{id}:
     get:
       description: Retrieves a single catalog item by its ID.
@@ -3536,6 +3544,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get catalog items by id
+      x-summary-source: derived
+      operationId: getCatalogItemsById
+      x-operation-id-source: derived
   /customerInvoices:
     get:
       description: Retrieves a paginated listing of all customer invoices.
@@ -4017,6 +4029,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get customer invoices
+      x-summary-source: derived
+      operationId: getCustomerInvoices
+      x-operation-id-source: derived
   /customerInvoices/{id}:
     get:
       description: Retrieves a single customer invoice by its ID.
@@ -4390,6 +4406,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get customer invoices by id
+      x-summary-source: derived
+      operationId: getCustomerInvoicesById
+      x-operation-id-source: derived
   /expenseReports:
     get:
       description: Retrieves a paginated listing of all expense reports.
@@ -4860,6 +4880,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get expense reports
+      x-summary-source: derived
+      operationId: getExpenseReports
+      x-operation-id-source: derived
   /expenseReports/{id}:
     get:
       description: Retrieves a single expense report by its ID.
@@ -5222,6 +5246,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get expense reports by id
+      x-summary-source: derived
+      operationId: getExpenseReportsById
+      x-operation-id-source: derived
   /externalCustomers:
     get:
       description: Retrieves a paginated listing of all external customers.
@@ -5719,6 +5747,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get external customers
+      x-summary-source: derived
+      operationId: getExternalCustomers
+      x-operation-id-source: derived
   /externalCustomers/{id}:
     get:
       description: Retrieves a single external customer by its ID.
@@ -6135,11 +6167,13 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get external customers by id
+      x-summary-source: derived
+      operationId: getExternalCustomersById
+      x-operation-id-source: derived
   /internalServiceDeliveries:
     get:
-      description: 'Retrieves a paginated listing of all internal service deliveries. This is not to be confused with the `isdLines` resource, which provides individual line items; this endpoint is intended for fetching/querying the entire ISD rather than just individual line items. For more information, see the [Internal Service Deliveries documentation](https://financeapis.wisc.edu/documentation/endpoints/internal-service-deliveries/) page on our website.
-
-        '
+      description: Retrieves a paginated listing of all internal service deliveries. This is not to be confused with the `isdLines` resource, which provides individual line items; this endpoint is intended for fetching/querying the entire ISD rather than just individual line items. For more information, see the Internal Service Deliveries documentation page on our website.
       parameters:
       - description: Delivery mode for the response. When set to 'bulk', the API will save the response to S3 and return a link to download it instead of returning the data directly. Cannot be used with pagination parameters.
         examples:
@@ -6838,11 +6872,13 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get internal service deliveries
+      x-summary-source: derived
+      operationId: getInternalServiceDeliveries
+      x-operation-id-source: derived
   /internalServiceDeliveries/{id}:
     get:
-      description: 'Retrieves a single internal service delivery by its ID. For more information, see the [Internal Service Deliveries documentation](https://financeapis.wisc.edu/documentation/endpoints/internal-service-deliveries/) page on our website.
-
-        '
+      description: Retrieves a single internal service delivery by its ID. For more information, see the Internal Service Deliveries documentation page on our website.
       parameters:
       - description: An Internal Service Delivery ID passed in as a URL parameter.
         in: path
@@ -7361,11 +7397,13 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get internal service deliveries by id
+      x-summary-source: derived
+      operationId: getInternalServiceDeliveriesById
+      x-operation-id-source: derived
   /internalServiceProviders:
     get:
-      description: 'Retrieves a paginated listing of all internal service providers. For more information, see the [Internal Service Providers documentation](https://financeapis.wisc.edu/documentation/endpoints/internal-service-providers/) page on our website.
-
-        '
+      description: Retrieves a paginated listing of all internal service providers. For more information, see the Internal Service Providers documentation page on our website.
       parameters:
       - description: Delivery mode for the response. When set to 'bulk', the API will save the response to S3 and return a link to download it instead of returning the data directly. Cannot be used with pagination parameters.
         examples:
@@ -7926,11 +7964,13 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get internal service providers
+      x-summary-source: derived
+      operationId: getInternalServiceProviders
+      x-operation-id-source: derived
   /internalServiceProviders/{id}:
     get:
-      description: 'Retrieves a single internal service provider by its ID. For more information, see the [Internal Service Providers documentation](https://financeapis.wisc.edu/documentation/endpoints/internal-service-providers/) page on our website.
-
-        '
+      description: Retrieves a single internal service provider by its ID. For more information, see the Internal Service Providers documentation page on our website.
       parameters:
       - description: An internal service provider ID passed in as a URL parameter.
         in: path
@@ -8361,11 +8401,13 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get internal service providers by id
+      x-summary-source: derived
+      operationId: getInternalServiceProvidersById
+      x-operation-id-source: derived
   /isdLines:
     get:
-      description: 'Retrieves a paginated listing of all ISD Lines. This is not to be confused with the `internalServiceDeliveries` resource, which provides the entire ISD; this endpoints is intended for fetching/querying individual line items. For more information, see the [ISD Lines documentation](https://financeapis.wisc.edu/documentation/endpoints/isd-lines/) page on our website.
-
-        '
+      description: Retrieves a paginated listing of all ISD Lines. This is not to be confused with the `internalServiceDeliveries` resource, which provides the entire ISD; this endpoints is intended for fetching/querying individual line items. For more information, see the ISD Lines documentation page on our website.
       parameters:
       - description: Delivery mode for the response. When set to 'bulk', the API will save the response to S3 and return a link to download it instead of returning the data directly. Cannot be used with pagination parameters.
         examples:
@@ -9049,11 +9091,13 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get isd lines
+      x-summary-source: derived
+      operationId: getIsdLines
+      x-operation-id-source: derived
   /isdLines/{id}:
     get:
-      description: 'Retrieves a single ISD line by its ID. For more information, see the [ISD Lines documentation](https://financeapis.wisc.edu/documentation/endpoints/isd-lines/) page on our website.
-
-        '
+      description: Retrieves a single ISD line by its ID. For more information, see the ISD Lines documentation page on our website.
       parameters:
       - description: A ISD line ID passed in as a URL parameter.
         in: path
@@ -9561,6 +9605,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get isd lines by id
+      x-summary-source: derived
+      operationId: getIsdLinesById
+      x-operation-id-source: derived
   /purchaseOrders:
     get:
       description: Retrieves a paginated listing of all purchase orders.
@@ -10362,6 +10410,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get purchase orders
+      x-summary-source: derived
+      operationId: getPurchaseOrders
+      x-operation-id-source: derived
   /purchaseOrders/{id}:
     get:
       description: Retrieves a single purchase order by its ID.
@@ -10945,6 +10997,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get purchase orders by id
+      x-summary-source: derived
+      operationId: getPurchaseOrdersById
+      x-operation-id-source: derived
   /salesItems:
     get:
       description: Retrieves a paginated listing of all sales items.
@@ -11464,6 +11520,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get sales items
+      x-summary-source: derived
+      operationId: getSalesItems
+      x-operation-id-source: derived
   /salesItems/{id}:
     get:
       description: Retrieves a single sales item by its ID.
@@ -11859,6 +11919,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get sales items by id
+      x-summary-source: derived
+      operationId: getSalesItemsById
+      x-operation-id-source: derived
   /sponsorInvoices:
     get:
       description: Retrieves a paginated listing of all sponsor invoices.
@@ -12367,6 +12431,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get sponsor invoices
+      x-summary-source: derived
+      operationId: getSponsorInvoices
+      x-operation-id-source: derived
   /sponsorInvoices/{id}:
     get:
       description: Retrieves a single sponsor invoice by its ID.
@@ -12779,6 +12847,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get sponsor invoices by id
+      x-summary-source: derived
+      operationId: getSponsorInvoicesById
+      x-operation-id-source: derived
   /sponsors:
     get:
       description: Retrieves a paginated listing of all sponsors.
@@ -13272,6 +13344,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get sponsors
+      x-summary-source: derived
+      operationId: getSponsors
+      x-operation-id-source: derived
   /sponsors/{id}:
     get:
       description: Retrieves a single sponsor by its ID.
@@ -13665,6 +13741,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get sponsors by id
+      x-summary-source: derived
+      operationId: getSponsorsById
+      x-operation-id-source: derived
   /subrecipients:
     get:
       description: Retrieves a paginated listing of all subrecipients.
@@ -14111,6 +14191,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get subrecipients
+      x-summary-source: derived
+      operationId: getSubrecipients
+      x-operation-id-source: derived
   /subrecipients/{id}:
     get:
       description: Retrieves a single subrecipient by its ID.
@@ -14461,6 +14545,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get subrecipients by id
+      x-summary-source: derived
+      operationId: getSubrecipientsById
+      x-operation-id-source: derived
   /supplierContracts:
     get:
       description: Retrieves a paginated listing of all supplier contracts.
@@ -14957,6 +15045,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get supplier contracts
+      x-summary-source: derived
+      operationId: getSupplierContracts
+      x-operation-id-source: derived
   /supplierContracts/{id}:
     get:
       description: Retrieves a single supplier contract by its ID.
@@ -15345,6 +15437,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get supplier contracts by id
+      x-summary-source: derived
+      operationId: getSupplierContractsById
+      x-operation-id-source: derived
   /supplierInvoices:
     get:
       description: Retrieves a paginated listing of all supplier invoices.
@@ -16084,6 +16180,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get supplier invoices
+      x-summary-source: derived
+      operationId: getSupplierInvoices
+      x-operation-id-source: derived
   /supplierInvoices/{id}:
     get:
       description: Retrieves a single supplier invoice by its ID.
@@ -16629,6 +16729,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Other
+      summary: Get supplier invoices by id
+      x-summary-source: derived
+      operationId: getSupplierInvoicesById
+      x-operation-id-source: derived
 components:
   securitySchemes:
     OAuth2ClientCredentials:

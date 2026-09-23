@@ -1,37 +1,47 @@
 openapi: 3.2.0
 info:
-  title: University Of Wisconsin Madison Jobs API
+  title: Mock Person Jobs API
   version: 1.0.0
   contact:
     name: DoIT Enterprise Integration API Team
     email: api@doit.wisc.edu
     url: https://go.wisc.edu/k701y6
-  description: 'Operations tagged jobs across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: A mock implementation of the Person API.
 servers:
 - url: https://mock.api.wisc.edu
-- url: https://api.wisc.edu
 security:
 - OAuth2ClientCredentials: []
 tags:
-- name: jobs
+- name: Jobs
 paths:
   /people/{id}/jobs:
     get:
-      description: "<main>\n    <section>\n        <p>\n            Get jobs for a person. During the transition from HRS to Workday, a Person will have two versions of a\n            given job, one from HRS and one from Workday as indicated by the \"source\" attribute.  The different versions\n            of jobs have some unique attributes mentioned below.  All other attributes will be populated for both HRS\n            and Workday jobs, but their values might differ slightly. Workday jobs are refreshed infrequently and might\n            contain older data than HRS jobs.\n        </p>\n        <p>\n            HRS jobs will contain data for the following attributes:\n        </p>\n        <ul>\n            <li><code>division</code></li>\n            <li><code>divisionCode</code></li>\n            <li><code>departmentUnit</code></li>\n        </ul>\n        <p>\n            Workday jobs will contain data for the following attributes:\n        </p>\n        <ul>\n            <li><code>supervisoryOrganizationId</code></li>\n            <li><code>supervisoryOrganizationName</code></li>\n            <li><code>supervisoryOrganizationCode</code></li>\n            <li><code>relatedSupervisoryOrganizationIds</code></li>\n            <li><code>managedSupervisoryOrganizationIds</code></li>\n            <li><code>costCenterId</code></li>\n            <li><code>costCenterName</code></li>\n            <li><code>locationId</code></li>\n            <li><code>workspaceId</code></li>\n            <li><code>action</code></li>\n            <li><code>actionReason</code></li>\n        </ul>\n    </section>\n</main>"
-      summary: Get jobs.
+      description: 'Get jobs for a person.
+
+
+        The following attributes were previously on HRS jobs and no longer contain any data:
+
+
+        division
+
+
+        divisionCode
+
+
+        departmentUnit'
+      summary: Get jobs
       operationId: get_person_jobs
       tags:
-      - jobs
+      - Jobs
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
         in: path
-        example: '700'
+        example: e2118c5a-aae2-4475-a661-bb0592effefa
         required: true
         schema:
           type: string
           description: An ephemeral identifier used only in the Person API to adhere to the [JSON:API specification](https://jsonapi.org/format/#document-resource-object-identification). This ID may change if a person is split into two people or two people are merged into one person. This ID is used for paginating results or following other links returned in the API response. This ID should not be stored in a consuming system. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: '12345'
       - name: fields
         in: query
         description: Specify the list of fields you would like to return for each resource type.  For example, `fields[people]=firstName,lastName` will just return the names for people.  If you are including related resources with 'includes' you can also specify fields on those resources as well.  For example, `includes=jobs&fields[people]=jobs&fields[jobs]=title` will just return titles for jobs.  See [Sparse Fieldsets](https://jsonapi.org/format/#fetching-sparse-fieldsets) for more details.
@@ -45,9 +55,33 @@ paths:
             type:
               type: string
               example: people
-      - name: filter
+      - name: filterIncluded
         in: query
-        description: Filter results of query using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](/person-api/filter-query-parameter) for more information about the `filter` query param.
+        description: Filter the resources returned in the `included` section of the response. Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404#filter-included) for more information about the `filterIncluded` query param.
+        required: false
+        style: deepObject
+        explode: true
+        schema:
+          type: object
+          additionalProperties: false
+          properties:
+            relationship:attribute:
+              type: string
+              example: jobs:title
+            attribute:
+              type: string
+              example: firstName
+      - name: include
+        in: query
+        description: '[include related resources](https://jsonapi.org/format/#fetching-includes) for jobs.'
+        schema:
+          type: string
+          enum:
+          - organizationStructure
+          - costAllocations
+      - name: advancedFilter
+        in: query
+        description: Filter results of query using the [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
         required: false
         style: deepObject
         explode: true
@@ -57,12 +91,263 @@ paths:
           properties:
             attribute:
               type: string
-              example: firstName
-      - name: include
+              example: and(equals(firstName, "John"), equals(lastName, "Doe"))
+      - name: filter[relationship.attribute]
         in: query
-        description: '[include related resources](https://jsonapi.org/format/#fetching-includes). The resources to include need to be direct relationships. Nested relationships are not supported. For example, `include=jobs,identifiers` is supported but `include=person.jobs` is not supported.'
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter resources by `relationship.attribute`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[title]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `title`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[annualizedSalary]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `annualizedSalary`.
+        schema:
+          type: number
+      - name: filter[basePay]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `basePay`.
+        schema:
+          type: number
+      - name: filter[beginDate]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `beginDate`.
         schema:
           type: string
+          format: date
+          pattern: ^[1-9][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+      - name: filter[endDate]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `endDate`.
+        schema:
+          type: string
+          format: date
+          pattern: ^[1-9][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+      - name: filter[effectiveDate]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `effectiveDate`.
+        schema:
+          type: string
+          format: date
+          pattern: ^[1-9][0-9]{3}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$
+      - name: filter[fullTimeEquivalent]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `fullTimeEquivalent`.
+        schema:
+          type: string
+          format: number
+          example: '100.0'
+          pattern: ^-?\d+(\.\d+)?$
+          minLength: 1
+      - name: filter[payRateType]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `payRateType`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[compensationBasis]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `compensationBasis`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[employeeCategoryCode]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `employeeCategoryCode`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[employeeCategory]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `employeeCategory`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[jobCode]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `jobCode`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[jobProfileName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `jobProfileName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[businessTitle]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `businessTitle`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[position]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `position`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[current]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `current`.
+        schema:
+          type: boolean
+      - name: filter[primary]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `primary`.
+        schema:
+          type: boolean
+      - name: filter[supervisoryOrganizationId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `supervisoryOrganizationId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[costCenterId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `costCenterId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[costCenterName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `costCenterName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[source]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `source`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[institution]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `institution`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[supervisoryOrganizationName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `supervisoryOrganizationName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[supervisoryOrganizationCode]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `supervisoryOrganizationCode`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[relatedSupervisoryOrganizationIds]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `relatedSupervisoryOrganizationIds`.
+        schema:
+          type: string
+          pattern: ^IN:[A-Za-z0-9]+(,[A-Za-z0-9]+)*$
+      - name: filter[managedSupervisoryOrganizationIds]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `managedSupervisoryOrganizationIds`.
+        schema:
+          type: string
+          pattern: ^IN:[A-Za-z0-9]+(,[A-Za-z0-9]+)*$
+      - name: filter[locationId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `locationId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[locationName]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `locationName`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[workspaceId]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `workspaceId`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[action]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `action`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[actionReason]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `actionReason`.
+        schema:
+          type:
+          - string
+          - 'null'
+      - name: filter[workerType]
+        in: query
+        required: false
+        description: Filter results using the [filter query parameter family](https://jsonapi.org/recommendations/#filtering). Refer to the [Person API Documentation](https://kb.wisc.edu/uw-apis/158404) for more information. Filter `jobs` resources by `workerType`.
+        schema:
+          type:
+          - string
+          - 'null'
       responses:
         '200':
           description: A collection of jobs
@@ -85,29 +370,30 @@ paths:
                       - id
                       - attributes
                       - relationships
+                      - links
                       properties:
                         type:
                           type: string
                           example: jobs
                         id:
                           type: string
-                          example: '12345'
                           description: Ephemeral ID used to adhere to the JSON:API specification. This ID should not be stored.
                         attributes:
                           type: object
                           required:
                           - title
-                          - division
-                          - divisionCode
-                          - departmentUnit
+                          - annualizedSalary
+                          - basePay
                           - beginDate
                           - endDate
                           - effectiveDate
                           - fullTimeEquivalent
-                          - payBasis
+                          - compensationBasis
+                          - payRateType
                           - employeeCategoryCode
                           - employeeCategory
                           - jobCode
+                          - jobProfileName
                           - businessTitle
                           - position
                           - current
@@ -117,32 +403,29 @@ paths:
                           - source
                           - institution
                           - locationId
+                          - locationName
                           - workspaceId
                           - action
                           - actionReason
+                          - workerType
                           properties:
                             title:
                               type: string
                               example: Software Eng/Developer I
                               description: Title of the person's position at this job.
-                            division:
+                              minLength: 1
+                            annualizedSalary:
                               type:
-                              - string
+                              - number
                               - 'null'
-                              example: INFORMATION TECHNOLOGY
-                              description: High level organizational unit where the job is located.
-                            divisionCode:
+                              example: 90384.56
+                              description: The annualized salary of the job. This is not the actual paid salary, but the expected annual salary given the normal pay rate and assuming full time equivalence, adjusted to a 12-month compensation basis (i.e. positions with a compensationBasis of 9 Month assume an FTE of 1.22222, while jobs with a compensationBasis of 12 Month assume 1.0 FTE). Only available for jobs with source Workday.
+                            basePay:
                               type:
-                              - string
+                              - number
                               - 'null'
-                              example: A067040
-                              description: Code for the location of the job.
-                            departmentUnit:
-                              type:
-                              - string
-                              - 'null'
-                              example: L&S/COMPUTER SCI/COMP SCI
-                              description: Organization path where the job is located.
+                              example: 75328.8
+                              description: The base pay of the job. This is not the actual paid salary. For jobs with a payRateType of Hourly, this is usually the hourly rate. For jobs with a payRateType of Salary, this is usually the expected annual salary given the normal pay rate and assuming full time equivalence, not adjusted for compensation basis (i.e. 1.0 FTE for both 9- and 12-month appointments). Only available for jobs with source Workday.
                             beginDate:
                               type: string
                               format: date
@@ -162,25 +445,33 @@ paths:
                               description: The date the newest action on this job is effective.
                             fullTimeEquivalent:
                               type: string
-                              example: '0.5'
-                              description: The full time equivalency of the job. Represented as a decimal for HRS jobs and as a percentage for Workday jobs.
-                            payBasis:
+                              example: '100.0'
+                              pattern: ^-?\d+(\.\d+)?$
+                              description: The full time equivalency of the job, represented as a percentage.
+                            payRateType:
                               type: string
                               enum:
-                              - Academic
-                              - Annual
                               - Hourly
-                              - Lump
-                              - No Pay Basis
-                              - Summer Service
-                              - Summer Session
-                              - Unknown
                               - Salary
                               - No_Pay
                               - Period_Activity_Pay
                               - One_Time_Payment
-                              example: Annual
-                              description: The pay basis for this position.  HRS jobs have a value of Academic, Annual, Hourly, Lump, No Pay Basis, Summer Service, Summer Session, or Unknown.  Workday jobs have a value of Hourly, Salary, No_Pay, Period_Activity_Pay, or One_Time_Payment.
+                              - Hourly_Timeclock
+                              example: Hourly
+                              description: The pay rate type for this position.
+                            compensationBasis:
+                              type:
+                              - string
+                              - 'null'
+                              enum:
+                              - 12 Month
+                              - 9 Month
+                              - Summer
+                              - Seasonal
+                              - No Pay
+                              - null
+                              example: 12 Month
+                              description: Compensation basis for a job.
                             employeeCategoryCode:
                               type: string
                               example: AS
@@ -189,18 +480,27 @@ paths:
                               type: string
                               example: Academic Staff
                               description: 'See this document for information on this field: https://kb.wisc.edu/ohr/policies/page.php?id=53496'
+                              minLength: 1
                             jobCode:
                               type: string
                               example: IT002
                               description: Unique identifier for the job title.
+                              minLength: 1
+                            jobProfileName:
+                              type: string
+                              example: Software Engineer
+                              description: The job’s assigned official standard job code description defining the characteristics of that position within the organization.
+                              minLength: 1
                             businessTitle:
                               type: string
                               example: Software Engineer/Developer
-                              description: Business title of the person's position at this job.
+                              description: The job’s assigned official job title, which can be edited with HR approval to include more specific details about an individual position within the organization or the type of work performed.
+                              minLength: 1
                             position:
                               type: string
                               example: 00123456-1
-                              description: An identifier to be used to uniquely identify a job for a person. This is a concatenation of the position and job record from Peoplesoft HRS, separated by a hyphen '-' (without quotes). It is not recommended to parse this value, but instead use it as an opaque identifier.
+                              description: An identifier to be used to uniquely identify a job for a person.
+                              minLength: 1
                             current:
                               type: boolean
                               example: true
@@ -208,19 +508,19 @@ paths:
                             primary:
                               type: boolean
                               example: true
-                              description: Property that indicates if this is the primary job.
+                              description: Property that indicates if this is the primary job. In Workday, a person can only have 1 primary job system-wide. The job designated as primary may be invisible to the registered app if they are not able to view data for the insitution the primary job belongs to.
                             supervisoryOrganizationId:
                               type:
                               - string
                               - 'null'
                               example: SO00001234
-                              description: The ID of the supervisory organization for this job.
+                              description: The ID of the supervisory organization for this job. Only available for jobs with source Workday.
                             costCenterId:
                               type:
                               - string
                               - 'null'
                               example: CC001234
-                              description: The ID of the cost center for this job.
+                              description: The ID of the cost center for this job. Only available for jobs with source Workday.
                             costCenterName:
                               type:
                               - string
@@ -229,11 +529,10 @@ paths:
                               description: The name of the cost center for this job. Only available for jobs with source Workday.
                             source:
                               type: string
-                              example: HRS
-                              enum:
-                              - HRS
-                              - Workday
+                              example: Workday
                               description: The source of this job.
+                              enum:
+                              - Workday
                             institution:
                               description: The institution associated with the resource.
                               type: string
@@ -268,54 +567,67 @@ paths:
                               example: UWMSN | DOIT |
                               description: The code of the supervisory organization for this job. Only available for jobs with source Workday.
                             relatedSupervisoryOrganizationIds:
-                              type:
-                              - array
-                              - 'null'
+                              type: array
                               items:
                                 type: string
                               example:
                               - SO00000000
                               - SO00001234
                               - SO00002345
-                              description: The IDs of the supervisory organizations related to this job. This list contains IDs of all parent supervisory organizations and IDs of supervisory organizations that this position manages.
+                              description: The IDs of the supervisory organizations related to this job. This list contains IDs of all parent supervisory organizations and IDs of supervisory organizations that this position manages. Only available for jobs with source Workday.
                             managedSupervisoryOrganizationIds:
-                              type:
-                              - array
-                              - 'null'
+                              type: array
                               items:
                                 type: string
                               example:
                               - SO00002345
-                              description: The IDs of the supervisory organizations that this job manages.
+                              description: The IDs of the supervisory organizations that this job manages. Only available for jobs with source Workday.
                             locationId:
                               type:
                               - string
                               - 'null'
                               example: LCMSN_0048
-                              description: The ID of the location for this job.  Only available for jobs with source Workday.
+                              description: The ID of the location for this job. Former jobs may have location IDs and names that are inaccurate or no longer exist. Only available for jobs with source Workday.
+                            locationName:
+                              type:
+                              - string
+                              - 'null'
+                              example: Memorial Union-0048
+                              description: The name of the location for this job. Former jobs may have location IDs and names that are inaccurate or no longer exist. Only available for jobs with source Workday.
                             workspaceId:
                               type:
                               - string
                               - 'null'
                               example: LCMSN_0048_03_0323
-                              description: The ID of the workspace for this job.  Only available for jobs with source Workday.
+                              description: The ID of the workspace for this job. Only available for jobs with source Workday.
                             action:
                               type:
                               - string
                               - 'null'
                               example: Change Job
-                              description: Workday business process.
+                              description: Workday business process. Only available for jobs with source Workday.
                             actionReason:
                               type:
                               - string
                               - 'null'
                               example: CJ9
-                              description: Reason for the action. Not all actions have a reason.
+                              description: Reason for the action. Not all actions have a reason. Only available for jobs with source Workday.
+                            workerType:
+                              type:
+                              - string
+                              - 'null'
+                              example: Regular
+                              enum:
+                              - null
+                              - Regular
+                              - Terminal
+                              - Temporary
+                              - Contingent_Worker
+                              description: The type of worker. Only available for jobs with source Workday.
                         relationships:
                           type: object
                           required:
                           - person
-                          - supervisor
                           properties:
                             person:
                               description: A generic relationship object
@@ -328,7 +640,9 @@ paths:
                                       type: string
                                       example: https://api.wisc.edu/link/to/related/object
                                 data:
-                                  type: object
+                                  type:
+                                  - object
+                                  - 'null'
                                   properties:
                                     type:
                                       type: string
@@ -339,15 +653,21 @@ paths:
                             supervisor:
                               description: The supervisor for the job. If the job reports to a position that has 0 or greater than 2 people occupying it, this relationship is empty. If the job reports to a position occupied by 2 people, this relationship points to the person with the most recently entered job.
                               type: object
+                              required:
+                              - data
                               properties:
                                 links:
                                   type: object
                                   properties:
                                     related:
-                                      type: string
+                                      type:
+                                      - string
+                                      - 'null'
                                       example: https://api.wisc.edu/people/123
                                 data:
-                                  type: object
+                                  type:
+                                  - object
+                                  - 'null'
                                   properties:
                                     type:
                                       type: string
@@ -355,6 +675,62 @@ paths:
                                     id:
                                       type: string
                                       example: '123'
+                            organizationStructures:
+                              description: The UW organization structure associated with the job.
+                              type: object
+                              required:
+                              - data
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/people/e64ca453-2194-4e99-a596-adb4f36a170c/jobs/9434f047-b024-4631-bfb7-3d34004228fe/organizationStructure
+                                data:
+                                  type:
+                                  - object
+                                  - 'null'
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: organizationStructures
+                                    id:
+                                      type: string
+                                      example: 91314182-3a7a-4690-83b2-a0050437c512
+                            costAllocations:
+                              description: The Cost Allocations associated with the job.
+                              type: object
+                              required:
+                              - data
+                              - links
+                              properties:
+                                links:
+                                  type: object
+                                  properties:
+                                    related:
+                                      type: string
+                                      example: https://api.wisc.edu/people/e64ca453-2194-4e99-a596-adb4f36a170c/jobs/9434f047-b024-4631-bfb7-3d34004228fe/costAllocations
+                                data:
+                                  type: array
+                                  items:
+                                    type:
+                                    - object
+                                    - 'null'
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: costAllocations
+                                      id:
+                                        type: string
+                                        example: dc82b638-a6ec-4592-9cd8-e91b373284c2
+                        links:
+                          description: The link to access a resource itself
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: https://api.wisc.edu/link/to/self
                   links:
                     description: The link to access a resource itself
                     type: object
@@ -398,7 +774,9 @@ paths:
                                       type: string
                                       example: https://api.wisc.edu/link/to/related/object
                                 data:
-                                  type: object
+                                  type:
+                                  - object
+                                  - 'null'
                                   properties:
                                     type:
                                       type: string
@@ -418,64 +796,20 @@ paths:
                   value:
                     data:
                     - attributes:
-                        departmentUnit: DOIT/AIS/ENTERPRISE INTEGRAT
-                        division: INFORMATION TECHNOLOGY
-                        divisionCode: A067040
+                        annualizedSalary: 90384.56
+                        basePay: 75328.8
                         title: Product Manager
                         beginDate: '2020-01-01'
                         endDate: '2080-01-01'
                         effectiveDate: '2020-01-01'
-                        fullTimeEquivalent: '1'
-                        payBasis: Annual
+                        fullTimeEquivalent: '100.0'
+                        payRateType: Salary
+                        compensationBasis: 12 Month
                         primary: true
                         employeeCategory: Academic Staff
                         employeeCategoryCode: AS
                         jobCode: IT002
-                        businessTitle: Department Product Manager
-                        position: 00123456-1
-                        current: true
-                        supervisoryOrganizationId: null
-                        supervisoryOrganizationName: null
-                        supervisoryOrganizationCode: null
-                        costCenterId: null
-                        costCenterName: null
-                        source: HRS
-                        institution: UW-Madison
-                        relatedSupervisoryOrganizationIds: []
-                        managedSupervisoryOrganizationIds: []
-                        locationId: null
-                        workspaceId: null
-                        action: null
-                        actionReason: null
-                      id: '100'
-                      relationships:
-                        person:
-                          data:
-                            id: '100'
-                            type: people
-                          links:
-                            related: https://api.wisc.edu/people/100
-                        supervisor:
-                          data:
-                            id: '200'
-                            type: people
-                          links:
-                            related: https://api.wisc.edu/people/200
-                      type: jobs
-                    - attributes:
-                        departmentUnit: null
-                        division: null
-                        divisionCode: null
-                        title: Product Manager
-                        beginDate: '2020-01-01'
-                        endDate: '2080-01-01'
-                        effectiveDate: '2020-01-01'
-                        fullTimeEquivalent: '1'
-                        payBasis: Annual
-                        primary: true
-                        employeeCategory: Academic Staff
-                        employeeCategoryCode: AS
-                        jobCode: IT002
+                        jobProfileName: Product Manager
                         businessTitle: Department Product Manager
                         position: 00123456-1
                         current: true
@@ -493,31 +827,42 @@ paths:
                         managedSupervisoryOrganizationIds:
                         - SO00002345
                         locationId: LCMSN_0048
+                        locationName: Memorial Union-0048
                         workspaceId: LCMSN_0048_03_0323
                         action: Change Job
                         actionReason: CJ9
-                      id: '100'
+                        workerType: Regular
+                      id: 01de376e-b08d-4fd7-8553-6664d13f14c0
                       relationships:
                         person:
                           data:
-                            id: '100'
+                            id: e2118c5a-aae2-4475-a661-bb0592effefa
                             type: people
                           links:
-                            related: https://api.wisc.edu/people/100
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa
                         supervisor:
                           data:
-                            id: '200'
+                            id: 8cfb0434-2d95-490a-99e8-94f9b77f7916
                             type: people
                           links:
-                            related: https://api.wisc.edu/people/200
+                            related: https://api.wisc.edu/people/8cfb0434-2d95-490a-99e8-94f9b77f7916
+                        organizationStructures:
+                          data:
+                            id: 8cfb0434-2d95-490a-99e8-94f9b77f7916
+                            type: organizationStructures
+                          links:
+                            related: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/jobs/01de376e-b08d-4fd7-8553-6664d13f14c0/organizationStructure
                       type: jobs
+                      links:
+                        self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/jobs/01de376e-b08d-4fd7-8553-6664d13f14c0
                     links:
-                      self: https://api.wisc.edu/people/100/jobs
+                      self: https://api.wisc.edu/people/e2118c5a-aae2-4475-a661-bb0592effefa/jobs
         '400':
           description: A bad request.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -526,6 +871,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -545,7 +895,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -557,6 +907,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -565,6 +916,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -592,6 +948,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -600,6 +957,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -628,11 +990,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -641,6 +1010,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -668,6 +1042,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -676,6 +1051,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -703,6 +1083,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -711,6 +1092,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -738,6 +1124,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -746,6 +1133,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -768,15 +1160,13 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
   /people/{id}/jobs/{jobId}:
     get:
-      description: Get a single job for a person. Refer to the [Jobs endpoint](/docs/person-api/1/routes/people/%7Bid%7D/jobs/get) for more information on the data returned.
-      summary: Get a job.
+      description: Get a single job for a person. Refer to the Jobs endpoint for more information on the data returned.
+      summary: Get a job
       operationId: get_person_job
       tags:
-      - jobs
+      - Jobs
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
@@ -1627,15 +2017,13 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
   /people/{id}/jobs/{jobId}/costAllocations:
     get:
       description: Get a list of cost allocations for this job.
-      summary: Get cost allocations.
+      summary: Get cost allocations
       operationId: get_person_job_cost_allocations
       tags:
-      - jobs
+      - Jobs
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
@@ -2220,15 +2608,13 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
   /people/{id}/jobs/{jobId}/costAllocations/{costAllocationId}:
     get:
       description: Get a single cost allocations for this job.
-      summary: Get a cost allocation.
+      summary: Get a cost allocation
       operationId: get_person_job_cost_allocation
       tags:
-      - jobs
+      - Jobs
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
@@ -2742,15 +3128,13 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
   /people/{id}/jobs/{jobId}/costAllocations/{costAllocationId}/worktags:
     get:
       description: Get a collection of worktags for this cost allocation.
-      summary: Get worktags.
+      summary: Get worktags
       operationId: get_person_job_cost_allocation_worktag
       tags:
-      - jobs
+      - Jobs
       parameters:
       - name: id
         description: 'ID of a person. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response. To get a person by an ID, use query parameters to search by a specific identifier. Example: /people?filter[identifiers.name]=netId&filter[identifiers.value]=bbadger'
@@ -3256,8 +3640,6 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
 components:
   securitySchemes:
     OAuth2ClientCredentials:
@@ -3269,13 +3651,3 @@ components:
 externalDocs:
   description: Read more about JSON:API here
   url: https://jsonapi.org/
-x-refined-from:
-- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
-- university-of-wisconsin-madison-mock-person-api-openapi.yml
-- university-of-wisconsin-madison-person-api-openapi.yml
-x-operator: institution
-x-provenance:
-  generated: '2026-08-19'
-  method: probed
-  source: https://public.enroll.wisc.edu/api/search/v1
-  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

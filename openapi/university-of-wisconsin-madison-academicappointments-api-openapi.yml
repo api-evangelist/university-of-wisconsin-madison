@@ -1,15 +1,14 @@
 openapi: 3.2.0
 info:
-  title: University Of Wisconsin Madison Academic Appointments API
+  title: Mock Person Academic Appointments API
   version: 1.0.0
   contact:
     name: DoIT Enterprise Integration API Team
     email: api@doit.wisc.edu
     url: https://go.wisc.edu/k701y6
-  description: 'Operations tagged academicAppointments across 2 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: A mock implementation of the Person API.
 servers:
 - url: https://mock.api.wisc.edu
-- url: https://api.wisc.edu
 security:
 - OAuth2ClientCredentials: []
 tags:
@@ -17,8 +16,22 @@ tags:
 paths:
   /people/{id}/academicAppointments:
     get:
-      description: "<main>\n    <section>\n        <p>\n            Get academic appointments for a person.\n            Different appointment types have unique attributes mentioned below.\n        </p>\n        <p>\n            Tenure appointments will contain data for the following attributes:\n        </p>\n        <ul>\n            <li><code>tenureStatus</code></li>\n            <li><code>tenureHomeAcademicUnitId</code></li>\n            <li><code>tenureHomeAcademicUnitName</code></li>\n        </ul>\n    </section>\n</main>"
-      summary: Get academic appointments.
+      description: 'Get academic appointments for a person.
+
+        Different appointment types have unique attributes mentioned below.
+
+
+        Tenure appointments will contain data for the following attributes:
+
+
+        tenureStatus
+
+
+        tenureHomeAcademicUnitId
+
+
+        tenureHomeAcademicUnitName'
+      summary: Get academic appointments
       operationId: get_person_academic_appointments
       tags:
       - academicAppointments
@@ -693,8 +706,6 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
 components:
   securitySchemes:
     OAuth2ClientCredentials:
@@ -706,12 +717,3 @@ components:
 externalDocs:
   description: Read more about JSON:API here
   url: https://jsonapi.org/
-x-refined-from:
-- university-of-wisconsin-madison-mock-person-api-openapi.yml
-- university-of-wisconsin-madison-person-api-openapi.yml
-x-operator: institution
-x-provenance:
-  generated: '2026-08-19'
-  method: probed
-  source: https://public.enroll.wisc.edu/api/search/v1
-  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

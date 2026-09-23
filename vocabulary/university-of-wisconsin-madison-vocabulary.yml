@@ -1,0 +1,102 @@
+generated: '2026-08-19'
+method: derived
+source: openapi/ (12 contracts) + examples/ (probed course-search responses)
+x-operator: institution
+note: >-
+  The institutional business vocabulary UW-Madison's own contracts expose. Derived from
+  component schema names and verified response field names — not authored, and not a
+  UW-Madison publication.
+domains:
+- name: Identity and Person
+  contracts: [person-api, mock-person-api, mock-person-api-certificates]
+  terms:
+  - person
+  - netId
+  - emplid
+  - pvi
+  - name (legal, preferred, primary)
+  - population
+  - affiliation
+  - email
+  - phone
+  - address
+  - certificate
+  - export
+  - webhook
+  note: >-
+    The richest vocabulary in the estate — 31 component schemas, 47 operations. This is the
+    ground SCIM standardizes, expressed in UW-local terms instead.
+- name: Human Resources
+  contracts: [hr-api, mock-hr-api]
+  terms:
+  - academicUnit
+  - supervisoryOrganization
+  - jobProfile
+  - position
+  - worker
+  - fullTimeEquivalent
+  - costCenter
+  note: Workday-derived concepts (supervisoryOrganization, worker) surfaced under UW's own contract.
+- name: Groups and Authorization
+  contracts: [manifest-api, mock-manifest-api]
+  terms:
+  - group
+  - member
+  - membership
+  - stem
+  note: Backed by Internet2 Grouper Web Services, per the portal's own API product description.
+- name: Finance
+  contracts: [finance-api]
+  terms:
+  - award
+  - awardLine
+  - awardTask
+  - grant
+  - gift
+  - fund
+  - function
+  - costCenter
+  - company
+  - budgetLine
+  - billingSchedule
+  - customerInvoice
+  - expenseReport
+  - externalCustomer
+  - asset
+  - activity
+  - catalogItem
+  - hierarchy
+  note: >-
+    73 operations, the largest single contract. Sponsored-research and grant administration
+    vocabulary — a genuinely university-shaped domain with no cross-institution standard.
+- name: Locations
+  contracts: [locations-api]
+  terms: [location, building, room, campus]
+- name: Billing
+  contracts: [enterprise-billing-api]
+  terms: [billingTransaction, serviceProvider]
+  note: Salesforce-backed per the portal product description; contract and host are UW's.
+- name: Curriculum and Enrollment
+  contracts: [course-search-api]
+  terms:
+  - course
+  - courseId
+  - subject
+  - catalogNumber
+  - termCode
+  - session
+  - credits / creditRange
+  - breadth
+  - generalEd
+  - ethnicStudies
+  - foreignLanguage
+  - honors
+  - level
+  - gradingBasis
+  - prerequisite (advisory, enrollment)
+  - courseDesignation
+  - crossListedSubject
+  - specialGroup
+  note: >-
+    Verified live: 190 subjects per term, 2 open terms. The degree-requirement vocabulary
+    (breadth, generalEd, ethnicStudies) is specific to UW-Madison's General Education policy.

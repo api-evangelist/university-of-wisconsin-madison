@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Enterprise Billing Bulkjob BillingTrans API
-  description: Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API.  For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/.  For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438.
+  description: Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API. For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/. For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438.
   version: 0.1.0
 servers:
 - url: https://doit.dev.api.wisc.edu/enterprise-billing
@@ -21,7 +21,7 @@ paths:
       description: Submit a .csv file of billing transactions.
     summary: Upload .csv file of billing transactions.
     post:
-      summary: Submit a .csv file of billing transactions.
+      summary: Submit a .csv file of billing transactions
       description: Creates Billing Batch and child billing transactions in Salesforce.
       requestBody:
         description: Attached .csv file for request.
@@ -65,6 +65,8 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
       - Bulkjob BillingTrans
+      operationId: postBulkjobBillingTrans
+      x-operation-id-source: derived
 components:
   responses:
     DuplicateBillingBatchName:
@@ -81,14 +83,6 @@ components:
               message: Billing Batch Name must be unique
               errorCode: Billing Batch Name must be unique
               fields: Name
-    NotFound:
-      description: A specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: The requested resource does not exist
     NoAuthorization:
       description: Not authorized to access resource.
       content:
@@ -97,31 +91,15 @@ components:
             $ref: '#/components/schemas/error'
           example:
             message: Token not found.
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist
   schemas:
-    errorDuplicateBillingBatchName:
-      description: Duplicate BillingBatchName error object
-      type: object
-      properties:
-        reason:
-          type: string
-          description: Base fault reason.
-        details:
-          type: string
-          description: Specific fault verbage. (from Apigee)
-        sfdcDetail:
-          type: array
-          description: Details from Salesforce.
-          items:
-            properties:
-              message:
-                type: string
-                description: Specific fault message.
-              errorCode:
-                type: string
-                description: specific error code
-              fields:
-                type: array
-                description: Field API name(s) with issues.
     billingTransactionsCSV:
       title: Billing Transaction CSV
       description: Billing transactions CSV file
@@ -187,12 +165,6 @@ components:
         Memo:
           title: Memo
           description: Comments field.
-          type: string
-    error:
-      description: Error object
-      type: object
-      properties:
-        message:
           type: string
     bulkjob:
       title: Bulkjob Status
@@ -298,3 +270,33 @@ components:
           title: APEX Processing Time
           description: Bulkjob APEX processing time.
           type: number
+    error:
+      description: Error object
+      type: object
+      properties:
+        message:
+          type: string
+    errorDuplicateBillingBatchName:
+      description: Duplicate BillingBatchName error object
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Base fault reason.
+        details:
+          type: string
+          description: Specific fault verbage. (from Apigee)
+        sfdcDetail:
+          type: array
+          description: Details from Salesforce.
+          items:
+            properties:
+              message:
+                type: string
+                description: Specific fault message.
+              errorCode:
+                type: string
+                description: specific error code
+              fields:
+                type: array
+                description: Field API name(s) with issues.

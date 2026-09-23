@@ -1,27 +1,26 @@
 openapi: 3.2.0
 info:
-  title: University Of Wisconsin Madison Exports API
+  title: Mock Person Exports API
   version: 1.0.0
   contact:
     name: DoIT Enterprise Integration API Team
     email: api@doit.wisc.edu
     url: https://go.wisc.edu/k701y6
-  description: 'Operations tagged exports across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: A mock implementation of the Person API.
 servers:
 - url: https://mock.api.wisc.edu
-- url: https://api.wisc.edu
 security:
 - OAuth2ClientCredentials: []
 tags:
-- name: exports
+- name: Exports
 paths:
   /people/exports:
     get:
-      description: Get a collection of exports. Refer to the [Exports Documentation](/person-api/exports) for more information.
-      summary: Get exports.
+      description: Get a collection of exports. Refer to the Exports Documentation for more information.
+      summary: Get exports
       operationId: get_exports
       tags:
-      - exports
+      - Exports
       responses:
         '200':
           description: A collection of exports.
@@ -37,7 +36,7 @@ paths:
                     description: A collection of exports.
                     type: array
                     items:
-                      description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](/person-api/exports) for more information.
+                      description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](https://kb.wisc.edu/uw-apis/158402) for more information.
                       type: object
                       required:
                       - type
@@ -51,79 +50,156 @@ paths:
                         id:
                           type: string
                           description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-                          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
                         attributes:
-                          type: object
-                          properties:
-                            relationships:
-                              type: array
-                              items:
-                                type: string
-                              example:
-                              - names
-                              - jobs
-                              description: Relationships to include in the exported data. By default, only the root person data will be included.
-                            filters:
-                              type: array
-                              items:
-                                type: object
-                                description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
-                                required:
-                                - attribute
-                                - values
-                                properties:
-                                  attribute:
-                                    type: string
-                                    example: jobs.divisionCode
-                                    description: A valid attribute or relationship attribute on the people resource.
-                                  operator:
-                                    type: string
-                                    example: STARTS_WITH
-                                    enum:
-                                    - STARTS_WITH
-                                    - ENDS_WITH
-                                    - CONTAINS
-                                    - EQUALS
-                                    - IN
-                                    description: The comparison to be performed on the values.
-                                  values:
-                                    type: array
-                                    items:
+                          allOf:
+                          - type: object
+                            properties:
+                              relationships:
+                                type: array
+                                items:
+                                  type: string
+                                example:
+                                - names
+                                - jobs
+                                description: Relationships to include in the exported data. By default, only the root person data will be included.
+                              advancedFilter:
+                                type:
+                                - string
+                                - 'null'
+                                example: jobs(equals(current, true))
+                                description: Advanced filter to apply when generating the exported data. This field is mutually exclusive with the `filters` field. For more information see [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
+                              filters:
+                                type: array
+                                items:
+                                  type: object
+                                  description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                                  required:
+                                  - attribute
+                                  - values
+                                  properties:
+                                    attribute:
                                       type: string
-                                    example:
-                                    - A192
-                                    - A193
-                                    description: A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
-                              description: Filters to apply when generating the exported data.
-                            status:
-                              type: string
-                              enum:
-                              - Pending
-                              - Completed
-                              - Deleted
-                              - Error
-                              readOnly: true
-                              example: Pending
-                              description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
-                            exportUrl:
-                              type: string
-                              format: url
-                              readOnly: true
-                              description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
-                            requestTime:
-                              type: string
-                              format: date-time
-                              readOnly: true
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The time the export request was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                            completionTime:
-                              type:
-                              - string
-                              - 'null'
-                              format: date-time
-                              readOnly: true
-                              example: '2024-01-01T00:05:00+00:00'
-                              description: The time the export was done processing. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                                      example: jobs.costCenterName
+                                      description: A valid attribute or relationship attribute on the people resource.
+                                      minLength: 1
+                                    operator:
+                                      type: string
+                                      example: STARTS_WITH
+                                      enum:
+                                      - STARTS_WITH
+                                      - ENDS_WITH
+                                      - CONTAINS
+                                      - EQUALS
+                                      - IN
+                                      - GREATER_THAN
+                                      - GREATER_THAN_OR_EQUAL
+                                      - LESS_THAN
+                                      - LESS_THAN_OR_EQUAL
+                                      description: The comparison to be performed on the values.
+                                    values:
+                                      type: array
+                                      minItems: 1
+                                      items:
+                                        type: string
+                                        minLength: 1
+                                      example:
+                                      - A192
+                                      - A193
+                                      description: A list of values to compare against. Values are required and must be a list of up to 1000 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                                description: Filters to apply when generating the exported data. This field is mutually exclusive with the `advancedFilter` field.
+                              inclusionFilters:
+                                type: array
+                                items:
+                                  type: object
+                                  description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                                  required:
+                                  - attribute
+                                  - values
+                                  properties:
+                                    attribute:
+                                      type: string
+                                      example: jobs.costCenterName
+                                      description: A valid attribute or relationship attribute on the people resource.
+                                      minLength: 1
+                                    operator:
+                                      type: string
+                                      example: STARTS_WITH
+                                      enum:
+                                      - STARTS_WITH
+                                      - ENDS_WITH
+                                      - CONTAINS
+                                      - EQUALS
+                                      - IN
+                                      - GREATER_THAN
+                                      - GREATER_THAN_OR_EQUAL
+                                      - LESS_THAN
+                                      - LESS_THAN_OR_EQUAL
+                                      description: The comparison to be performed on the values.
+                                    values:
+                                      type: array
+                                      minItems: 1
+                                      items:
+                                        type: string
+                                        minLength: 1
+                                      example:
+                                      - A192
+                                      - A193
+                                      description: A list of values to compare against. Values are required and must be a list of up to 1000 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                                description: Filter the included relationships selected in the "relationships" array.
+                              fields:
+                                type: array
+                                description: Fields to include for each resource type. By default, all fields will be included unless specified otherwise for a given resource type.
+                                items:
+                                  type: object
+                                  required:
+                                  - resourceType
+                                  - fields
+                                  properties:
+                                    resourceType:
+                                      type: string
+                                      example: jobs
+                                      description: A valid resource type in the Person API.
+                                    fields:
+                                      type: array
+                                      items:
+                                        type: string
+                                      example:
+                                      - title
+                                      - beginDate
+                                      description: A list of fields to include for the given resource type. Fields can be attributes or relationships. The list can also be empty to return no fields for the resource type.
+                          - type: object
+                            properties:
+                              status:
+                                type: string
+                                enum:
+                                - Pending
+                                - Completed
+                                - Deleted
+                                - Error
+                                readOnly: true
+                                example: Pending
+                                description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
+                              exportUrl:
+                                type:
+                                - string
+                                - 'null'
+                                format: url
+                                readOnly: true
+                                description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
+                              requestTime:
+                                type: string
+                                format: date-time
+                                readOnly: true
+                                example: '2024-01-01T00:00:00Z'
+                                description: The time the export request was created. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
+                              completionTime:
+                                type:
+                                - string
+                                - 'null'
+                                format: date-time
+                                readOnly: true
+                                example: '2024-01-01T00:05:00Z'
+                                description: The time the export was done processing. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
                         links:
                           description: The link to access a resource itself
                           type: object
@@ -146,16 +222,31 @@ paths:
                         relationships:
                         - names
                         - jobs
+                        fields:
+                        - resourceType: people
+                          fields:
+                          - firstName
+                          - lastName
+                        - resourceType: jobs
+                          fields:
+                          - current
+                          - beginDate
+                        advancedFilter: null
                         filters:
-                        - attribute: jobs.divisionCode
+                        - attribute: jobs.costCenterName
                           operator: STARTS_WITH
                           values:
-                          - A192
-                          - A193
+                          - UWMSN
+                          - UWPLT
+                        inclusionFilters:
+                        - attribute: names.firstName
+                          operator: STARTS_WITH
+                          values:
+                          - Jo
                         status: Completed
                         exportUrl: https://example.com/person-export-d26bd7c2-8874-4322-b184-aaa410246630.json?signature=123456
-                        requestTime: '2024-01-01T00:00:00+00:00'
-                        completionTime: '2024-01-01T00:05:00+00:00'
+                        requestTime: '2024-01-01T00:00:00Z'
+                        completionTime: '2024-01-01T00:05:00Z'
                       id: d26bd7c2-8874-4322-b184-aaa410246630
                       links:
                         self: https://api.wisc.edu/people/exports/d26bd7c2-8874-4322-b184-aaa410246630
@@ -164,12 +255,26 @@ paths:
                         relationships:
                         - emailAddresses
                         - phoneNumbers
+                        fields:
+                        - resourceType: people
+                          fields:
+                          - firstName
+                          - lastName
+                        - resourceType: jobs
+                          fields:
+                          - current
+                          - beginDate
                         filters:
                         - attribute: emailAddresses.emailAddress
                           operator: ENDS_WITH
                           values:
                           - '@wisc.edu'
                           - '@wisconsin.edu'
+                        inclusionFilters:
+                        - attribute: names.firstName
+                          operator: STARTS_WITH
+                          values:
+                          - Jo
                         status: Error
                         exportUrl: null
                         requestTime: '2024-01-02T00:00:00Z'
@@ -185,6 +290,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -193,6 +299,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -220,6 +331,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -228,6 +340,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -256,11 +373,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '406':
           description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -269,6 +393,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -296,6 +425,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -304,6 +434,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -331,6 +466,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -339,6 +475,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -362,13 +503,13 @@ paths:
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
     post:
-      description: Create an export. Refer to the [Exports Documentation](/person-api/exports) for more information.
-      summary: Create an export.
+      description: Create an export. Refer to the Exports Documentation for more information.
+      summary: Create an export
       operationId: create_export
       tags:
-      - exports
+      - Exports
       requestBody:
-        description: An export request body. Only the attributes "relationships" and "filters" can be set in a request.
+        description: An export request body. Only the attributes "relationships",  "advancedFilter", and "filters" can be set in a request.  You can only use one of "advancedFilter" or "filters" in a request.
         required: true
         content:
           application/vnd.api+json:
@@ -398,6 +539,12 @@ paths:
                           - names
                           - jobs
                           description: Relationships to include in the exported data. By default, only the root person data will be included.
+                        advancedFilter:
+                          type:
+                          - string
+                          - 'null'
+                          example: jobs(equals(current, true))
+                          description: Advanced filter to apply when generating the exported data. This field is mutually exclusive with the `filters` field. For more information see [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
                         filters:
                           type: array
                           items:
@@ -409,8 +556,9 @@ paths:
                             properties:
                               attribute:
                                 type: string
-                                example: jobs.divisionCode
+                                example: jobs.costCenterName
                                 description: A valid attribute or relationship attribute on the people resource.
+                                minLength: 1
                               operator:
                                 type: string
                                 example: STARTS_WITH
@@ -420,16 +568,82 @@ paths:
                                 - CONTAINS
                                 - EQUALS
                                 - IN
+                                - GREATER_THAN
+                                - GREATER_THAN_OR_EQUAL
+                                - LESS_THAN
+                                - LESS_THAN_OR_EQUAL
                                 description: The comparison to be performed on the values.
                               values:
+                                type: array
+                                minItems: 1
+                                items:
+                                  type: string
+                                  minLength: 1
+                                example:
+                                - A192
+                                - A193
+                                description: A list of values to compare against. Values are required and must be a list of up to 1000 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                          description: Filters to apply when generating the exported data. This field is mutually exclusive with the `advancedFilter` field.
+                        inclusionFilters:
+                          type: array
+                          items:
+                            type: object
+                            description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                            required:
+                            - attribute
+                            - values
+                            properties:
+                              attribute:
+                                type: string
+                                example: jobs.costCenterName
+                                description: A valid attribute or relationship attribute on the people resource.
+                                minLength: 1
+                              operator:
+                                type: string
+                                example: STARTS_WITH
+                                enum:
+                                - STARTS_WITH
+                                - ENDS_WITH
+                                - CONTAINS
+                                - EQUALS
+                                - IN
+                                - GREATER_THAN
+                                - GREATER_THAN_OR_EQUAL
+                                - LESS_THAN
+                                - LESS_THAN_OR_EQUAL
+                                description: The comparison to be performed on the values.
+                              values:
+                                type: array
+                                minItems: 1
+                                items:
+                                  type: string
+                                  minLength: 1
+                                example:
+                                - A192
+                                - A193
+                                description: A list of values to compare against. Values are required and must be a list of up to 1000 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                          description: Filter the included relationships selected in the "relationships" array.
+                        fields:
+                          type: array
+                          description: Fields to include for each resource type. By default, all fields will be included unless specified otherwise for a given resource type.
+                          items:
+                            type: object
+                            required:
+                            - resourceType
+                            - fields
+                            properties:
+                              resourceType:
+                                type: string
+                                example: jobs
+                                description: A valid resource type in the Person API.
+                              fields:
                                 type: array
                                 items:
                                   type: string
                                 example:
-                                - A192
-                                - A193
-                                description: A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
-                          description: Filters to apply when generating the exported data.
+                                - title
+                                - beginDate
+                                description: A list of fields to include for the given resource type. Fields can be attributes or relationships. The list can also be empty to return no fields for the resource type.
       responses:
         '202':
           description: A single export.
@@ -442,7 +656,7 @@ paths:
                 - links
                 properties:
                   data:
-                    description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](/person-api/exports) for more information.
+                    description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](https://kb.wisc.edu/uw-apis/158402) for more information.
                     type: object
                     required:
                     - type
@@ -456,79 +670,156 @@ paths:
                       id:
                         type: string
                         description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-                        example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
                       attributes:
-                        type: object
-                        properties:
-                          relationships:
-                            type: array
-                            items:
-                              type: string
-                            example:
-                            - names
-                            - jobs
-                            description: Relationships to include in the exported data. By default, only the root person data will be included.
-                          filters:
-                            type: array
-                            items:
-                              type: object
-                              description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
-                              required:
-                              - attribute
-                              - values
-                              properties:
-                                attribute:
-                                  type: string
-                                  example: jobs.divisionCode
-                                  description: A valid attribute or relationship attribute on the people resource.
-                                operator:
-                                  type: string
-                                  example: STARTS_WITH
-                                  enum:
-                                  - STARTS_WITH
-                                  - ENDS_WITH
-                                  - CONTAINS
-                                  - EQUALS
-                                  - IN
-                                  description: The comparison to be performed on the values.
-                                values:
-                                  type: array
-                                  items:
+                        allOf:
+                        - type: object
+                          properties:
+                            relationships:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - names
+                              - jobs
+                              description: Relationships to include in the exported data. By default, only the root person data will be included.
+                            advancedFilter:
+                              type:
+                              - string
+                              - 'null'
+                              example: jobs(equals(current, true))
+                              description: Advanced filter to apply when generating the exported data. This field is mutually exclusive with the `filters` field. For more information see [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
+                            filters:
+                              type: array
+                              items:
+                                type: object
+                                description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                                required:
+                                - attribute
+                                - values
+                                properties:
+                                  attribute:
                                     type: string
-                                  example:
-                                  - A192
-                                  - A193
-                                  description: A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
-                            description: Filters to apply when generating the exported data.
-                          status:
-                            type: string
-                            enum:
-                            - Pending
-                            - Completed
-                            - Deleted
-                            - Error
-                            readOnly: true
-                            example: Pending
-                            description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
-                          exportUrl:
-                            type: string
-                            format: url
-                            readOnly: true
-                            description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
-                          requestTime:
-                            type: string
-                            format: date-time
-                            readOnly: true
-                            example: '2024-01-01T00:00:00+00:00'
-                            description: The time the export request was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                          completionTime:
-                            type:
-                            - string
-                            - 'null'
-                            format: date-time
-                            readOnly: true
-                            example: '2024-01-01T00:05:00+00:00'
-                            description: The time the export was done processing. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                                    example: jobs.costCenterName
+                                    description: A valid attribute or relationship attribute on the people resource.
+                                    minLength: 1
+                                  operator:
+                                    type: string
+                                    example: STARTS_WITH
+                                    enum:
+                                    - STARTS_WITH
+                                    - ENDS_WITH
+                                    - CONTAINS
+                                    - EQUALS
+                                    - IN
+                                    - GREATER_THAN
+                                    - GREATER_THAN_OR_EQUAL
+                                    - LESS_THAN
+                                    - LESS_THAN_OR_EQUAL
+                                    description: The comparison to be performed on the values.
+                                  values:
+                                    type: array
+                                    minItems: 1
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    example:
+                                    - A192
+                                    - A193
+                                    description: A list of values to compare against. Values are required and must be a list of up to 1000 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                              description: Filters to apply when generating the exported data. This field is mutually exclusive with the `advancedFilter` field.
+                            inclusionFilters:
+                              type: array
+                              items:
+                                type: object
+                                description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                                required:
+                                - attribute
+                                - values
+                                properties:
+                                  attribute:
+                                    type: string
+                                    example: jobs.costCenterName
+                                    description: A valid attribute or relationship attribute on the people resource.
+                                    minLength: 1
+                                  operator:
+                                    type: string
+                                    example: STARTS_WITH
+                                    enum:
+                                    - STARTS_WITH
+                                    - ENDS_WITH
+                                    - CONTAINS
+                                    - EQUALS
+                                    - IN
+                                    - GREATER_THAN
+                                    - GREATER_THAN_OR_EQUAL
+                                    - LESS_THAN
+                                    - LESS_THAN_OR_EQUAL
+                                    description: The comparison to be performed on the values.
+                                  values:
+                                    type: array
+                                    minItems: 1
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    example:
+                                    - A192
+                                    - A193
+                                    description: A list of values to compare against. Values are required and must be a list of up to 1000 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                              description: Filter the included relationships selected in the "relationships" array.
+                            fields:
+                              type: array
+                              description: Fields to include for each resource type. By default, all fields will be included unless specified otherwise for a given resource type.
+                              items:
+                                type: object
+                                required:
+                                - resourceType
+                                - fields
+                                properties:
+                                  resourceType:
+                                    type: string
+                                    example: jobs
+                                    description: A valid resource type in the Person API.
+                                  fields:
+                                    type: array
+                                    items:
+                                      type: string
+                                    example:
+                                    - title
+                                    - beginDate
+                                    description: A list of fields to include for the given resource type. Fields can be attributes or relationships. The list can also be empty to return no fields for the resource type.
+                        - type: object
+                          properties:
+                            status:
+                              type: string
+                              enum:
+                              - Pending
+                              - Completed
+                              - Deleted
+                              - Error
+                              readOnly: true
+                              example: Pending
+                              description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
+                            exportUrl:
+                              type:
+                              - string
+                              - 'null'
+                              format: url
+                              readOnly: true
+                              description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
+                            requestTime:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                              example: '2024-01-01T00:00:00Z'
+                              description: The time the export request was created. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
+                            completionTime:
+                              type:
+                              - string
+                              - 'null'
+                              format: date-time
+                              readOnly: true
+                              example: '2024-01-01T00:05:00Z'
+                              description: The time the export was done processing. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
                       links:
                         description: The link to access a resource itself
                         type: object
@@ -552,14 +843,29 @@ paths:
                         - names
                         - jobs
                         - identifiers
+                        fields:
+                        - resourceType: people
+                          fields:
+                          - firstName
+                          - lastName
+                        - resourceType: jobs
+                          fields:
+                          - current
+                          - beginDate
+                        advancedFilter: null
                         filters:
-                        - attribute: jobs.divisionCode
+                        - attribute: jobs.costCenterName
                           operator: STARTS_WITH
                           values:
-                          - A192
-                          - A193
+                          - UWMSN
+                          - UWPLT
+                        inclusionFilters:
+                        - attribute: names.firstName
+                          operator: STARTS_WITH
+                          values:
+                          - Jo
                         status: Pending
-                        requestTime: '2024-01-01T00:00:00+00:00'
+                        requestTime: '2024-01-01T00:00:00Z'
                       id: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
                       links:
                         self: https://api.wisc.edu/people/exports/b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
@@ -571,6 +877,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -579,6 +886,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -598,7 +910,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -610,6 +922,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -618,6 +931,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -645,6 +963,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -653,6 +972,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -681,11 +1005,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '406':
           description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -694,6 +1025,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -721,6 +1057,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -729,6 +1066,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -756,6 +1098,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -764,6 +1107,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -791,6 +1139,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -799,6 +1148,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -821,15 +1175,13 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
   /people/exports/{exportId}:
     get:
-      description: Get an export. This endpoint is meant to be checked on a repeated basis when waiting for an export to complete. Requests to this endpoint count towards the overall quota for an application. Refer to the [Exports Documentation](/person-api/exports) for more information.
-      summary: Get an export.
+      description: Get an export. This endpoint is meant to be checked on a repeated basis when waiting for an export to complete. Requests to this endpoint count towards the overall quota for an application. Refer to the Exports Documentation for more information.
+      summary: Get an export
       operationId: get_export
       tags:
-      - exports
+      - Exports
       parameters:
       - name: exportId
         description: ID of an export. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
@@ -839,7 +1191,6 @@ paths:
         schema:
           type: string
           description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
       responses:
         '200':
           description: A single export.
@@ -852,7 +1203,7 @@ paths:
                 - links
                 properties:
                   data:
-                    description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](/person-api/exports) for more information.
+                    description: An export allows applications to get bulk person data. Refer to the [Exports Documentation](https://kb.wisc.edu/uw-apis/158402) for more information.
                     type: object
                     required:
                     - type
@@ -866,79 +1217,156 @@ paths:
                       id:
                         type: string
                         description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-                        example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
                       attributes:
-                        type: object
-                        properties:
-                          relationships:
-                            type: array
-                            items:
-                              type: string
-                            example:
-                            - names
-                            - jobs
-                            description: Relationships to include in the exported data. By default, only the root person data will be included.
-                          filters:
-                            type: array
-                            items:
-                              type: object
-                              description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
-                              required:
-                              - attribute
-                              - values
-                              properties:
-                                attribute:
-                                  type: string
-                                  example: jobs.divisionCode
-                                  description: A valid attribute or relationship attribute on the people resource.
-                                operator:
-                                  type: string
-                                  example: STARTS_WITH
-                                  enum:
-                                  - STARTS_WITH
-                                  - ENDS_WITH
-                                  - CONTAINS
-                                  - EQUALS
-                                  - IN
-                                  description: The comparison to be performed on the values.
-                                values:
-                                  type: array
-                                  items:
+                        allOf:
+                        - type: object
+                          properties:
+                            relationships:
+                              type: array
+                              items:
+                                type: string
+                              example:
+                              - names
+                              - jobs
+                              description: Relationships to include in the exported data. By default, only the root person data will be included.
+                            advancedFilter:
+                              type:
+                              - string
+                              - 'null'
+                              example: jobs(equals(current, true))
+                              description: Advanced filter to apply when generating the exported data. This field is mutually exclusive with the `filters` field. For more information see [Advanced Filter](https://kb.wisc.edu/uw-apis/158404#advanced-filters).
+                            filters:
+                              type: array
+                              items:
+                                type: object
+                                description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                                required:
+                                - attribute
+                                - values
+                                properties:
+                                  attribute:
                                     type: string
-                                  example:
-                                  - A192
-                                  - A193
-                                  description: A list of values to compare against. Values are required and must be a list of up to 10 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
-                            description: Filters to apply when generating the exported data.
-                          status:
-                            type: string
-                            enum:
-                            - Pending
-                            - Completed
-                            - Deleted
-                            - Error
-                            readOnly: true
-                            example: Pending
-                            description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
-                          exportUrl:
-                            type: string
-                            format: url
-                            readOnly: true
-                            description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
-                          requestTime:
-                            type: string
-                            format: date-time
-                            readOnly: true
-                            example: '2024-01-01T00:00:00+00:00'
-                            description: The time the export request was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                          completionTime:
-                            type:
-                            - string
-                            - 'null'
-                            format: date-time
-                            readOnly: true
-                            example: '2024-01-01T00:05:00+00:00'
-                            description: The time the export was done processing. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                                    example: jobs.costCenterName
+                                    description: A valid attribute or relationship attribute on the people resource.
+                                    minLength: 1
+                                  operator:
+                                    type: string
+                                    example: STARTS_WITH
+                                    enum:
+                                    - STARTS_WITH
+                                    - ENDS_WITH
+                                    - CONTAINS
+                                    - EQUALS
+                                    - IN
+                                    - GREATER_THAN
+                                    - GREATER_THAN_OR_EQUAL
+                                    - LESS_THAN
+                                    - LESS_THAN_OR_EQUAL
+                                    description: The comparison to be performed on the values.
+                                  values:
+                                    type: array
+                                    minItems: 1
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    example:
+                                    - A192
+                                    - A193
+                                    description: A list of values to compare against. Values are required and must be a list of up to 1000 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                              description: Filters to apply when generating the exported data. This field is mutually exclusive with the `advancedFilter` field.
+                            inclusionFilters:
+                              type: array
+                              items:
+                                type: object
+                                description: Attributes for a filter object when creating a webhook filter (/people/webhooks/{webhookId}/filters) or an export filter (/people/exports).
+                                required:
+                                - attribute
+                                - values
+                                properties:
+                                  attribute:
+                                    type: string
+                                    example: jobs.costCenterName
+                                    description: A valid attribute or relationship attribute on the people resource.
+                                    minLength: 1
+                                  operator:
+                                    type: string
+                                    example: STARTS_WITH
+                                    enum:
+                                    - STARTS_WITH
+                                    - ENDS_WITH
+                                    - CONTAINS
+                                    - EQUALS
+                                    - IN
+                                    - GREATER_THAN
+                                    - GREATER_THAN_OR_EQUAL
+                                    - LESS_THAN
+                                    - LESS_THAN_OR_EQUAL
+                                    description: The comparison to be performed on the values.
+                                  values:
+                                    type: array
+                                    minItems: 1
+                                    items:
+                                      type: string
+                                      minLength: 1
+                                    example:
+                                    - A192
+                                    - A193
+                                    description: A list of values to compare against. Values are required and must be a list of up to 1000 non-empty strings. For non-string fields, such as booleans, provide their string equivalents (e.g. "true").
+                              description: Filter the included relationships selected in the "relationships" array.
+                            fields:
+                              type: array
+                              description: Fields to include for each resource type. By default, all fields will be included unless specified otherwise for a given resource type.
+                              items:
+                                type: object
+                                required:
+                                - resourceType
+                                - fields
+                                properties:
+                                  resourceType:
+                                    type: string
+                                    example: jobs
+                                    description: A valid resource type in the Person API.
+                                  fields:
+                                    type: array
+                                    items:
+                                      type: string
+                                    example:
+                                    - title
+                                    - beginDate
+                                    description: A list of fields to include for the given resource type. Fields can be attributes or relationships. The list can also be empty to return no fields for the resource type.
+                        - type: object
+                          properties:
+                            status:
+                              type: string
+                              enum:
+                              - Pending
+                              - Completed
+                              - Deleted
+                              - Error
+                              readOnly: true
+                              example: Pending
+                              description: Status of the exported data. If the status is Error, please contact [api@doit.wisc.edu](mailto:api@doit.wisc.edu) for further investigation.
+                            exportUrl:
+                              type:
+                              - string
+                              - 'null'
+                              format: url
+                              readOnly: true
+                              description: URL of the exported data. This field will only contain the URL when the status of the export is "Completed".
+                            requestTime:
+                              type: string
+                              format: date-time
+                              readOnly: true
+                              example: '2024-01-01T00:00:00Z'
+                              description: The time the export request was created. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
+                            completionTime:
+                              type:
+                              - string
+                              - 'null'
+                              format: date-time
+                              readOnly: true
+                              example: '2024-01-01T00:05:00Z'
+                              description: The time the export was done processing. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
                       links:
                         description: The link to access a resource itself
                         type: object
@@ -961,16 +1389,31 @@ paths:
                         relationships:
                         - names
                         - jobs
+                        fields:
+                        - resourceType: people
+                          fields:
+                          - firstName
+                          - lastName
+                        - resourceType: jobs
+                          fields:
+                          - current
+                          - beginDate
+                        advancedFilter: null
                         filters:
-                        - attribute: jobs.divisionCode
+                        - attribute: jobs.costCenterName
                           operator: STARTS_WITH
                           values:
-                          - A192
-                          - A193
+                          - UWMSN
+                          - UWPLT
+                        inclusionFilters:
+                        - attribute: names.firstName
+                          operator: STARTS_WITH
+                          values:
+                          - Jo
                         status: Completed
                         exportUrl: https://example.com/person-export-d26bd7c2-8874-4322-b184-aaa410246630.json?signature=123456
-                        requestTime: '2024-01-01T00:00:00+00:00'
-                        completionTime: '2024-01-01T00:05:00+00:00'
+                        requestTime: '2024-01-01T00:00:00Z'
+                        completionTime: '2024-01-01T00:05:00Z'
                       id: d26bd7c2-8874-4322-b184-aaa410246630
                       links:
                         self: https://api.wisc.edu/people/exports/d26bd7c2-8874-4322-b184-aaa410246630
@@ -984,12 +1427,28 @@ paths:
                         relationships:
                         - emailAddresses
                         - phoneNumbers
+                        - names
+                        fields:
+                        - resourceType: people
+                          fields:
+                          - firstName
+                          - lastName
+                        - resourceType: jobs
+                          fields:
+                          - current
+                          - beginDate
+                        advancedFilter: null
                         filters:
                         - attribute: emailAddresses.emailAddress
                           operator: ENDS_WITH
                           values:
                           - '@wisc.edu'
                           - '@wisconsin.edu'
+                        inclusionFilters:
+                        - attribute: names.firstName
+                          operator: STARTS_WITH
+                          values:
+                          - Jo
                         status: Error
                         exportUrl: null
                         requestTime: '2024-01-02T00:00:00Z'
@@ -1005,6 +1464,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1013,6 +1473,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1040,6 +1505,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1048,6 +1514,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1076,11 +1547,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1089,6 +1567,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1116,6 +1599,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1124,6 +1608,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1151,6 +1640,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1159,6 +1649,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1186,6 +1681,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1194,6 +1690,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1217,11 +1718,11 @@ paths:
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
     delete:
-      description: Delete an export. This deletes the export and the exported data. Refer to the [Exports Documentation](/person-api/exports) for more information.
-      summary: Delete an export.
+      description: Delete an export. This deletes the export and the exported data. Refer to the Exports Documentation for more information.
+      summary: Delete an export
       operationId: delete_export
       tags:
-      - exports
+      - Exports
       parameters:
       - name: exportId
         description: ID of an export. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
@@ -1231,15 +1732,15 @@ paths:
         schema:
           type: string
           description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
       responses:
         '204':
-          description: Name deleted. Empty response.
-        '401':
-          description: Incorrect or expired OAuth token.
+          description: Export deleted. Empty response.
+        '400':
+          description: A bad request.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1248,6 +1749,56 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                        status:
+                          type: integer
+                          example: 400
+                        title:
+                          type: string
+                          example: Error title
+                        detail:
+                          type: string
+                          example: Additional details about the error
+                        links:
+                          type: object
+                        meta:
+                          type: object
+                        source:
+                          type: object
+              examples:
+                application/vnd.api+json:
+                  value:
+                    errors:
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
+                      links: {}
+                      meta: {}
+                      source: {}
+                      status: 400
+                      title: Bad Request
+                      detail: Invalid properties in query parameters - resource type 'people' has no attribute 'invalid'.
+        '401':
+          description: Incorrect or expired OAuth token.
+          content:
+            application/vnd.api+json:
+              schema:
+                description: A JSON:API error response body containing one or more errors.
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      description: An error
+                      type: object
+                      properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1275,6 +1826,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1283,6 +1835,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1311,11 +1868,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1324,6 +1888,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1351,6 +1920,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1359,6 +1929,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1386,6 +1961,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1394,6 +1970,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1421,6 +2002,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1429,6 +2011,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1451,8 +2038,6 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
 components:
   securitySchemes:
     OAuth2ClientCredentials:
@@ -1464,13 +2049,3 @@ components:
 externalDocs:
   description: Read more about JSON:API here
   url: https://jsonapi.org/
-x-refined-from:
-- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
-- university-of-wisconsin-madison-mock-person-api-openapi.yml
-- university-of-wisconsin-madison-person-api-openapi.yml
-x-operator: institution
-x-provenance:
-  generated: '2026-08-19'
-  method: probed
-  source: https://public.enroll.wisc.edu/api/search/v1
-  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

@@ -1,0 +1,48 @@
+generated: '2026-08-19'
+method: derived
+source: openapi/ (12 contracts) + https://developer.wisc.edu/sitemap.xml
+docs: https://git.doit.wisc.edu/interop/external-docs/api-publisher-documentation
+x-operator: institution
+versioning:
+  scheme: none-in-path
+  detail: >-
+    UW-Madison does NOT version in the URL path. Servers are bare — https://api.wisc.edu,
+    https://api.wisc.edu/hr, https://api.wisc.edu/finance, https://api.wisc.edu/manifest — and
+    the version lives only in info.version (1.0.0 on most contracts). The portal's own doc
+    routes use a "/1/" segment, but that is the portal's document revision, not an API version.
+  current: '1.0.0'
+release_notes:
+  published: true
+  urls:
+  - https://developer.wisc.edu/person-api/release-notes
+  - https://developer.wisc.edu/hr-api/release-notes
+  detail: >-
+    Per-API release-notes pages exist for the two flagship APIs (Person, HR). Enumerated from
+    the portal sitemap. No changelog was found for Finance, Locations, Manifest or Enterprise
+    Billing.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  detail: >-
+    No standalone deprecation policy and no RFC 8594 Sunset/Deprecation header usage found. The
+    institution HAS however run a real, documented platform migration: the portal publishes a
+    "wso2-migration-guide" and an "old-api-manager-documentation" page, showing a prior WSO2 API
+    Manager estate was retired in favour of Google Apigee. Migration guidance is published;
+    a deprecation policy is not.
+platform_history:
+  - platform: WSO2 API Manager
+    state: retired
+    evidence: https://developer.wisc.edu/wso2-migration-guide
+  - platform: Google Apigee (org doit-ipt-apigee-prod-ce29)
+    state: current
+    evidence: https://developer.wisc.edu/ portal siteid doit-ipt-apigee-prod-ce29-productionorgportal
+environments:
+  production: https://api.wisc.edu
+  mock: https://mock.api.wisc.edu
+  development: https://doit.dev.api.wisc.edu
+  detail: >-
+    Three declared environments. NOTE: the published Enterprise Billing API contract declares
+    ONLY the development host (https://doit.dev.api.wisc.edu/enterprise-billing) as its server
+    — a production-portal listing pointing at a dev environment. Recorded as-published; not
+    corrected here.

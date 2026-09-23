@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: Enterprise Billing Bulk Job Failed Results API
-  description: Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API.  For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/.  For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438.
+  description: Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API. For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/. For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438.
   version: 0.1.0
 servers:
 - url: https://doit.dev.api.wisc.edu/enterprise-billing
@@ -36,16 +36,10 @@ paths:
           $ref: '#/components/responses/NoAuthorization'
         '404':
           $ref: '#/components/responses/NotFound'
+      operationId: getBulkjobFailedResultsById
+      x-operation-id-source: derived
 components:
   responses:
-    NotFound:
-      description: A specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: The requested resource does not exist
     NoAuthorization:
       description: Not authorized to access resource.
       content:
@@ -54,6 +48,14 @@ components:
             $ref: '#/components/schemas/error'
           example:
             message: Token not found.
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist
   schemas:
     error:
       description: Error object

@@ -3,19 +3,7 @@ info:
   contact:
     email: finance-apis@doit.wisc.edu
     name: DoIT Enterprise Business Systems (EBS) Integrated Business Solutions (IBS) API Team
-  description: 'An API for accessing and validating UW financial data.
-
-    ## Getting Started
-
-    For information on how to create an application on the portal and request access to the API, please visit the [Getting Started page](https://financeapis.wisc.edu/getting-started/) on our website.
-
-    ## Endpoints, Filtering, Inclusions, and Sourcing
-
-    Information on how to use the filter query parameter and include related resources, individual endpoints, and how we source our data can be found on the [Documentation page](https://financeapis.wisc.edu/documentation/) of our website.
-
-    ## Help/Support
-
-    If you need assistance in using the Finance API, have questions about the data, need to report a bug, or would like to suggest features/improvements, please fill out the form on the [Contact Us page](https://financeapis.wisc.edu/contact-us/) of our website or email us at [finance-apis@doit.wisc.edu](mailto:finance-apis@doit.wisc.edu).'
+  description: An API for accessing and validating UW financial data.
   title: Finance Research API
   version: 2026-02-18
 servers:
@@ -518,6 +506,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Research
+      summary: Get award tasks
+      x-summary-source: derived
+      operationId: getAwardTasks
+      x-operation-id-source: derived
   /awardTasks/{id}:
     get:
       description: Retrieves a single award task by its ID.
@@ -902,6 +894,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Research
+      summary: Get award tasks by id
+      x-summary-source: derived
+      operationId: getAwardTasksById
+      x-operation-id-source: derived
   /awards:
     get:
       description: Retrieves a paginated list of all awards.
@@ -1671,6 +1667,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Research
+      summary: Get awards
+      x-summary-source: derived
+      operationId: getAwards
+      x-operation-id-source: derived
   /awards/{id}:
     get:
       description: Retrieves a single award by its ID.
@@ -2321,6 +2321,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Research
+      summary: Get awards by id
+      x-summary-source: derived
+      operationId: getAwardsById
+      x-operation-id-source: derived
   /billingSchedules:
     get:
       description: Retrieves a paginated listing of all billing schedules.
@@ -3124,6 +3128,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Research
+      summary: Get billing schedules
+      x-summary-source: derived
+      operationId: getBillingSchedules
+      x-operation-id-source: derived
   /billingSchedules/{id}:
     get:
       description: Retrieves a single billing schedule by its ID.
@@ -3703,6 +3711,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Research
+      summary: Get billing schedules by id
+      x-summary-source: derived
+      operationId: getBillingSchedulesById
+      x-operation-id-source: derived
 components:
   securitySchemes:
     OAuth2ClientCredentials:

@@ -1,15 +1,14 @@
 openapi: 3.2.0
 info:
-  title: University Of Wisconsin Madison Organization Structures API
+  title: Mock Person Organization Structures API
   version: 1.0.0
   contact:
     name: DoIT Enterprise Integration API Team
     email: api@doit.wisc.edu
     url: https://go.wisc.edu/k701y6
-  description: 'Operations tagged organizationStructures across 2 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: A mock implementation of the Person API.
 servers:
 - url: https://mock.api.wisc.edu
-- url: https://api.wisc.edu
 security:
 - OAuth2ClientCredentials: []
 tags:
@@ -17,8 +16,8 @@ tags:
 paths:
   /people/{id}/organizationStructures:
     get:
-      description: 'Get the UW Organization Structures for a person. Refer to this page for more information on UW Organization Structure: [https://secure.atp.wisconsin.edu/uw-organization-structure](https://secure.atp.wisconsin.edu/uw-organization-structure)'
-      summary: Get Organization Structures.
+      description: 'Get the UW Organization Structures for a person. Refer to this page for more information on UW Organization Structure: https://secure.atp.wisconsin.edu/uw-organization-structure'
+      summary: Get Organization Structures
       operationId: get_person_organization_structures
       tags:
       - organizationStructures
@@ -751,12 +750,10 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
   /people/{id}/jobs/{jobId}/organizationStructure:
     get:
-      description: 'Get the UW Organization Structure for a job. The organization structure of a job comes from the Cost Center of the default Supervisory Organization of the job. Refer to this page for more information on UW Organization Structure: [https://secure.atp.wisconsin.edu/uw-organization-structure](https://secure.atp.wisconsin.edu/uw-organization-structure)'
-      summary: Get Job Organization Structure.
+      description: 'Get the UW Organization Structure for a job. The organization structure of a job comes from the Cost Center of the default Supervisory Organization of the job. Refer to this page for more information on UW Organization Structure: https://secure.atp.wisconsin.edu/uw-organization-structure'
+      summary: Get Job Organization Structure
       operationId: get_person_job_organization_structures
       tags:
       - organizationStructures
@@ -1350,8 +1347,6 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
 components:
   securitySchemes:
     OAuth2ClientCredentials:
@@ -1363,12 +1358,3 @@ components:
 externalDocs:
   description: Read more about JSON:API here
   url: https://jsonapi.org/
-x-refined-from:
-- university-of-wisconsin-madison-mock-person-api-openapi.yml
-- university-of-wisconsin-madison-person-api-openapi.yml
-x-operator: institution
-x-provenance:
-  generated: '2026-08-19'
-  method: probed
-  source: https://public.enroll.wisc.edu/api/search/v1
-  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

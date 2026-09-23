@@ -1,26 +1,25 @@
 openapi: 3.2.0
 info:
-  title: University Of Wisconsin Madison Members API
+  title: Manifest Members API
+  description: 'To Get Access to the Manifest API, please fill out the Access Request form: https://uwmadison.co1.qualtrics.com/jfe/form/SV_bmvdy2r9F2SFJKS.'
   version: 1.0.0
   contact:
     name: DoIT Enterprise Integration API Team
     email: api@doit.wisc.edu
-  description: 'Operations tagged members across 2 of this provider''s published API definitions: university-of-wisconsin-madison-manifest-api-openapi.yml, university-of-wisconsin-madison-mock-manifest-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.wisc.edu/manifest
-- url: https://mock.api.wisc.edu/manifest
 security:
 - OAuth2ClientCredentials: []
 tags:
-- name: members
+- name: Members
 paths:
   /members/{id}:
     get:
       description: Get a group member.
-      summary: Get a group member.
+      summary: Get a group member
       operationId: get_member
       tags:
-      - members
+      - Members
       parameters:
       - name: id
         description: ID of a member.
@@ -392,15 +391,13 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://api.wisc.edu/manifest
   /members/{id}/groups:
     get:
       description: Get the groups a member belongs to.
-      summary: Get a member's groups.
+      summary: Get a member's groups
       operationId: get_member_groups
       tags:
-      - members
+      - Members
       parameters:
       - name: id
         description: ID of a member.
@@ -801,8 +798,6 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://api.wisc.edu/manifest
 components:
   securitySchemes:
     OAuth2ClientCredentials:
@@ -814,12 +809,3 @@ components:
 externalDocs:
   description: Read more about JSON:API here
   url: https://jsonapi.org/
-x-refined-from:
-- university-of-wisconsin-madison-manifest-api-openapi.yml
-- university-of-wisconsin-madison-mock-manifest-api-openapi.yml
-x-operator: institution
-x-provenance:
-  generated: '2026-08-19'
-  method: probed
-  source: https://public.enroll.wisc.edu/api/search/v1
-  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

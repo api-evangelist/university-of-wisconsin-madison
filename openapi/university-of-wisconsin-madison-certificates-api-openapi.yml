@@ -1,27 +1,26 @@
 openapi: 3.2.0
 info:
-  title: University Of Wisconsin Madison Certificates API
+  title: Mock Person Certificates API
   version: 1.0.0
   contact:
     name: DoIT Enterprise Integration API Team
     email: api@doit.wisc.edu
     url: https://go.wisc.edu/k701y6
-  description: 'Operations tagged certificates across 3 of this provider''s published API definitions: university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml, university-of-wisconsin-madison-mock-person-api-openapi.yml, university-of-wisconsin-madison-person-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: A mock implementation of the Person API.
 servers:
 - url: https://mock.api.wisc.edu
-- url: https://api.wisc.edu
 security:
 - OAuth2ClientCredentials: []
 tags:
-- name: certificates
+- name: Certificates
 paths:
   /people/certificates:
     get:
-      description: Get a collection of certificates. This endpoint is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
-      summary: Get certificates.
+      description: Get a collection of certificates. This endpoint is restricted to applications with access to the Certificates Product. Refer to the Certificates Documentation for more information.
+      summary: Get certificates
       operationId: get_certificates
       tags:
-      - certificates
+      - Certificates
       responses:
         '200':
           description: A collection of certificates.
@@ -37,7 +36,7 @@ paths:
                     description: A collection of certificates.
                     type: array
                     items:
-                      description: A certificate. This is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
+                      description: A certificate. This is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](https://kb.wisc.edu/uw-apis/158407) for more information.
                       type: object
                       required:
                       - type
@@ -51,7 +50,6 @@ paths:
                         id:
                           type: string
                           description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-                          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
                         attributes:
                           type: object
                           required:
@@ -59,6 +57,8 @@ paths:
                           properties:
                             certificate:
                               type: string
+                              contentMediaType: application/x-pem-file
+                              contentEncoding: base64
                               example: '-----BEGIN CERTIFICATE-----
 
                                 MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
@@ -101,18 +101,18 @@ paths:
                             createdDate:
                               type: string
                               format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate resource was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                              example: '2024-01-01T00:00:00Z'
+                              description: The date-time this certificate resource was created. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
                             startDate:
                               type: string
                               format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate is valid from, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                              example: '2024-01-01T00:00:00Z'
+                              description: The date-time this certificate is valid from, extracted from the certificate. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
                             expirationDate:
                               type: string
                               format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate is valid until, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
+                              example: '2024-01-01T00:00:00Z'
+                              description: The date-time this certificate is valid until, extracted from the certificate. This is an ISO 8601 date-time in UTC, with the timezone given as `Z`.
                         links:
                           description: The link to access a resource itself
                           type: object
@@ -171,10 +171,10 @@ paths:
                           97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
 
                           -----END CERTIFICATE-----'
-                        createdDate: '2024-01-01T00:00:00+00:00'
-                        startDate: '2024-01-01T00:00:00+00:00'
-                        expirationDate: '2024-12-31T23:59:59+00:00'
-                      id: z5wV9pQBauFab4m5jNFR
+                        createdDate: '2024-01-01T00:00:00Z'
+                        startDate: '2024-01-01T00:00:00Z'
+                        expirationDate: '2024-12-31T23:59:59Z'
+                      id: 1c2186e3-bc3a-4789-ada1-6b4381086f45
                       type: certificates
                       links:
                         self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
@@ -245,7 +245,7 @@ paths:
                         createdDate: '2024-01-05T00:00:00Z'
                         startDate: '2024-01-05T00:00:00Z'
                         expirationDate: '2024-04-04T23:59:59Z'
-                      id: sJxRAJUBauFab4m5a9Jh
+                      id: 1c2186e3-bc3a-4789-ada1-6b4381086f45
                       type: certificates
                       links:
                         self: https://api.wisc.edu/people/certificates/sJxRAJUBauFab4m5a9Jh
@@ -256,6 +256,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -264,6 +265,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -291,6 +297,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -299,6 +306,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -327,11 +339,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '406':
           description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -340,6 +359,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -367,6 +391,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -375,6 +400,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -402,6 +432,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -410,6 +441,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -433,11 +469,11 @@ paths:
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
     post:
-      description: Create a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
-      summary: Create a certificate.
+      description: Create a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the Certificates Documentation for more information.
+      summary: Create a certificate
       operationId: create_certificate
       tags:
-      - certificates
+      - Certificates
       requestBody:
         description: A certificate request body. Only the attribute "certificate" can be set in a request.
         required: true
@@ -466,6 +502,8 @@ paths:
                       properties:
                         certificate:
                           type: string
+                          contentMediaType: application/x-pem-file
+                          contentEncoding: base64
                           example: '-----BEGIN CERTIFICATE-----
 
                             MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
@@ -519,90 +557,6 @@ paths:
                   data:
                     description: A single certificate.
                     type: object
-                    items:
-                      description: A certificate. This is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
-                      type: object
-                      required:
-                      - type
-                      - id
-                      - attributes
-                      - links
-                      properties:
-                        type:
-                          type: string
-                          example: certificates
-                        id:
-                          type: string
-                          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-                          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
-                        attributes:
-                          type: object
-                          required:
-                          - certificate
-                          properties:
-                            certificate:
-                              type: string
-                              example: '-----BEGIN CERTIFICATE-----
-
-                                MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
-
-                                BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
-
-                                TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
-
-                                DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
-
-                                BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
-
-                                dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
-
-                                MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
-
-                                9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
-
-                                Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
-
-                                64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
-
-                                KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
-
-                                Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
-
-                                b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
-
-                                PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
-
-                                o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
-
-                                3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
-
-                                aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
-
-                                97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
-
-                                -----END CERTIFICATE-----'
-                            createdDate:
-                              type: string
-                              format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate resource was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                            startDate:
-                              type: string
-                              format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate is valid from, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                            expirationDate:
-                              type: string
-                              format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate is valid until, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                        links:
-                          description: The link to access a resource itself
-                          type: object
-                          properties:
-                            self:
-                              type: string
-                              example: https://api.wisc.edu/link/to/self
                   links:
                     description: The link to access a resource itself
                     type: object
@@ -654,20 +608,32 @@ paths:
                           97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
 
                           -----END CERTIFICATE-----'
-                        createdDate: '2024-01-01T00:00:00+00:00'
-                        startDate: '2024-01-01T00:00:00+00:00'
-                        expirationDate: '2024-12-31T23:59:59+00:00'
-                      id: z5wV9pQBauFab4m5jNFR
+                        createdDate: '2024-01-01T00:00:00Z'
+                        startDate: '2024-01-01T00:00:00Z'
+                        expirationDate: '2024-12-31T23:59:59Z'
+                      id: 1c2186e3-bc3a-4789-ada1-6b4381086f45
                       type: certificates
                       links:
                         self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
                     links:
                       self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
+          links:
+            GetCertificateById:
+              operationId: get_certificate
+              parameters:
+                certificateId: $response.body#/data/id
+              description: Use the created certificate's ID to get it
+            DeleteCertificateById:
+              operationId: delete_certificate
+              parameters:
+                certificateId: $response.body#/data/id
+              description: Use the created certificate's ID to delete it
         '400':
           description: A bad request.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -676,6 +642,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -695,7 +666,7 @@ paths:
                 application/vnd.api+json:
                   value:
                     errors:
-                    - id: null
+                    - id: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                       links: {}
                       meta: {}
                       source: {}
@@ -707,6 +678,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -715,6 +687,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -742,6 +719,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -750,6 +728,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -778,11 +761,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '406':
           description: Servers respond with a 406 Not Acceptable status code if a request’s Accept header contains the JSON:API media type and all instances of that media type are modified with media type parameters.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -791,6 +781,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -818,6 +813,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -826,6 +822,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -853,6 +854,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -861,6 +863,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -888,6 +895,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -896,6 +904,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -918,25 +931,22 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
   /people/certificates/{certificateId}:
     get:
-      description: Get a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
-      summary: Get a certificate.
+      description: Get a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the Certificates Documentation for more information.
+      summary: Get a certificate
       operationId: get_certificate
       tags:
-      - certificates
+      - Certificates
       parameters:
       - name: certificateId
         description: ID of a certificate. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
         in: path
-        example: z5wV9pQBauFab4m5jNFR
+        example: 1c2186e3-bc3a-4789-ada1-6b4381086f45
         required: true
         schema:
           type: string
           description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
       responses:
         '200':
           description: A single certificate.
@@ -951,90 +961,6 @@ paths:
                   data:
                     description: A single certificate.
                     type: object
-                    items:
-                      description: A certificate. This is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
-                      type: object
-                      required:
-                      - type
-                      - id
-                      - attributes
-                      - links
-                      properties:
-                        type:
-                          type: string
-                          example: certificates
-                        id:
-                          type: string
-                          description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-                          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
-                        attributes:
-                          type: object
-                          required:
-                          - certificate
-                          properties:
-                            certificate:
-                              type: string
-                              example: '-----BEGIN CERTIFICATE-----
-
-                                MIIDWDCCAkCgAwIBAgIUaiq6K195EzsvindYi6Iu2AK39SQwDQYJKoZIhvcNAQEL
-
-                                BQAwWTELMAkGA1UEBhMCVVMxEjAQBgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwH
-
-                                TWFkaXNvbjEQMA4GA1UECgwHVGVzdGluZzESMBAGA1UEAwwJbG9jYWxob3N0MB4X
-
-                                DTI0MDkyNTE3MDg1NVoXDTI0MTIyNDE3MDg1NVowWTELMAkGA1UEBhMCVVMxEjAQ
-
-                                BgNVBAgMCVdpc2NvbnNpbjEQMA4GA1UEBwwHTWFkaXNvbjEQMA4GA1UECgwHVGVz
-
-                                dGluZzESMBAGA1UEAwwJbG9jYWxob3N0MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8A
-
-                                MIIBCgKCAQEAyXcXQqCOvAE7V25B08c6FYTA3ruqtPXiv0lipuOLCQ1fRhteoeVL
-
-                                9qp/BM8fEEhnuYDq0zxlPLu0hYi4Fuc8KHdY7Qwe16q+d8J28GCxxW2gfxS9Yn+O
-
-                                Qn6yF3Q4LtmxLqgBtFaI8sKS7O4qrBWSIxONEZP8FpMMgaAJv4b6lwjfyLsAA5kE
-
-                                64jd5MXrCGbu7BawrQ/PLVl/7WqADp1CeDskQM1/9i75ZIErcXrOte1pCftCnVGZ
-
-                                KiHS2JmBFhzUOb3efwgTKSggoFf/NPJ2Ja50qutS/ovXakYgHVKpEeKbirE0TYCf
-
-                                Fb79EAinP8Q+1W/z/bgJ2SoVm4akf/BzSwIDAQABoxgwFjAUBgNVHREEDTALggls
-
-                                b2NhbGhvc3QwDQYJKoZIhvcNAQELBQADggEBAJkx7OvrTdXYu4OXF8kzKk9WSmw4
-
-                                PLmyUdSgBChBGu2MABSRK4imQ//6NmKWqtMLlJ0JpkTSJMjmU7xCg15Q/eaH/YSc
-
-                                o+ji6ShoSFlZcm2LuGCvwMOmfnsMKtNSyUPq5n3MvJZUCEh7Ojc/N3yxzROvUQwA
-
-                                3EctLRWtYZzFYc5sFYHGNVOqaTabV3zbCtO5oaEmZplRtQ4ZzPoDu+Bzk9aFrQD3
-
-                                aIPpuoaK27+y0u0/1IgziR2pYrUV8MH63jxG6LEsg3I0+VSXjlZfUBPAItId3p65
-
-                                97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
-
-                                -----END CERTIFICATE-----'
-                            createdDate:
-                              type: string
-                              format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate resource was created. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                            startDate:
-                              type: string
-                              format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate is valid from, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                            expirationDate:
-                              type: string
-                              format: date-time
-                              example: '2024-01-01T00:00:00+00:00'
-                              description: The date-time in UTC this certificate is valid until, extracted from the certificate. This is an ISO 8601 date-time, with the timezone given as either `Z` or an `+-HH:MM` offset.
-                        links:
-                          description: The link to access a resource itself
-                          type: object
-                          properties:
-                            self:
-                              type: string
-                              example: https://api.wisc.edu/link/to/self
                   links:
                     description: The link to access a resource itself
                     type: object
@@ -1086,20 +1012,32 @@ paths:
                           97wQcJErutieNl8blnVm+lAU+R273CxnJGwjoBayYJxqpB5UN10DiSNo/Lc=
 
                           -----END CERTIFICATE-----'
-                        createdDate: '2024-01-01T00:00:00+00:00'
-                        startDate: '2024-01-01T00:00:00+00:00'
-                        expirationDate: '2024-12-31T23:59:59+00:00'
-                      id: z5wV9pQBauFab4m5jNFR
+                        createdDate: '2024-01-01T00:00:00Z'
+                        startDate: '2024-01-01T00:00:00Z'
+                        expirationDate: '2024-12-31T23:59:59Z'
+                      id: 1c2186e3-bc3a-4789-ada1-6b4381086f45
                       type: certificates
                       links:
                         self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
                     links:
                       self: https://api.wisc.edu/people/certificates/z5wV9pQBauFab4m5jNFR
+          links:
+            GetCertificateById:
+              operationId: get_certificate
+              parameters:
+                certificateId: $response.body#/data/id
+              description: Use the created certificate's ID to get it
+            DeleteCertificateById:
+              operationId: delete_certificate
+              parameters:
+                certificateId: $response.body#/data/id
+              description: Use the created certificate's ID to delete it
         '401':
           description: Incorrect or expired OAuth token.
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1108,6 +1046,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1135,6 +1078,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1143,6 +1087,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1171,11 +1120,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1184,6 +1140,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1211,6 +1172,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1219,6 +1181,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1246,6 +1213,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1254,6 +1222,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1281,6 +1254,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1289,6 +1263,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1312,21 +1291,20 @@ paths:
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
     delete:
-      description: Delete a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the [Certificates Documentation](/person-api/certificates) for more information.
-      summary: Delete a certificate.
+      description: Delete a certificate. This endpoint is restricted to applications with access to the Certificates Product. Refer to the Certificates Documentation for more information.
+      summary: Delete a certificate
       operationId: delete_certificate
       tags:
-      - certificates
+      - Certificates
       parameters:
       - name: certificateId
         description: ID of a certificate. This parameter should not be manually built/concatenated, but instead be used by following the fully-formed links returned in an API response.
         in: path
-        example: z5wV9pQBauFab4m5jNFR
+        example: 1c2186e3-bc3a-4789-ada1-6b4381086f45
         required: true
         schema:
           type: string
           description: An identifier used to identify non-person resources, such as Certificates and Webhooks. This ID is used for following other links returned in the API response. Concatenating parts of the URL to form a link is discouraged. Instead, use the fully-formed links returned in an API response.
-          example: b463e0f7-c882-4b08-a9c7-e0a2fd90d04b
       responses:
         '204':
           description: Certificate deleted. Empty response.
@@ -1335,6 +1313,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1343,6 +1322,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1370,6 +1354,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1378,6 +1363,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1406,11 +1396,18 @@ paths:
                     - status: 403
                       title: Forbidden
                       detail: Requested method is forbidden for endpoint - GET - /people
+                disabled-temporarily-example:
+                  value:
+                    errors:
+                    - status: 403
+                      title: Forbidden
+                      detail: Webhook Create/Update/Delete operations are disabled temporarily. Try again later.
         '404':
           description: Unable to find the specified record
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1419,6 +1416,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1446,6 +1448,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1454,6 +1457,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1481,6 +1489,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1489,6 +1498,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1516,6 +1530,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
+                description: A JSON:API error response body containing one or more errors.
                 type: object
                 properties:
                   errors:
@@ -1524,6 +1539,11 @@ paths:
                       description: An error
                       type: object
                       properties:
+                        id:
+                          type:
+                          - string
+                          - 'null'
+                          example: 0fd247d9-a93c-4b48-bde8-247ce352ebcb
                         status:
                           type: integer
                           example: 400
@@ -1546,8 +1566,6 @@ paths:
                     - status: 500
                       title: Internal Server Error
                       detail: Something went wrong in the server-side.
-    servers:
-    - url: https://mock.api.wisc.edu
 components:
   securitySchemes:
     OAuth2ClientCredentials:
@@ -1559,13 +1577,3 @@ components:
 externalDocs:
   description: Read more about JSON:API here
   url: https://jsonapi.org/
-x-refined-from:
-- university-of-wisconsin-madison-mock-person-api-certificates-openapi.yml
-- university-of-wisconsin-madison-mock-person-api-openapi.yml
-- university-of-wisconsin-madison-person-api-openapi.yml
-x-operator: institution
-x-provenance:
-  generated: '2026-08-19'
-  method: probed
-  source: https://public.enroll.wisc.edu/api/search/v1
-  note: 'Reverse-described from live unauthenticated responses. Not a UW-Madison publication and must never be counted as one. Probes: GET /terms (200, 499 bytes, 2 terms), GET /aggregate (200, 127,065 bytes), POST / (200, term 1266 "computer science" -> found=226; term 1272 -> found=932).'

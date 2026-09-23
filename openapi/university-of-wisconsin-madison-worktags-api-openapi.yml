@@ -3,19 +3,7 @@ info:
   contact:
     email: finance-apis@doit.wisc.edu
     name: DoIT Enterprise Business Systems (EBS) Integrated Business Solutions (IBS) API Team
-  description: 'An API for accessing and validating UW financial data.
-
-    ## Getting Started
-
-    For information on how to create an application on the portal and request access to the API, please visit the [Getting Started page](https://financeapis.wisc.edu/getting-started/) on our website.
-
-    ## Endpoints, Filtering, Inclusions, and Sourcing
-
-    Information on how to use the filter query parameter and include related resources, individual endpoints, and how we source our data can be found on the [Documentation page](https://financeapis.wisc.edu/documentation/) of our website.
-
-    ## Help/Support
-
-    If you need assistance in using the Finance API, have questions about the data, need to report a bug, or would like to suggest features/improvements, please fill out the form on the [Contact Us page](https://financeapis.wisc.edu/contact-us/) of our website or email us at [finance-apis@doit.wisc.edu](mailto:finance-apis@doit.wisc.edu).'
+  description: An API for accessing and validating UW financial data.
   title: Finance Worktags API
   version: 2026-02-18
 servers:
@@ -423,6 +411,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get activities
+      x-summary-source: derived
+      operationId: getActivities
+      x-operation-id-source: derived
   /activities/{id}:
     get:
       description: Retrieves a single activity by its ID.
@@ -732,6 +724,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get activities by id
+      x-summary-source: derived
+      operationId: getActivitiesById
+      x-operation-id-source: derived
   /awardLines:
     get:
       description: Retrieves a paginated listing of all award lines from the accounting system
@@ -1280,6 +1276,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get award lines
+      x-summary-source: derived
+      operationId: getAwardLines
+      x-operation-id-source: derived
   /awardLines/{id}:
     get:
       description: Retrieves a single award line by its ID.
@@ -1697,6 +1697,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get award lines by id
+      x-summary-source: derived
+      operationId: getAwardLinesById
+      x-operation-id-source: derived
   /companies:
     get:
       description: Retrieves a paginated listing of all companies.
@@ -2095,6 +2099,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get companies
+      x-summary-source: derived
+      operationId: getCompanies
+      x-operation-id-source: derived
   /companies/{id}:
     get:
       description: Retrieves a single company by its ID.
@@ -2397,6 +2405,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get companies by id
+      x-summary-source: derived
+      operationId: getCompaniesById
+      x-operation-id-source: derived
   /costCenters:
     get:
       description: Retrieves a paginated listing of all cost centers.
@@ -2877,6 +2889,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get cost centers
+      x-summary-source: derived
+      operationId: getCostCenters
+      x-operation-id-source: derived
   /costCenters/{id}:
     get:
       description: Retrieves a single cost center by its ID.
@@ -3227,6 +3243,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get cost centers by id
+      x-summary-source: derived
+      operationId: getCostCentersById
+      x-operation-id-source: derived
   /functions:
     get:
       description: Retrieves a paginated listing of all functions.
@@ -3617,6 +3637,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get functions
+      x-summary-source: derived
+      operationId: getFunctions
+      x-operation-id-source: derived
   /functions/{id}:
     get:
       description: Retrieves a single function by its ID.
@@ -3919,6 +3943,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get functions by id
+      x-summary-source: derived
+      operationId: getFunctionsById
+      x-operation-id-source: derived
   /funds:
     get:
       description: Retrieves a paginated listing of all funds.
@@ -4317,6 +4345,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get funds
+      x-summary-source: derived
+      operationId: getFunds
+      x-operation-id-source: derived
   /funds/{id}:
     get:
       description: Retrieves a single fund by its ID.
@@ -4619,6 +4651,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get funds by id
+      x-summary-source: derived
+      operationId: getFundsById
+      x-operation-id-source: derived
   /gifts:
     get:
       description: Retrieves a paginated listing of all gifts.
@@ -5196,6 +5232,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get gifts
+      x-summary-source: derived
+      operationId: getGifts
+      x-operation-id-source: derived
   /gifts/{id}:
     get:
       description: Retrieves a single gift by its ID.
@@ -5645,6 +5685,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get gifts by id
+      x-summary-source: derived
+      operationId: getGiftsById
+      x-operation-id-source: derived
   /grants:
     get:
       description: Retrieves a paginated listing of all grants.
@@ -6227,6 +6271,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get grants
+      x-summary-source: derived
+      operationId: getGrants
+      x-operation-id-source: derived
   /grants/{id}:
     get:
       description: Retrieves a single grant by its ID.
@@ -6685,6 +6733,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get grants by id
+      x-summary-source: derived
+      operationId: getGrantsById
+      x-operation-id-source: derived
   /hierarchies:
     get:
       description: Retrieves a paginated listing of all hierarchies.
@@ -7137,6 +7189,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get hierarchies
+      x-summary-source: derived
+      operationId: getHierarchies
+      x-operation-id-source: derived
   /hierarchies/{id}:
     get:
       description: Retrieves a single hierarchy by its ID.
@@ -7481,6 +7537,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get hierarchies by id
+      x-summary-source: derived
+      operationId: getHierarchiesById
+      x-operation-id-source: derived
   /ledgerAccounts:
     get:
       description: Retrieves a paginated listing of all ledger accounts.
@@ -7879,6 +7939,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get ledger accounts
+      x-summary-source: derived
+      operationId: getLedgerAccounts
+      x-operation-id-source: derived
   /ledgerAccounts/{id}:
     get:
       description: Retrieves a single ledger account by its ID.
@@ -8181,6 +8245,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get ledger accounts by id
+      x-summary-source: derived
+      operationId: getLedgerAccountsById
+      x-operation-id-source: derived
   /programs:
     get:
       description: Retrieves a paginated listing of all programs.
@@ -8742,6 +8810,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get programs
+      x-summary-source: derived
+      operationId: getPrograms
+      x-operation-id-source: derived
   /programs/{id}:
     get:
       description: Retrieves a single program by its ID.
@@ -9183,6 +9255,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get programs by id
+      x-summary-source: derived
+      operationId: getProgramsById
+      x-operation-id-source: derived
   /projects:
     get:
       description: Retrieves a paginated listing of all projects.
@@ -9762,6 +9838,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get projects
+      x-summary-source: derived
+      operationId: getProjects
+      x-operation-id-source: derived
   /projects/{id}:
     get:
       description: Retrieves a single project by its ID.
@@ -10213,6 +10293,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get projects by id
+      x-summary-source: derived
+      operationId: getProjectsById
+      x-operation-id-source: derived
   /revenueCategories:
     get:
       description: Retrieves a paginated listing of all revenue categories.
@@ -10611,6 +10695,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get revenue categories
+      x-summary-source: derived
+      operationId: getRevenueCategories
+      x-operation-id-source: derived
   /revenueCategories/{id}:
     get:
       description: Retrieves a single revenue category by its ID.
@@ -10913,6 +11001,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get revenue categories by id
+      x-summary-source: derived
+      operationId: getRevenueCategoriesById
+      x-operation-id-source: derived
   /spendCategories:
     get:
       description: Retrieves a paginated listing of all spend categories.
@@ -11327,6 +11419,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get spend categories
+      x-summary-source: derived
+      operationId: getSpendCategories
+      x-operation-id-source: derived
   /spendCategories/{id}:
     get:
       description: Retrieves a single spend category by its ID.
@@ -11645,6 +11741,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get spend categories by id
+      x-summary-source: derived
+      operationId: getSpendCategoriesById
+      x-operation-id-source: derived
   /taxCodes:
     get:
       description: Retrieves a paginated listing of all tax codes.
@@ -12050,6 +12150,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get tax codes
+      x-summary-source: derived
+      operationId: getTaxCodes
+      x-operation-id-source: derived
   /taxCodes/{id}:
     get:
       description: Retrieves a single tax code by its ID.
@@ -12359,6 +12463,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Get tax codes by id
+      x-summary-source: derived
+      operationId: getTaxCodesById
+      x-operation-id-source: derived
   /validateFdm:
     post:
       description: Validates a set of FDM combinations for compatibility
@@ -12704,6 +12812,10 @@ paths:
           description: Finance API is unavailable.
       tags:
       - Worktags
+      summary: Create validate fdm
+      x-summary-source: derived
+      operationId: postValidateFdm
+      x-operation-id-source: derived
 components:
   securitySchemes:
     OAuth2ClientCredentials:

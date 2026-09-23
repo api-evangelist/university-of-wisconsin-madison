@@ -1,22 +1,26 @@
-openapi: 3.2.0
+openapi: 3.0.0
 info:
   version: 1.0.0
-  title: OAuth Token API
-  description: This API grants access tokens that can be used to access your other APIs. Access tokens must use the client credentials grant type and require the client key and secret from an authorized application. You do not need to enable this API with your application to access it.
-servers:
-- url: https://api.wisc.edu/oauth
-security:
-- basicAuth: []
-tags:
-- name: Token
+  title: OAuth
+  description: >-
+    This API grants access tokens that can be used to access your other APIs.  
+    Access tokens must use the client credentials grant type and require the client 
+    key and secret from an authorized application.  You do not need to enable
+    this API with your application to access it.
+    
 paths:
   /token:
     post:
       summary: Request a new access token
-      description: Request a new access token with the client credentials grant type using the client key and secret from an authorized application. Pass the client key and secret values as an HTTP-Basic Authorization header, as described in IETF RFC 2617. To do this, you must base64-encode the result of joining the two values together with a colon separating them.
+      description: >-
+        Request a new access token with the client credentials grant type using 
+        the client key and secret from an authorized application.  Pass the 
+        client key and secret values as an HTTP-Basic Authorization header, as 
+        described in IETF RFC 2617. To do this, you must base64-encode the 
+        result of joining the two values together with a colon separating them.
       requestBody:
         content:
-          application/x-www-form-urlencoded:
+          'application/x-www-form-urlencoded':  
             schema:
               properties:
                 grant_type:
@@ -27,27 +31,39 @@ paths:
         '200':
           description: OK
           content:
-            application/json:
+            'application/json':
               schema:
                 $ref: '#/components/schemas/access_token'
         '400':
           description: Bad request
           content:
-            application/json:
+            'application/json':
               schema:
                 $ref: '#/components/schemas/error'
         '401':
           description: Unauthorized
           content:
-            application/json:
+            'application/json':
               schema:
                 $ref: '#/components/schemas/error'
-      tags:
-      - Token
-      operationId: postToken
-      x-operation-id-source: derived
+          
+servers:
+  - url: https://api.wisc.edu/oauth
+          
 components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
   schemas:
+    error:
+      properties:
+        error:
+          description: Type of error
+          type: string
+        error_description:
+          description: Details of error
+          type: string
     access_token:
       properties:
         access_token:
@@ -109,15 +125,6 @@ components:
           description: Number of times the token has been refreshed
           type: string
           example: 0
-    error:
-      properties:
-        error:
-          description: Type of error
-          type: string
-        error_description:
-          description: Details of error
-          type: string
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
+
+security:
+  - basicAuth: []

@@ -1,0 +1,602 @@
+---
+openapi: "3.0.0"
+info:
+  title: "Enterprise Billing API"
+  description: "Enterprise Billing API provides an API proxy to Salesforce using the Salesforce API.  For access requests, please visit https://crm.project.wiscweb.wisc.edu/enterprise-billing-api-request-form/.  For additional information, please visit https://kb.wisc.edu/uw-enterprise-billing-api/page.php?id=162438."
+  version: "0.1.0"
+servers:
+- url: "https://doit.dev.api.wisc.edu/enterprise-billing"
+  description: "Dev server"
+security:
+- OAuth2ClientCredentials: []
+tags: 
+- name: "Service Provider Charge Collection"
+  description: "Available operations for Charge Collections."
+paths:
+  /billingCustomers:
+    summary: "represents Billing Customers"
+    get:
+      summary:  "testste"
+      description: "Retrieve Billing Customers."
+      responses:
+        "200":
+          description: "A JSON representation of Billing Customers."
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: "#/components/schemas/billingCustomer"
+              example:
+                totalSize: 5
+                done: true
+                records:
+                  id: "a0ADh00000606IOMAY"
+                  name: "ICUS000002"
+                  type: "Internal"
+                  isActive: false
+        "403":
+          $ref: "#/components/responses/NoAuthorization"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /billingBatches:
+    summary: "represents Billing Batches"
+    get:
+      tags:
+      - "Billing Batches"
+      summary: "represents Billing Batches"
+      description: "Retrieve Billing Batches."
+      responses:
+        "200":
+          description: "A JSON representation of Billing Batches."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/billingBatch"
+              example:
+                totalSize: 5
+                done: true
+                records:
+                  id: "a0IDh000005sqp4MAA"
+                  name: "Maddie Test B"
+                  type: "ISP Provided"
+                  status: "New"
+                  ispDataRecordCount: 3,
+                  dataErrorRows: 0
+        "403":
+          $ref: "#/components/responses/NoAuthorization"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /billingBatch/{id}:
+    parameters:
+    - in: "path"
+      name: "id"
+      schema:
+        type: "string"
+      required: true
+      description: "Salesforce Billing Batch Id"
+    summary: "represents Billing Batch information regarding a imported set of transactions"
+    get:
+      tags:
+      - "Billing Batch Information"
+      summary: "represents a single Billing Batch"
+      description: "Retrieve Billing Batch information."
+      responses:
+        "200":
+          description: "A JSON representation of Billing Batch information."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/billingBatch"
+              example:
+                totalSize: 5
+                done: true
+                records:
+                  id: "a0IDh000005sqp4MAA"
+                  name: "Maddie Test B"
+                  type: "ISP Provided"
+                  status: "New"
+                  ispDataRecordCount: 3,
+                  dataErrorRows: 0
+        "403":
+          $ref: "#/components/responses/NoAuthorization"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags:
+      - "Billing Batch Delete"
+      summary: "Delete a single Billing Batch"
+      description: "Delete a Billing Batch and child ISP data transaction records."
+      responses:
+        "204":
+          description: "Empty response."
+        "403":
+          $ref: "#/components/responses/NoAuthorization"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /bulkjob/{id}:
+    parameters:
+    - in: "path"
+      name: "id"
+      schema:
+        type: "string"
+      required: true
+      description: "Salesforce bulkjobId"
+    summary: "represents status of a bulk job"
+    get:
+      tags:
+      - "Bulk Job Status"
+      summary: "represents a single bulk job status"
+      description: "Retrieve status of a bulkjob."
+      responses:
+        "200":
+          description: "A JSON representation of bulkjob status."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/bulkjob"
+              example:
+                id: "750Dh0000095JICIA2"
+                operation: "insert"
+                object: "blng_Billing_ISP_Data__c"
+                createdById: "005Dh000007Z12uIAC"
+                createdDate: "2025-03-20T13:29:35.000+0000"
+                systemModstamp: "2025-03-20T13:29:37.000+0000"
+                state: "JobComplete"
+                concurrencyMode: "Parallel"
+                contentType: "CSV"
+                apiVersion: 58.0,
+                jobType: "V2Ingest"
+                lineEnding: "CRLF"
+                columnDelimiter: "COMMA"
+                numberRecordsProcessed: 2
+                numberRecordsFailed: 0
+                retries: 0
+                totalProcessingTime: 848
+                apiActiveProcessingTime: 790
+                apexProcessingTime: 329
+        "403":
+          $ref: "#/components/responses/NoAuthorization"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /bulkjob-BillingTrans:
+    parameters:
+    - in: path
+      name: "csv file"
+      schema:
+        type: "array"
+      required: true
+      description: "Submit a .csv file of billing transactions."
+    summary: "Upload .csv file of billing transactions."
+    post:
+      summary: "Submit a .csv file of billing transactions."
+      description: "Creates Billing Batch and child billing transactions in Salesforce."
+      requestBody:
+        description: "Attached .csv file for request."
+        required: true
+        content:
+          text/plain::
+            schema:
+              $ref: "#/components/schemas/billingTransactionsCSV"
+      responses:
+        "200":
+          description: "Bulkjob created with submitted CSV file."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/bulkjob"
+              example:
+                id: "750Dh0000095JICIA2"
+                operation: "insert"
+                object: "blng_Billing_ISP_Data__c"
+                createdById: "005Dh000007Z12uIAC"
+                createdDate: "2025-03-20T13:29:35.000+0000"
+                systemModstamp: "2025-03-20T13:29:37.000+0000"
+                state: "JobComplete"
+                concurrencyMode: "Parallel"
+                contentType: "CSV"
+                apiVersion: 58.0,
+                jobType: "V2Ingest"
+                lineEnding: "CRLF"
+                columnDelimiter: "COMMA"
+                numberRecordsProcessed: 2
+                numberRecordsFailed: 0
+                retries: 0
+                totalProcessingTime: 848
+                apiActiveProcessingTime: 790
+                apexProcessingTime: 329
+        "400":
+          $ref: "#/components/responses/DuplicateBillingBatchName"
+        "403":
+          $ref: "#/components/responses/NoAuthorization"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /bulkjob-FailedResults/{id}:
+    parameters:
+    - in: "path"
+      name: "id"
+      schema:
+        type: "string"
+      required: true
+      description: "Salesforce bulkjobId"
+    summary: "represents a bulkjob response of failed records"
+    get:
+      tags:
+      - "Bulk Job Failed Results"
+      summary: "represents json records which failed to load"
+      description: ""
+      responses:
+        "200":
+          description: "A JSON object.array of failed records."
+          content:
+            application/json:
+              schema:
+                type: "array"
+        "403":
+          $ref: "#/components/responses/NoAuthorization"
+        "404":
+          $ref: "#/components/responses/NotFound"
+components:
+  schemas:
+    error:
+      description: "Error object"
+      type: "object"
+      properties:
+        message:
+          type: "string"
+    errorDuplicateBillingBatchName:
+      description: "Duplicate BillingBatchName error object"
+      type: "object"
+      properties:
+        reason:
+          type: "string"
+          description: "Base fault reason."
+        details:
+          type: "string"
+          description: "Specific fault verbage. (from Apigee)"
+        sfdcDetail:
+          type: "array"
+          description: "Details from Salesforce."
+          items:
+            properties:
+              message:
+                type: "string"
+                description: "Specific fault message."
+              errorCode:
+                type: "string"
+                description: "specific error code"
+              fields:
+                type: "array"
+                description: "Field API name(s) with issues."
+    billingCustomer:
+      title: "Billing Customer"
+      description: "Billing Customer information."
+      type: "object"
+      properties:
+        totalSize:
+          readOnly: true
+          title: "totalSize"
+          description: "Number of response records."
+          type: "integer"
+        done: 
+          readOnly: true
+          title: "done"
+          description: "Response complete."
+          type: "boolean"
+        records:
+          description: "A collection of BillingCustomers."
+          type: array
+          items:
+            description: "A single BillingCustomer."
+            properties:
+              id:
+                readOnly: true
+                title: "Id"
+                description: "Salesforce record identifier."
+                type: "string"
+                format: "Salesforce Id"
+                example: "a0ADh00000606IOMAY"
+              name:
+                readOnly: true
+                title: "Name"
+                description: "Name of Billing Customer."
+                type: "string"
+                example: "ICUS000002"
+              type:
+                readOnly: true
+                title: "Type"
+                description: "Type of Billing Customer."
+                type: "string"
+                example: "Internal"
+              isActive:
+                readOnly: true
+                title: "Is Active"
+                description: "Active status of Billing Customer."
+                type: "boolean"
+                example: "true"
+    billingBatch:
+      title: "Billing Batch"
+      description: "Billing Batch information of submitted transaction data."
+      type: "object"
+      properties:
+        totalSize:
+          readOnly: true
+          title: "totalSize"
+          description: "Number of response records."
+          type: integer
+        done: 
+          readOnly: true
+          title: "done"
+          description: "Response complete."
+          type: boolean
+        records:
+          description: "A collection of BillingBatches."
+          type: "array"
+          items:
+            description: "A single BillingCustomer."
+            type: "object"
+            properties:
+              id:
+                readOnly: true
+                title: "Id"
+                description: "Salesforce record identifier."
+                type: "string"
+                format: "Salesforce Id"
+              name:
+                readOnly: true
+                title: "Name"
+                description: "Name of Billing Batch."
+                type: "string"
+              type:
+                readOnly: true
+                title: "Type"
+                description: "Type of Billing Batch."
+                type: "string"
+              status:
+                readOnly: true
+                title: "Status"
+                description: "Status of Billing Batch."
+                type: "string"
+              ispDataRecordCount:
+                readOnly: true
+                title: "ISP Data Record Count"
+                description: "Count of records per Billing Batch."
+                type: "integer"
+              dataErrorRows:
+                readOnly: true
+                title: "Data Errors Rows"
+                description: "Count of records with errors per Billing Batch."
+                type: "integer"
+    bulkjob:
+      title: "Bulkjob Status"
+      description: "Bulkjob information."
+      type: "object"
+      properties:
+        id:
+          readOnly: true
+          title: "Id"
+          description: "Salesforce record identifier."
+          type: "string"
+          format: "Salesforce Id"
+        operation:
+          readOnly: true
+          title: "Operation"
+          description: "Bulkjob data operation of submitted data."
+          type: "string"
+        object:
+          readOnly: true
+          title: "Object"
+          description: "Bulkjob target object (api name)."
+          type: "string"
+        createdById:
+          readOnly: true
+          title: "Created By"
+          description: "Salesforce user identifier whom created bulkjob. "
+          type: "string"
+          format: "Salesforce Id"
+        createdDate:
+          readOnly: true
+          title: "Created Date"
+          description: "Bulkjob created date."
+          type: "string"
+          format: "date-time"
+        systemModstamp:
+          readOnly: true
+          title: "System Modstamp"
+          description: ""
+          type: "string"
+          format: "date-time"
+        state:
+          readOnly: true
+          title: "State"
+          description: "Bulkjob status."
+          type: "string"
+        concurrencyMode:
+          readOnly: true
+          title: "Concurrency Mode"
+          description: "Bulkjob run mode."
+          type: "string"
+        contentType:
+          readOnly: true
+          title: "Content Type"
+          description: "Bulkjob submitted data type."
+          type: "string"
+        apiVersion:
+          readOnly: true
+          title: "APIVersion"
+          description: "Bulkjob runtime api version."
+          type: "string"
+        jobType:
+          readOnly: true
+          title: "Job Type"
+          description: "Bulkjob type."
+          type: "string"
+        lineEnding:
+          readOnly: true
+          title: "Line Ending"
+          description: "Bulkjob submitted data lineEnding."
+          type: "string"
+        columnDelimiter:
+          readOnly: true
+          title: "Column Delimiter"
+          description: "Bulkjob submitted data column delimiter."
+          type: "string"
+        numberRecordsProcessed:
+          readOnly: true
+          title: "Number of Records Processed"
+          description: "Bulkjob total records processed."
+          type: "number"
+        numberRecordsFailed:
+          readOnly: true
+          title: "Number of Records Failed"
+          description: "Bulkjob records that failed."
+          type: "number"
+        retries:
+          readOnly: true
+          title: "Retries"
+          description: "Bulkjob retries."
+          type: "number"
+        totalProcessingTime:
+          readOnly: true
+          title: "Total Processing Time"
+          description: "Bulkjob processing time."
+          type: "number"
+        apiActiveProcessingTime:
+          readOnly: true
+          title: "API Active Processing Time"
+          description: "Bulkjob API active processing time."
+          type: "number"
+        apexProcessingTime:
+          readOnly: true
+          title: "APEX Processing Time"
+          description: "Bulkjob APEX processing time."
+          type: "number"
+    billingTransactionsCSV:
+      title: "Billing Transaction CSV"
+      description: "Billing transactions CSV file"
+      type: object
+      properties:
+        Billing_Batch_Name:
+          title: "Billing_Batch_Name"
+          description: "Salesforce name of Billing Batch."
+          type: "string"
+          example: "Cloud Services April 2025"
+        ISP_Source_Record_ID:
+          title: "ISP_Source_Record_ID"
+          description: "Source system record unique identifier."
+          type: "string"
+        Billing_Customer_ID:
+          title: "Billing_Customer_ID"
+          description: "Salesforce Billing_Customer_ID."
+          type: "string"
+          example: "ICUS000002"
+        Customer_PO_Number:
+          title: "Customer_PO_Number"
+          description: "External Customer PO Number."
+          type: "string"
+        Service_Billing_Table_Name:
+          title: "Service_Billing_Table_Name"
+          description: "Salesforce name of provided service."
+          type: "string"
+          example: "Digital Publishing and Printing Services"
+        Quantity:
+          title: "Quantity"
+          description: "Quantity consumed. (Quantity x Unit_Cost = Extended Amount)"
+          type: number
+        Unit_of_Measure:
+          title: "Unit_of_Measure"
+          description: "Unit of Measure"
+          type: "string"
+        Unit_Cost:
+          title: "Unit_Cost"
+          description: "Cost per Unit. (Quantity x Unit_Cost = Extended Amount)"
+          type: "string"
+        Extended_Amount:
+          title: "Extended_Amount"
+          description: "(Quantity x Unit_Cost = Extended Amount)"
+          type: "string"
+        Transaction_Date:
+          title: "Transaction_Date"
+          description: "Date of service."
+          type: string
+          format: "date"
+          example: "2024-11-27"
+        From_Date:
+          title: "From_Date"
+          description: "Start of date range for service."
+          type: "string"
+          format: "date"
+          example: "2024-07-23"
+        To_Date:
+          title: "To_Date"
+          description: "End of date range for service."
+          type: "string"
+          format: "date"
+          example: "2024-03-17"
+        Memo:
+          title: "Memo"
+          description: "Comments field."
+          type: "string"
+  responses:
+    DuplicateBillingBatchName:
+      description: "Duplicate BillingBatchName not allowed."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errorDuplicateBillingBatchName"
+          example:
+            error:
+            reason: "Bad Request"
+            details: "Salesforce Billing_Batch_Name must be unique."
+            sfdcDetail:
+              message: "Billing Batch Name must be unique"
+              errorCode: "Billing Batch Name must be unique"
+              fields: "Name"
+    NotFound:
+      description: "A specified resource was not found."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+          example:
+            message: "The requested resource does not exist"    
+    NoAuthorization:
+      description: "Not authorized to access resource."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/error"
+          example:
+            message: "Token not found."
+    NoContent:
+      description: "A resource was updated."
+  examples:
+    BillingBatchExample:
+      summary: "BillingBatch response example."
+      value:
+            id: "a0IDh000005sqp4MAA"
+            name: "Maddie Test B"
+            type: "ISP Provided"
+            status: "New"
+            ispDataRecordCount: 0
+            dataErrorRows: 0
+    BulkJobStatusExample:
+      summary: "BulkJob Status response example."
+      value:
+        id: "750Hr00000dbh5yIAA"
+        operation: "insert"
+        object: "blng_Billing_ISP_Data__c"
+        createdById: "005Hr00000HmLHmIAN"
+        createdDate: "2025-02-28T16:07:36.000+0000"
+        systemModstamp: "2025-02-28T16:07:36.000+0000"
+        state: "InProgress"
+        concurrencyMode: "Parallel"
+        contentType: "CSV"
+        apiVersion: 58.0
+        jobType: "V2Ingest"
+        lineEnding: "CRLF"
+        columnDelimiter: "COMMA"
+        numberRecordsProcessed: 0
+        numberRecordsFailed: 0
+        retries: 0
+        totalProcessingTime: 0
+        apiActiveProcessingTime: 0
+        apexProcessingTime: 0
