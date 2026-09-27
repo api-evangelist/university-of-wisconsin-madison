@@ -68,104 +68,31 @@ paths:
       operationId: postBulkjobBillingTrans
       x-operation-id-source: derived
 components:
-  responses:
-    DuplicateBillingBatchName:
-      description: Duplicate BillingBatchName not allowed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errorDuplicateBillingBatchName'
-          example:
-            error: null
-            reason: Bad Request
-            details: Salesforce Billing_Batch_Name must be unique.
-            sfdcDetail:
-              message: Billing Batch Name must be unique
-              errorCode: Billing Batch Name must be unique
-              fields: Name
-    NoAuthorization:
-      description: Not authorized to access resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: Token not found.
-    NotFound:
-      description: A specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: The requested resource does not exist
   schemas:
-    billingTransactionsCSV:
-      title: Billing Transaction CSV
-      description: Billing transactions CSV file
+    errorDuplicateBillingBatchName:
+      description: Duplicate BillingBatchName error object
       type: object
       properties:
-        Billing_Batch_Name:
-          title: Billing_Batch_Name
-          description: Salesforce name of Billing Batch.
+        reason:
           type: string
-          example: Cloud Services April 2025
-        ISP_Source_Record_ID:
-          title: ISP_Source_Record_ID
-          description: Source system record unique identifier.
+          description: Base fault reason.
+        details:
           type: string
-        Billing_Customer_ID:
-          title: Billing_Customer_ID
-          description: Salesforce Billing_Customer_ID.
-          type: string
-          example: ICUS000002
-        Customer_PO_Number:
-          title: Customer_PO_Number
-          description: External Customer PO Number.
-          type: string
-        Service_Billing_Table_Name:
-          title: Service_Billing_Table_Name
-          description: Salesforce name of provided service.
-          type: string
-          example: Digital Publishing and Printing Services
-        Quantity:
-          title: Quantity
-          description: Quantity consumed. (Quantity x Unit_Cost = Extended Amount)
-          type: number
-        Unit_of_Measure:
-          title: Unit_of_Measure
-          description: Unit of Measure
-          type: string
-        Unit_Cost:
-          title: Unit_Cost
-          description: Cost per Unit. (Quantity x Unit_Cost = Extended Amount)
-          type: string
-        Extended_Amount:
-          title: Extended_Amount
-          description: (Quantity x Unit_Cost = Extended Amount)
-          type: string
-        Transaction_Date:
-          title: Transaction_Date
-          description: Date of service.
-          type: string
-          format: date
-          example: '2024-11-27'
-        From_Date:
-          title: From_Date
-          description: Start of date range for service.
-          type: string
-          format: date
-          example: '2024-07-23'
-        To_Date:
-          title: To_Date
-          description: End of date range for service.
-          type: string
-          format: date
-          example: '2024-03-17'
-        Memo:
-          title: Memo
-          description: Comments field.
-          type: string
+          description: Specific fault verbage. (from Apigee)
+        sfdcDetail:
+          type: array
+          description: Details from Salesforce.
+          items:
+            properties:
+              message:
+                type: string
+                description: Specific fault message.
+              errorCode:
+                type: string
+                description: specific error code
+              fields:
+                type: array
+                description: Field API name(s) with issues.
     bulkjob:
       title: Bulkjob Status
       description: Bulkjob information.
@@ -276,27 +203,100 @@ components:
       properties:
         message:
           type: string
-    errorDuplicateBillingBatchName:
-      description: Duplicate BillingBatchName error object
+    billingTransactionsCSV:
+      title: Billing Transaction CSV
+      description: Billing transactions CSV file
       type: object
       properties:
-        reason:
+        Billing_Batch_Name:
+          title: Billing_Batch_Name
+          description: Salesforce name of Billing Batch.
           type: string
-          description: Base fault reason.
-        details:
+          example: Cloud Services April 2025
+        ISP_Source_Record_ID:
+          title: ISP_Source_Record_ID
+          description: Source system record unique identifier.
           type: string
-          description: Specific fault verbage. (from Apigee)
-        sfdcDetail:
-          type: array
-          description: Details from Salesforce.
-          items:
-            properties:
-              message:
-                type: string
-                description: Specific fault message.
-              errorCode:
-                type: string
-                description: specific error code
-              fields:
-                type: array
-                description: Field API name(s) with issues.
+        Billing_Customer_ID:
+          title: Billing_Customer_ID
+          description: Salesforce Billing_Customer_ID.
+          type: string
+          example: ICUS000002
+        Customer_PO_Number:
+          title: Customer_PO_Number
+          description: External Customer PO Number.
+          type: string
+        Service_Billing_Table_Name:
+          title: Service_Billing_Table_Name
+          description: Salesforce name of provided service.
+          type: string
+          example: Digital Publishing and Printing Services
+        Quantity:
+          title: Quantity
+          description: Quantity consumed. (Quantity x Unit_Cost = Extended Amount)
+          type: number
+        Unit_of_Measure:
+          title: Unit_of_Measure
+          description: Unit of Measure
+          type: string
+        Unit_Cost:
+          title: Unit_Cost
+          description: Cost per Unit. (Quantity x Unit_Cost = Extended Amount)
+          type: string
+        Extended_Amount:
+          title: Extended_Amount
+          description: (Quantity x Unit_Cost = Extended Amount)
+          type: string
+        Transaction_Date:
+          title: Transaction_Date
+          description: Date of service.
+          type: string
+          format: date
+          example: '2024-11-27'
+        From_Date:
+          title: From_Date
+          description: Start of date range for service.
+          type: string
+          format: date
+          example: '2024-07-23'
+        To_Date:
+          title: To_Date
+          description: End of date range for service.
+          type: string
+          format: date
+          example: '2024-03-17'
+        Memo:
+          title: Memo
+          description: Comments field.
+          type: string
+  responses:
+    DuplicateBillingBatchName:
+      description: Duplicate BillingBatchName not allowed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorDuplicateBillingBatchName'
+          example:
+            error: null
+            reason: Bad Request
+            details: Salesforce Billing_Batch_Name must be unique.
+            sfdcDetail:
+              message: Billing Batch Name must be unique
+              errorCode: Billing Batch Name must be unique
+              fields: Name
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist

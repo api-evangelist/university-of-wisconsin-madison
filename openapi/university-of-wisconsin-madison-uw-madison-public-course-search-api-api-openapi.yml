@@ -36,6 +36,31 @@ paths:
       - UW Madison Public Course Search API
 components:
   schemas:
+    CourseSearchRequest:
+      type: object
+      required:
+      - selectedTerm
+      properties:
+        selectedTerm:
+          type: string
+          description: Term code from GET /terms.
+          example: '1266'
+        queryString:
+          type: string
+          example: computer science
+        filters:
+          type: array
+          items:
+            type: object
+        page:
+          type: integer
+          example: 1
+        pageSize:
+          type: integer
+          example: 2
+        sortOrder:
+          type: string
+          example: SCORE
     CourseHit:
       type: object
       description: Field set observed in live responses. Types are inferred from observed values; only field names are directly verified.
@@ -157,31 +182,6 @@ components:
           type: string
         subjectAggregate:
           type: string
-    CourseSearchRequest:
-      type: object
-      required:
-      - selectedTerm
-      properties:
-        selectedTerm:
-          type: string
-          description: Term code from GET /terms.
-          example: '1266'
-        queryString:
-          type: string
-          example: computer science
-        filters:
-          type: array
-          items:
-            type: object
-        page:
-          type: integer
-          example: 1
-        pageSize:
-          type: integer
-          example: 2
-        sortOrder:
-          type: string
-          example: SCORE
     CourseSearchResponse:
       type: object
       properties:

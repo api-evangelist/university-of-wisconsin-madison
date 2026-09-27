@@ -59,24 +59,13 @@ paths:
       operationId: getBulkjobById
       x-operation-id-source: derived
 components:
-  responses:
-    NoAuthorization:
-      description: Not authorized to access resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: Token not found.
-    NotFound:
-      description: A specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: The requested resource does not exist
   schemas:
+    error:
+      description: Error object
+      type: object
+      properties:
+        message:
+          type: string
     bulkjob:
       title: Bulkjob Status
       description: Bulkjob information.
@@ -181,9 +170,20 @@ components:
           title: APEX Processing Time
           description: Bulkjob APEX processing time.
           type: number
-    error:
-      description: Error object
-      type: object
-      properties:
-        message:
-          type: string
+  responses:
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist

@@ -276,7 +276,219 @@ paths:
       operationId: getLocationsTypes
       x-operation-id-source: derived
 components:
+  responses:
+    TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Rate limit exceeded. Try again later.
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Authentication failed. Invalid or missing API key.
+    CSVRedirect:
+      description: 'Redirect to a URL to download a CSV response. Triggered by setting the `Accept` header to `text/csv`.
+
+        '
+      headers:
+        Location:
+          description: The URL to download a CSV with the query results.
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CSVRedirectResponse'
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Invalid parameter or request.
+              status:
+                type: integer
+                example: 400
+  parameters:
+    PageNumber:
+      name: page[number]
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        default: 1
+    GenericFilter:
+      name: filter
+      in: query
+      description: Filter query results on the specified attribute. See the Filter Query Parameter documentation in the [Overview](/docs/locations-api/1/overview) for more information.
+      required: false
+      style: deepObject
+      explode: true
+      examples:
+        basicEquality:
+          description: Filtering a field using basic equality.
+          value: filter[addresses.line1]=100 Main St
+        specialOperatorBetween:
+          description: Filtering a field using the "between" operator.
+          value: filter[workdayCreatedOn:between]=2020-01-01,2022-01-01
+        specialOperatorGreaterThan:
+          description: Filtering a field using the "greaterThan" operator.
+          value: filter[workdayDateOfLastChange:greaterThan]=2020-01-01
+      schema:
+        type: object
+        additionalProperties: false
+        properties:
+          attributeAndOperator:
+            description: The name of the attribute and (if needed) the special operator being used on it. If a special operator is in use, it is separated from the attribute name with a `:`.
+            type: string
+            example: addresses.line1
+            pattern: ^(?<attributeName>[^:]+)(?::(?<specialOperator>.+))?$
+    Accept:
+      name: Accept
+      in: header
+      description: 'The response format. For `application/json`, nothing changes, as the API defaults to JSON responses. For `text/csv`, the response will be serialized as a CSV and uploaded to AWS S3. See the CSV Output documentation in the [Overview](/docs/locations-api/1/overview) for more information.
+
+        '
+      required: false
+      schema:
+        type: string
+        default: application/json
+        enum:
+        - application/json
+        - text/csv
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of records per page
+      schema:
+        type: integer
+        default: 100
   schemas:
+    Address:
+      type: object
+      properties:
+        isPrimary:
+          description: Whether the address is the primary address of the location. If a location has multiple addresses, this should only be true for one of them.
+          type: boolean
+          example: true
+        country:
+          type: string
+          example: USA
+        line1:
+          description: Line 1 of the address.
+          type: string
+          example: 879 Faux Circle
+        municipality:
+          type: string
+          example: Stateville
+        postalCode:
+          type: string
+          example: 54401-5362
+        region:
+          description: The region within the country. This is usually the state's postal abbreviation.
+          type: string
+          example: WI
+        regionDescriptor:
+          description: The descriptive name of the region within the country. This is usually the state's unabbreviated name.
+          type: string
+          example: Wisconsin
+        regionSubdivision:
+          description: The subdivision within the region. This is usually a county name, but can be null if it splits multiple subdivisions (i.e. the boundaries extend into multiple counties).
+          type: string
+          example: Dane
+        regionSubdivisionDescriptor:
+          description: The type of the subdivision within the region. This is usually just "County", or null if it splits multiple subdivisions.
+          type: string
+          example: County
+        usages:
+          description: 'How the address is intended to be used. Note that usages are not guaranteed to be unique among a location''s addresses, e.g. a location could have multiple shipping and street addresses.
+
+            '
+          type: array
+          example:
+          - SHIPPING
+          - BUSINESS
+          items:
+            $ref: '#/components/schemas/Usage'
+    Usage:
+      description: 'How a space is intended to be used. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for more information.
+
+        '
+      type: object
+      properties:
+        name:
+          type: string
+          example: BUSINESS SITE
+    Links:
+      description: Pagination links.
+      type: object
+      properties:
+        nextPage:
+          description: The next page of data.
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://api.wic.edu/locations?page[number]=3&page[size]=100
+        prevPage:
+          description: The previous page of data.
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
+        firstPage:
+          description: The first page of data.
+          type: string
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
+        lastPage:
+          description: The last page of data.
+          type: string
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1892&page[size]=100
+    CSVRedirectResponse:
+      description: 'Information on the CSV response. Triggered by setting the `Accept` header to `text/csv`.
+
+        '
+      type: object
+      properties:
+        message:
+          description: Human-readable information about the response.
+          type: string
+          example: Your file is available from the following download link.
+        status:
+          description: The HTTP code of the response.
+          type: integer
+          example: 302
+        url:
+          description: 'The URL the CSV can be downloaded from. Note that this URL is only valid for 15 minutes, and attempting to access it after it expires will return an error.
+
+            '
+          type: string
+          format: uri
+          example: https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456
+      example:
+        message: Your file is available from the following download link.
+        status: 302
+        url: https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456
     Location:
       type: object
       properties:
@@ -373,31 +585,6 @@ components:
           - BUSINESS ASSET
           items:
             $ref: '#/components/schemas/Usage'
-    CSVRedirectResponse:
-      description: 'Information on the CSV response. Triggered by setting the `Accept` header to `text/csv`.
-
-        '
-      type: object
-      properties:
-        message:
-          description: Human-readable information about the response.
-          type: string
-          example: Your file is available from the following download link.
-        status:
-          description: The HTTP code of the response.
-          type: integer
-          example: 302
-        url:
-          description: 'The URL the CSV can be downloaded from. Note that this URL is only valid for 15 minutes, and attempting to access it after it expires will return an error.
-
-            '
-          type: string
-          format: uri
-          example: https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456
-      example:
-        message: Your file is available from the following download link.
-        status: 302
-        url: https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456
     Type:
       description: 'The type of a location. See the [Types documentation](https://locationsapi.wisc.edu/documentation/endpoints/types/) for more information.
 
@@ -426,193 +613,6 @@ components:
               description: The requested page size.
               type: integer
               example: 100
-    Usage:
-      description: 'How a space is intended to be used. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for more information.
-
-        '
-      type: object
-      properties:
-        name:
-          type: string
-          example: BUSINESS SITE
-    Links:
-      description: Pagination links.
-      type: object
-      properties:
-        nextPage:
-          description: The next page of data.
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://api.wic.edu/locations?page[number]=3&page[size]=100
-        prevPage:
-          description: The previous page of data.
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
-        firstPage:
-          description: The first page of data.
-          type: string
-          format: uri
-          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
-        lastPage:
-          description: The last page of data.
-          type: string
-          format: uri
-          example: https://api.wisc.edu/locations?page[number]=1892&page[size]=100
-    Address:
-      type: object
-      properties:
-        isPrimary:
-          description: Whether the address is the primary address of the location. If a location has multiple addresses, this should only be true for one of them.
-          type: boolean
-          example: true
-        country:
-          type: string
-          example: USA
-        line1:
-          description: Line 1 of the address.
-          type: string
-          example: 879 Faux Circle
-        municipality:
-          type: string
-          example: Stateville
-        postalCode:
-          type: string
-          example: 54401-5362
-        region:
-          description: The region within the country. This is usually the state's postal abbreviation.
-          type: string
-          example: WI
-        regionDescriptor:
-          description: The descriptive name of the region within the country. This is usually the state's unabbreviated name.
-          type: string
-          example: Wisconsin
-        regionSubdivision:
-          description: The subdivision within the region. This is usually a county name, but can be null if it splits multiple subdivisions (i.e. the boundaries extend into multiple counties).
-          type: string
-          example: Dane
-        regionSubdivisionDescriptor:
-          description: The type of the subdivision within the region. This is usually just "County", or null if it splits multiple subdivisions.
-          type: string
-          example: County
-        usages:
-          description: 'How the address is intended to be used. Note that usages are not guaranteed to be unique among a location''s addresses, e.g. a location could have multiple shipping and street addresses.
-
-            '
-          type: array
-          example:
-          - SHIPPING
-          - BUSINESS
-          items:
-            $ref: '#/components/schemas/Usage'
-  responses:
-    CSVRedirect:
-      description: 'Redirect to a URL to download a CSV response. Triggered by setting the `Accept` header to `text/csv`.
-
-        '
-      headers:
-        Location:
-          description: The URL to download a CSV with the query results.
-          schema:
-            type: string
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CSVRedirectResponse'
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Invalid parameter or request.
-              status:
-                type: integer
-                example: 400
-    TooManyRequests:
-      description: Too Many Requests
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Rate limit exceeded. Try again later.
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Authentication failed. Invalid or missing API key.
-  parameters:
-    Accept:
-      name: Accept
-      in: header
-      description: 'The response format. For `application/json`, nothing changes, as the API defaults to JSON responses. For `text/csv`, the response will be serialized as a CSV and uploaded to AWS S3. See the CSV Output documentation in the [Overview](/docs/locations-api/1/overview) for more information.
-
-        '
-      required: false
-      schema:
-        type: string
-        default: application/json
-        enum:
-        - application/json
-        - text/csv
-    PageSize:
-      name: page[size]
-      in: query
-      description: Number of records per page
-      schema:
-        type: integer
-        default: 100
-    GenericFilter:
-      name: filter
-      in: query
-      description: Filter query results on the specified attribute. See the Filter Query Parameter documentation in the [Overview](/docs/locations-api/1/overview) for more information.
-      required: false
-      style: deepObject
-      explode: true
-      examples:
-        basicEquality:
-          description: Filtering a field using basic equality.
-          value: filter[addresses.line1]=100 Main St
-        specialOperatorBetween:
-          description: Filtering a field using the "between" operator.
-          value: filter[workdayCreatedOn:between]=2020-01-01,2022-01-01
-        specialOperatorGreaterThan:
-          description: Filtering a field using the "greaterThan" operator.
-          value: filter[workdayDateOfLastChange:greaterThan]=2020-01-01
-      schema:
-        type: object
-        additionalProperties: false
-        properties:
-          attributeAndOperator:
-            description: The name of the attribute and (if needed) the special operator being used on it. If a special operator is in use, it is separated from the attribute name with a `:`.
-            type: string
-            example: addresses.line1
-            pattern: ^(?<attributeName>[^:]+)(?::(?<specialOperator>.+))?$
-    PageNumber:
-      name: page[number]
-      in: query
-      description: Page number for pagination
-      schema:
-        type: integer
-        default: 1
   securitySchemes:
     OAuth2ClientCredentials:
       flows:

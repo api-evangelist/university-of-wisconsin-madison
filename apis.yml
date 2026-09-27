@@ -190,6 +190,12 @@ apis:
   tags:
   - Research Repository
   - OAI-PMH
+  - Library
+  - Open Access
+  - Metadata
+  tags_raw:
+  - Research Repository
+  - OAI-PMH
   - Libraries
   - Open Access
   - Metadata
