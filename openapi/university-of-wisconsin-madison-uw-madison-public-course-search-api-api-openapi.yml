@@ -61,6 +61,23 @@ components:
         sortOrder:
           type: string
           example: SCORE
+    CourseSearchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type:
+          - string
+          - 'null'
+        found:
+          type: integer
+          description: Total matching courses.
+          example: 226
+        hits:
+          type: array
+          items:
+            $ref: '#/components/schemas/CourseHit'
     CourseHit:
       type: object
       description: Field set observed in live responses. Types are inferred from observed values; only field names are directly verified.
@@ -182,23 +199,6 @@ components:
           type: string
         subjectAggregate:
           type: string
-    CourseSearchResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type:
-          - string
-          - 'null'
-        found:
-          type: integer
-          description: Total matching courses.
-          example: 226
-        hits:
-          type: array
-          items:
-            $ref: '#/components/schemas/CourseHit'
 x-operator: institution
 x-provenance:
   generated: '2026-08-19'

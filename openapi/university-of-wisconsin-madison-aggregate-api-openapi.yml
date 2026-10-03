@@ -28,25 +28,6 @@ paths:
       - Aggregate
 components:
   schemas:
-    Aggregate:
-      type: object
-      properties:
-        terms:
-          type: array
-          items:
-            $ref: '#/components/schemas/Term'
-        subjects:
-          type: array
-          items:
-            type: object
-        sessions:
-          type: array
-          items:
-            type: object
-        specialGroups:
-          type: array
-          items:
-            type: object
     Term:
       type: object
       properties:
@@ -76,6 +57,25 @@ components:
           example: 2025-26
         pastTerm:
           type: boolean
+    Aggregate:
+      type: object
+      properties:
+        terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Term'
+        subjects:
+          type: array
+          items:
+            type: object
+        sessions:
+          type: array
+          items:
+            type: object
+        specialGroups:
+          type: array
+          items:
+            type: object
 x-operator: institution
 x-provenance:
   generated: '2026-08-19'

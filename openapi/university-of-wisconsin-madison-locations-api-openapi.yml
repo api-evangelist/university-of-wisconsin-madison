@@ -276,110 +276,6 @@ paths:
       operationId: getLocationsTypes
       x-operation-id-source: derived
 components:
-  responses:
-    TooManyRequests:
-      description: Too Many Requests
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Rate limit exceeded. Try again later.
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: Authentication failed. Invalid or missing API key.
-    CSVRedirect:
-      description: 'Redirect to a URL to download a CSV response. Triggered by setting the `Accept` header to `text/csv`.
-
-        '
-      headers:
-        Location:
-          description: The URL to download a CSV with the query results.
-          schema:
-            type: string
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CSVRedirectResponse'
-    BadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error:
-                type: string
-                example: Bad Request
-              message:
-                type: string
-                example: Invalid parameter or request.
-              status:
-                type: integer
-                example: 400
-  parameters:
-    PageNumber:
-      name: page[number]
-      in: query
-      description: Page number for pagination
-      schema:
-        type: integer
-        default: 1
-    GenericFilter:
-      name: filter
-      in: query
-      description: Filter query results on the specified attribute. See the Filter Query Parameter documentation in the [Overview](/docs/locations-api/1/overview) for more information.
-      required: false
-      style: deepObject
-      explode: true
-      examples:
-        basicEquality:
-          description: Filtering a field using basic equality.
-          value: filter[addresses.line1]=100 Main St
-        specialOperatorBetween:
-          description: Filtering a field using the "between" operator.
-          value: filter[workdayCreatedOn:between]=2020-01-01,2022-01-01
-        specialOperatorGreaterThan:
-          description: Filtering a field using the "greaterThan" operator.
-          value: filter[workdayDateOfLastChange:greaterThan]=2020-01-01
-      schema:
-        type: object
-        additionalProperties: false
-        properties:
-          attributeAndOperator:
-            description: The name of the attribute and (if needed) the special operator being used on it. If a special operator is in use, it is separated from the attribute name with a `:`.
-            type: string
-            example: addresses.line1
-            pattern: ^(?<attributeName>[^:]+)(?::(?<specialOperator>.+))?$
-    Accept:
-      name: Accept
-      in: header
-      description: 'The response format. For `application/json`, nothing changes, as the API defaults to JSON responses. For `text/csv`, the response will be serialized as a CSV and uploaded to AWS S3. See the CSV Output documentation in the [Overview](/docs/locations-api/1/overview) for more information.
-
-        '
-      required: false
-      schema:
-        type: string
-        default: application/json
-        enum:
-        - application/json
-        - text/csv
-    PageSize:
-      name: page[size]
-      in: query
-      description: Number of records per page
-      schema:
-        type: integer
-        default: 100
   schemas:
     Address:
       type: object
@@ -427,43 +323,6 @@ components:
           - BUSINESS
           items:
             $ref: '#/components/schemas/Usage'
-    Usage:
-      description: 'How a space is intended to be used. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for more information.
-
-        '
-      type: object
-      properties:
-        name:
-          type: string
-          example: BUSINESS SITE
-    Links:
-      description: Pagination links.
-      type: object
-      properties:
-        nextPage:
-          description: The next page of data.
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://api.wic.edu/locations?page[number]=3&page[size]=100
-        prevPage:
-          description: The previous page of data.
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
-        firstPage:
-          description: The first page of data.
-          type: string
-          format: uri
-          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
-        lastPage:
-          description: The last page of data.
-          type: string
-          format: uri
-          example: https://api.wisc.edu/locations?page[number]=1892&page[size]=100
     CSVRedirectResponse:
       description: 'Information on the CSV response. Triggered by setting the `Accept` header to `text/csv`.
 
@@ -489,6 +348,25 @@ components:
         message: Your file is available from the following download link.
         status: 302
         url: https://example.com/00000000-0000-0000-0000-000000000000.csv?signature=123456
+    Meta:
+      description: Information about the response's pagination.
+      type: object
+      properties:
+        totalCount:
+          description: The total number of items in the result set.
+          type: integer
+          example: 1000
+        page:
+          type: object
+          properties:
+            number:
+              description: The requested page number.
+              type: integer
+              example: 1
+            size:
+              description: The requested page size.
+              type: integer
+              example: 100
     Location:
       type: object
       properties:
@@ -585,6 +463,34 @@ components:
           - BUSINESS ASSET
           items:
             $ref: '#/components/schemas/Usage'
+    Links:
+      description: Pagination links.
+      type: object
+      properties:
+        nextPage:
+          description: The next page of data.
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://api.wic.edu/locations?page[number]=3&page[size]=100
+        prevPage:
+          description: The previous page of data.
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
+        firstPage:
+          description: The first page of data.
+          type: string
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1&page[size]=100
+        lastPage:
+          description: The last page of data.
+          type: string
+          format: uri
+          example: https://api.wisc.edu/locations?page[number]=1892&page[size]=100
     Type:
       description: 'The type of a location. See the [Types documentation](https://locationsapi.wisc.edu/documentation/endpoints/types/) for more information.
 
@@ -594,25 +500,119 @@ components:
         name:
           type: string
           example: Building
-    Meta:
-      description: Information about the response's pagination.
+    Usage:
+      description: 'How a space is intended to be used. See the [Usages documentation](https://locationsapi.wisc.edu/documentation/endpoints/usages/) for more information.
+
+        '
       type: object
       properties:
-        totalCount:
-          description: The total number of items in the result set.
-          type: integer
-          example: 1000
-        page:
-          type: object
-          properties:
-            number:
-              description: The requested page number.
-              type: integer
-              example: 1
-            size:
-              description: The requested page size.
-              type: integer
-              example: 100
+        name:
+          type: string
+          example: BUSINESS SITE
+  parameters:
+    Accept:
+      name: Accept
+      in: header
+      description: 'The response format. For `application/json`, nothing changes, as the API defaults to JSON responses. For `text/csv`, the response will be serialized as a CSV and uploaded to AWS S3. See the CSV Output documentation in the [Overview](/docs/locations-api/1/overview) for more information.
+
+        '
+      required: false
+      schema:
+        type: string
+        default: application/json
+        enum:
+        - application/json
+        - text/csv
+    PageNumber:
+      name: page[number]
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        default: 1
+    GenericFilter:
+      name: filter
+      in: query
+      description: Filter query results on the specified attribute. See the Filter Query Parameter documentation in the [Overview](/docs/locations-api/1/overview) for more information.
+      required: false
+      style: deepObject
+      explode: true
+      examples:
+        basicEquality:
+          description: Filtering a field using basic equality.
+          value: filter[addresses.line1]=100 Main St
+        specialOperatorBetween:
+          description: Filtering a field using the "between" operator.
+          value: filter[workdayCreatedOn:between]=2020-01-01,2022-01-01
+        specialOperatorGreaterThan:
+          description: Filtering a field using the "greaterThan" operator.
+          value: filter[workdayDateOfLastChange:greaterThan]=2020-01-01
+      schema:
+        type: object
+        additionalProperties: false
+        properties:
+          attributeAndOperator:
+            description: The name of the attribute and (if needed) the special operator being used on it. If a special operator is in use, it is separated from the attribute name with a `:`.
+            type: string
+            example: addresses.line1
+            pattern: ^(?<attributeName>[^:]+)(?::(?<specialOperator>.+))?$
+    PageSize:
+      name: page[size]
+      in: query
+      description: Number of records per page
+      schema:
+        type: integer
+        default: 100
+  responses:
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Authentication failed. Invalid or missing API key.
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: Bad Request
+              message:
+                type: string
+                example: Invalid parameter or request.
+              status:
+                type: integer
+                example: 400
+    CSVRedirect:
+      description: 'Redirect to a URL to download a CSV response. Triggered by setting the `Accept` header to `text/csv`.
+
+        '
+      headers:
+        Location:
+          description: The URL to download a CSV with the query results.
+          schema:
+            type: string
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CSVRedirectResponse'
+    TooManyRequests:
+      description: Too Many Requests
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Rate limit exceeded. Try again later.
   securitySchemes:
     OAuth2ClientCredentials:
       flows:
