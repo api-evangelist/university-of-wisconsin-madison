@@ -68,7 +68,44 @@ paths:
       operationId: postBulkjobBillingTrans
       x-operation-id-source: derived
 components:
+  responses:
+    DuplicateBillingBatchName:
+      description: Duplicate BillingBatchName not allowed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/errorDuplicateBillingBatchName'
+          example:
+            error: null
+            reason: Bad Request
+            details: Salesforce Billing_Batch_Name must be unique.
+            sfdcDetail:
+              message: Billing Batch Name must be unique
+              errorCode: Billing Batch Name must be unique
+              fields: Name
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.
   schemas:
+    error:
+      description: Error object
+      type: object
+      properties:
+        message:
+          type: string
     bulkjob:
       title: Bulkjob Status
       description: Bulkjob information.
@@ -173,12 +210,6 @@ components:
           title: APEX Processing Time
           description: Bulkjob APEX processing time.
           type: number
-    error:
-      description: Error object
-      type: object
-      properties:
-        message:
-          type: string
     billingTransactionsCSV:
       title: Billing Transaction CSV
       description: Billing transactions CSV file
@@ -269,34 +300,3 @@ components:
               fields:
                 type: array
                 description: Field API name(s) with issues.
-  responses:
-    NotFound:
-      description: A specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: The requested resource does not exist
-    NoAuthorization:
-      description: Not authorized to access resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: Token not found.
-    DuplicateBillingBatchName:
-      description: Duplicate BillingBatchName not allowed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/errorDuplicateBillingBatchName'
-          example:
-            error: null
-            reason: Bad Request
-            details: Salesforce Billing_Batch_Name must be unique.
-            sfdcDetail:
-              message: Billing Batch Name must be unique
-              errorCode: Billing Batch Name must be unique
-              fields: Name

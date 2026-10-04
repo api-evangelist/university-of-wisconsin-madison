@@ -49,6 +49,23 @@ paths:
       operationId: getBillingBatchById
       x-operation-id-source: derived
 components:
+  responses:
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.
+    NotFound:
+      description: A specified resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: The requested resource does not exist
   schemas:
     error:
       description: Error object
@@ -109,20 +126,3 @@ components:
                 title: Data Errors Rows
                 description: Count of records with errors per Billing Batch.
                 type: integer
-  responses:
-    NoAuthorization:
-      description: Not authorized to access resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: Token not found.
-    NotFound:
-      description: A specified resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: The requested resource does not exist

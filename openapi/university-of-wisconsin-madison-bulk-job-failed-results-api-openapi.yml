@@ -39,13 +39,6 @@ paths:
       operationId: getBulkjobFailedResultsById
       x-operation-id-source: derived
 components:
-  schemas:
-    error:
-      description: Error object
-      type: object
-      properties:
-        message:
-          type: string
   responses:
     NoAuthorization:
       description: Not authorized to access resource.
@@ -63,3 +56,10 @@ components:
             $ref: '#/components/schemas/error'
           example:
             message: The requested resource does not exist
+  schemas:
+    error:
+      description: Error object
+      type: object
+      properties:
+        message:
+          type: string
