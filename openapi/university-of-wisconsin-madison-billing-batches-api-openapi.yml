@@ -43,14 +43,6 @@ paths:
       x-operation-id-source: derived
 components:
   responses:
-    NoAuthorization:
-      description: Not authorized to access resource.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/error'
-          example:
-            message: Token not found.
     NotFound:
       description: A specified resource was not found.
       content:
@@ -59,6 +51,14 @@ components:
             $ref: '#/components/schemas/error'
           example:
             message: The requested resource does not exist
+    NoAuthorization:
+      description: Not authorized to access resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            message: Token not found.
   schemas:
     error:
       description: Error object

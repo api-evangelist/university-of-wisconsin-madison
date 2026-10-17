@@ -48,14 +48,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    error:
-      properties:
-        error:
-          description: Type of error
-          type: string
-        error_description:
-          description: Details of error
-          type: string
     access_token:
       properties:
         access_token:
@@ -117,6 +109,14 @@ components:
           description: Number of times the token has been refreshed
           type: string
           example: 0
+    error:
+      properties:
+        error:
+          description: Type of error
+          type: string
+        error_description:
+          description: Details of error
+          type: string
   securitySchemes:
     basicAuth:
       type: http
