@@ -235,7 +235,7 @@ apis:
   humanURL: https://canvas.wisc.edu/
   baseURL: https://canvas.wisc.edu/api/v1
   tags:
-  - Learning Management
+  - LMS
   - Canvas
   - Instructure
   - Tenants
